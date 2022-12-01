@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <CheckBox
+        android:id="@+id/chkBox_studyScrn_CtrlPanel_random_mode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/chkBox_study_screen_ctrl_panel_random_order" />
+
+    <CheckBox
+        android:id="@+id/chkBox_studyScrn_CtrlPanel_showing_back_first"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/chkBox_study_screen_ctrl_panel_showing_back_first" />
+
+    <CheckBox
+        android:id="@+id/chkBox_studyScrn_CtrlPanel_specified_marking"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/chkBox_study_screen_ctrl_panel_specified_marking" />
+
+<!--    <Button-->
+<!--        android:id="@+id/button_studyScrn_CtrlPanel_restart_session"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/button_study_screen_ctrl_panel_restart_session" />-->
+
+
+<!--    <Button-->
+<!--        android:id="@+id/button_studyScrn_CtrlPanel_marking_option"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/button_dialog_confirm"-->
+<!--        />-->
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_dialog_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_dialog_confirm"
+            />
+        <Button
+            android:id="@+id/button_dialog_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_dialog_cancel"
+            />
+
+    </LinearLayout>
+
+
+
+
+
+<!--    <LinearLayout-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal">-->
+
+<!--        <Button-->
+<!--            android:id="@+id/button_dialog_confirm"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/button_dialog_confirm"-->
+<!--            />-->
+<!--        <Button-->
+<!--            android:id="@+id/button_dialog_cancel"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/button_dialog_cancel"-->
+<!--            />-->
+
+<!--    </LinearLayout>-->
+
+</LinearLayout>

@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name">My Application 8</string>
+
+    <string name="button_start">START</string>
+    <string name="button_add_item_to_list">NEW DECK</string>
+    <string name="button_list_option">OPTION</string>
+
+    <string name="button_dialog_confirm">Confirm</string>
+    <string name="button_dialog_cancel">Cancel</string>
+
+    <string name="menu_item_text_deck_rename">rename deck</string>
+    <string name="menu_item_text_deck_delete">delete deck</string>
+    <string name="menu_item_text_card_edit">edit card</string>
+    <string name="menu_item_text_card_delete">delete card</string>
+
+    <string name="dialog_descr_txt_deck_delete_confirm">about to delete this deck, are you sure???</string>
+    <string name="dialog_descr_txt_create_new_deck">creating new deck, name plz</string>
+    <string name="dialog_descr_txt_rename_deck">renaming deck, new name plz</string>
+    <string name="dialog_descr_txt_open_deck_confirm">open this deck: %1$s?</string>
+    <string name="dialog_descr_txt_open_new_deck_confirm">new deck created, open this deck?</string>
+    <string name="dialog_descr_txt_create_new_card">create new card</string>
+    <string name="dialog_descr_txt_edit_card">edit card</string>
+    <string name="dialog_descr_txt_card_delete_confirm">about to delete this card, are you sure???</string>
+    <string name="dialog_descr_txt_default_text">what the hell was that</string>
+    <string name="dialog_descr_txt_default_text2">what the hell was that\nwhat\nwhat\nwhat\nwhat\nwhat\nwhat</string>
+
+    <string name="button_create_new_card">new card</string>
+    <string name="button_move_to_study">study this deck</string>
+    <string name="button_study_screen_restart">restart</string>
+    <string name="button_study_screen_option">option</string>
+    <string name="button_study_screen_next_card">next &gt;&gt;&gt;</string>
+    <string name="button_study_screen_flip_card">flip</string>
+    <string name="button_study_screen_previous_card">previous &lt;&lt;&lt;</string>
+    <string name="button_study_screen_edit_card">edit</string>
+
+    <string name="button_study_screen_ctrl_panel_restart_session">restart session</string>
+
+    <string name="chkBox_study_screen_ctrl_panel_random_order">random mode</string>
+    <string name="chkBox_study_screen_ctrl_panel_showing_back_first">show back side first</string>
+    <string name="chkBox_study_screen_ctrl_panel_specified_marking">limit marking</string>
+    <string name="button_study_screen_ctrl_panel_selected_marking">marking option</string>
+    <string name="chkBox_list_sort_option_descending">descending</string>
+
+    <string name="radio_button_list_sort_creation_order">creation order</string>
+    <string name="radio_button_list_sort_visited_order">visited order</string>
+    <string name="radio_button_list_sort_alphabet_order">alphabet order</string>
+
+    <!-- PREFERENCES -->
+
+    <string name="pref_key_random_mode_on">pref_random_mode_on</string>
+    <string name="pref_key_show_back_side_first">pref_display_back_side_first</string>
+    <string name="pref_key_limited_marking_value">pref_limited_marking_value</string>
+    <string name="pref_key_deck_list_sorting_type">pref_deck_list_sorting_type</string>
+    <string name="pref_key_deck_list_sorting_descending">pref_deck_list_sorting_descending</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

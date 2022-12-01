@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.FragmentCardList"
+    android:orientation="vertical"
+    android:background="@color/white"
+    android:clickable="true"
+    android:focusable="true">
+
+<!--    &lt;!&ndash; TODO: Update blank fragment layout &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/textview_fragment_default_text"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:textSize="50dp"-->
+<!--        android:text="hello_blank_fragment2" />-->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_card_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <Button
+        android:id="@+id/button_create_new_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_create_new_card"/>
+
+    <Button
+        android:id="@+id/button_study_this_deck"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/button_move_to_study"/>
+
+
+
+
+
+</LinearLayout>
