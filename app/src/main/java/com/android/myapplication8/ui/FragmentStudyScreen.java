@@ -18,6 +18,7 @@ import com.android.myapplication8.ViewModel1;
 import com.android.myapplication8.database2.CardEntity;
 import com.android.myapplication8.database2.Database2Wrapper;
 import com.android.myapplication8.database2.DeckEntity;
+import com.android.myapplication8.database2.DeckEntityExtra;
 import com.android.myapplication8.interfaces.MarkingEditCallback;
 import com.android.myapplication8.interfaces.NewCardDialogCallback;
 import com.android.myapplication8.interfaces.StdScrnControlPanelCallback;
@@ -254,6 +255,11 @@ public class FragmentStudyScreen extends Fragment implements
 
             @Override
             public void onSearchDeckComplete(Database2Wrapper.DbTask whichTask, List<DeckEntity> deckSearchResult) {
+
+            }
+
+            @Override
+            public void onSearchDeckCompleteExtra(Database2Wrapper.DbTask whichTask, List<DeckEntityExtra> deckSearchResult) {
 
             }
 

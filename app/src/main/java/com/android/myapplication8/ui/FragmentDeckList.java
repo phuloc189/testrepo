@@ -6,7 +6,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +19,9 @@ import android.widget.Button;
 import android.widget.PopupMenu;
 
 import com.android.myapplication8.CustomAdapterDeckList;
+import com.android.myapplication8.CustomAdapterDecklist_Extra;
+import com.android.myapplication8.database2.DeckEntityExtra;
+import com.android.myapplication8.database2.DeckEntityInterface;
 import com.android.myapplication8.interfaces.ConfirmDialogCallback;
 import com.android.myapplication8.interfaces.DialogResultCallback;
 import com.android.myapplication8.R;
@@ -30,7 +32,6 @@ import com.android.myapplication8.database2.DeckEntity;
 import com.android.myapplication8.interfaces.DeckListSortSettingCallback;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class FragmentDeckList extends Fragment implements
@@ -41,7 +42,9 @@ public class FragmentDeckList extends Fragment implements
 
     ViewModel1 viewModel;
 
-    DeckEntity longClickedDeck;
+    int longClickedDeckUid;
+
+    String longClickedDeckName;
 
     Fragment1Interface callBack = null;
 
@@ -117,8 +120,15 @@ public class FragmentDeckList extends Fragment implements
             public void onSearchDeckComplete(Database2Wrapper.DbTask whichTask, List<DeckEntity> deckSearchResult) {
                 Util.logDebug(TAG, "db task complete: " + whichTask);
                 Util.logDebug(TAG, "onSearchDeckComplete: " + deckSearchResult.size());
-                onNewDeckListFromDatabase(deckSearchResult);
+//                onNewDeckListFromDatabase(deckSearchResult); //todo: delete this
 
+            }
+
+            @Override
+            public void onSearchDeckCompleteExtra(Database2Wrapper.DbTask whichTask, List<DeckEntityExtra> deckSearchResult) {
+                Util.logDebug(TAG, "db task complete: " + whichTask);
+                Util.logDebug(TAG, "onSearchDeckCompleteExtra: " + deckSearchResult.size());
+                onNewDeckListFromDatabase2(deckSearchResult);
             }
 
             @Override
@@ -136,23 +146,6 @@ public class FragmentDeckList extends Fragment implements
     }
 
     private void setupViewModel(){
-        /**
-         *  todo: problem: should i pass callback like this???
-         */
-//        ViewModelProvider.Factory factory = (ViewModelProvider.Factory) new ViewModel1.MyVmFactory3(
-//                requireActivity().getApplication(),
-//                new Database2Wrapper.Database2Callback() {
-//                    @Override
-//                    public void onComplete(Database2Wrapper.DbTask whichTask,
-//                                           Database2Wrapper.DbTaskResult taskResult) {
-//                        Util.logDebug(TAG, "completed database task: " + whichTask +
-//                                ", with result: " + taskResult);
-//                    }
-//                }
-//        );
-//        viewModel = new ViewModelProvider(
-//                requireActivity(),
-//                factory).get(ViewModel1.class);
         viewModel = new ViewModelProvider(requireActivity()).get(ViewModel1.class);
         viewModel.setMark("i was here");
     }
@@ -165,31 +158,62 @@ public class FragmentDeckList extends Fragment implements
          * , if its state is STARTED or RESUMED"
          *  -> ASSUMPTION: no need to manually remove observer
          */
-        viewModel.readAll_vm().observe(
+//        viewModel.readAll_vm().observe(
+//                getViewLifecycleOwner(),
+//                new Observer<List<DeckEntity>>() {
+//                    @Override
+//                    public void onChanged(List<DeckEntity> deckEntities) {
+//                        Util.logDebug(TAG, "auto update from database");
+//                        onNewDeckListFromDatabase(deckEntities);
+//                    }
+//                });
+
+        viewModel.getAllLiveData_experimental2_vm().observe(
                 getViewLifecycleOwner(),
-                new Observer<List<DeckEntity>>() {
+                new Observer<List<DeckEntityExtra>>() {
                     @Override
-                    public void onChanged(List<DeckEntity> deckEntities) {
-                        Util.logDebug(TAG, "auto update from database");
-                        onNewDeckListFromDatabase(deckEntities);
+                    public void onChanged(List<DeckEntityExtra> deckEntityExtras) {
+                        onNewDeckListFromDatabase2(deckEntityExtras);
                     }
-                });
+                }
+        );
     }
 
-    private void onNewDeckListFromDatabase(List<DeckEntity> deckEntities) {
-        if (deckEntities != null && deckEntities.size() > 0){
+    private void onNewDeckListFromDatabase2(List<DeckEntityExtra> deckEntityExtras) {
+        if (deckEntityExtras != null && deckEntityExtras.size() > 0){
+            for (int i = 0; i < deckEntityExtras.size(); i++) {
+                Util.logDebug(TAG, "deckEntityExtras xxx: " + deckEntityExtras.get(i).uid);
+                Util.logDebug(TAG, "deckEntityExtras name: " + deckEntityExtras.get(i).deckName);
+                Util.logDebug(TAG, "deckEntityExtras date: " + deckEntityExtras.get(i).visitedDate);
+                Util.logDebug(TAG, "deckEntityExtras count: " + deckEntityExtras.get(i).cardsCount);
+            }
             Util.logDebug(TAG, "live data list update");
-            recyViewAdapterAlias().submitList(deckEntities);
+            recyViewAdapterAlias().submitList(deckEntityExtras);
         } else {
-            if (deckEntities == null)
+            if (deckEntityExtras == null)
                 // todo: display error dialog
                 Util.logDebug(TAG, "live data list update error: null list");
             else {
                 Util.logDebug(TAG, "live data list update error: no item on list");
-                recyViewAdapterAlias().submitList(deckEntities);
+                recyViewAdapterAlias().submitList(deckEntityExtras);
             }
         }
     }
+
+//    private void onNewDeckListFromDatabase(List<DeckEntity> deckEntities) {
+//        if (deckEntities != null && deckEntities.size() > 0){
+//            Util.logDebug(TAG, "live data list update");
+//            recyViewAdapterAlias().submitList(deckEntities);
+//        } else {
+//            if (deckEntities == null)
+//                // todo: display error dialog
+//                Util.logDebug(TAG, "live data list update error: null list");
+//            else {
+//                Util.logDebug(TAG, "live data list update error: no item on list");
+//                recyViewAdapterAlias().submitList(deckEntities);
+//            }
+//        }
+//    }
 
     private void setupButton(View view) {
         buttonCreateNewDeck = view.findViewById(R.id.button_add_item_to_decks_list);
@@ -236,10 +260,7 @@ public class FragmentDeckList extends Fragment implements
     private void transitionToSearchMode(){
         searchMode = true;
         buttonCreateNewDeck.setVisibility(View.GONE);
-        LiveData list = viewModel.getCurrentDeckList_LiveData();
-        if (list != null) {
-            list.removeObservers(getViewLifecycleOwner());
-        }
+        viewModel.removeDeckListObservers(getViewLifecycleOwner());
     }
 
     private void transitionToNormalMode() {
@@ -258,16 +279,25 @@ public class FragmentDeckList extends Fragment implements
         if (!searchMode) {
             transitionToSearchMode();
         }
-        viewModel.findDecks_vm(query, database2Callback);
+//        viewModel.findDecks_vm(query, database2Callback);
+        viewModel.findDecksExtra_vm(query, database2Callback);
     }
 
     private void setupListUi(View view) {
         recyclerView = view.findViewById(R.id.recyclerView_item_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
-        recyclerView.setAdapter(new CustomAdapterDeckList(new CustomAdapterDeckList.DeckItemDiff(),
-                new CustomAdapterDeckList.CustomAdapter3Callback() {
+//        recyclerView.setAdapter(new CustomAdapterDeckList(new CustomAdapterDeckList.DeckItemDiff(),
+//                new CustomAdapterDeckList.CustomAdapterDeckListCallback() {
+//                    @Override
+//                    public void onItemClick(Util.ClickEvent event, int position) {
+//                        handleDeckListItemClick(event, position);
+//                    }
+//                }));
+        recyclerView.setAdapter(new CustomAdapterDecklist_Extra(
+                new CustomAdapterDecklist_Extra.ItemDiff(),
+                new CustomAdapterDecklist_Extra.CustomAdapterDecklist_ExtraCallback() {
                     @Override
-                    public void customAdapter3OnItemClick(Util.ClickEvent event, int position) {
+                    public void onItemClick(Util.ClickEvent event, int position) {
                         handleDeckListItemClick(event, position);
                     }
                 }));
@@ -282,14 +312,13 @@ public class FragmentDeckList extends Fragment implements
                 Util.logDebug(TAG, "cannot find view holder");
                 return;
             }
-//            longClickedDeck = deck;
-            longClickedDeck = recyViewAdapterAlias().getCurrentList().get(position);
+            longClickedDeckUid = recyViewAdapterAlias().getCurrentList().get(position).getUid();
+            longClickedDeckName = recyViewAdapterAlias().getCurrentList().get(position).getDeckName();
             longClickedItemPosition = position;
             showDeckItemPopupMenu(viewHolder.itemView);
         } else if (event == Util.ClickEvent.CLICK){
-//            longClickedDeck = deck;
-            longClickedDeck = recyViewAdapterAlias().getCurrentList().get(position);
-//            showDialog_OpenDeckConfirm();
+            longClickedDeckUid = recyViewAdapterAlias().getCurrentList().get(position).getUid();
+            longClickedDeckName = recyViewAdapterAlias().getCurrentList().get(position).getDeckName();
             showDialog_ConfirmDialog(Util.DialogType.CONFIRM_OPEN_DECK);
         }
     }
@@ -300,7 +329,7 @@ public class FragmentDeckList extends Fragment implements
         popMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                /**
+                /*
                  * return true if the event was handled, false otherwise
                  */
                 return handleDeckItemPopupMenuSelected(menuItem);
@@ -310,8 +339,7 @@ public class FragmentDeckList extends Fragment implements
     }
 
     private boolean handleDeckItemPopupMenuSelected(MenuItem item) {
-        /**
-         *  todo done: investigate this
+        /*
          *      "Resource IDs will be non-final by default in Android Gradle
          *      Plugin version 8.0, avoid using them in switch case statement""
          *
@@ -319,7 +347,6 @@ public class FragmentDeckList extends Fragment implements
          *      https://stackoverflow.com/questions/64335374/how-to-resolve-resource-ids-will-be-non-final-in-android-gradle-plugin-version
          */
         if (item.getItemId() == R.id.menu_item_deck_delete){
-//            showDialog_DeckDeleteConfirm();
             showDialog_ConfirmDialog(Util.DialogType.CONFIRM_DECK_DELETE);
             /*
              * "return true if the event was handled, false otherwise"
@@ -359,28 +386,10 @@ public class FragmentDeckList extends Fragment implements
         Bundle args = new Bundle();
         args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
                 Util.getStringFromDialogType(Util.DialogType.DECK_RENAME));
-        args.putString(Util.BUNDLE_KEY_OLD_NAME, longClickedDeck.getDeckName());
+        args.putString(Util.BUNDLE_KEY_OLD_NAME, longClickedDeckName);
         newDeckDialogFragment.setArguments(args);
         newDeckDialogFragment.show(getChildFragmentManager(), DialogFragmentNewDeck.TAG);
     }
-
-//    private void showDialog_DeckDeleteConfirm() {
-//        ConfirmDialogFragment dialogFragment = new ConfirmDialogFragment();
-//        Bundle args = new Bundle();
-//        args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
-//                Util.getStringFromDialogType(Util.DialogType.CONFIRM_DECK_DELETE));
-//        dialogFragment.setArguments(args);
-//        dialogFragment.show(getChildFragmentManager(), ConfirmDialogFragment.TAG);
-//    }
-//
-//    private void showDialog_OpenDeckConfirm() {
-//        ConfirmDialogFragment dialogFragment = new ConfirmDialogFragment();
-//        Bundle args = new Bundle();
-//        args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
-//                Util.getStringFromDialogType(Util.DialogType.CONFIRM_OPEN_DECK));
-//        dialogFragment.setArguments(args);
-//        dialogFragment.show(getChildFragmentManager(), ConfirmDialogFragment.TAG);
-//    }
 
     private void showDialog_ConfirmDialog(Util.DialogType confirmDialogType) {
         DialogFragmentConfirm dialogFragment = new DialogFragmentConfirm();
@@ -388,14 +397,18 @@ public class FragmentDeckList extends Fragment implements
         args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
                 Util.getStringFromDialogType(confirmDialogType));
         if (confirmDialogType == Util.DialogType.CONFIRM_OPEN_DECK) {
-            args.putString(Util.BUNDLE_KEY_NAME_OF_DECK_TOBE_OPENED, longClickedDeck.getDeckName());
+            args.putString(Util.BUNDLE_KEY_NAME_OF_DECK_TOBE_OPENED, longClickedDeckName);
         }
         dialogFragment.setArguments(args);
         dialogFragment.show(getChildFragmentManager(), DialogFragmentConfirm.TAG);
     }
 
-    private CustomAdapterDeckList recyViewAdapterAlias() {
-        return (CustomAdapterDeckList) recyclerView.getAdapter();
+//    private CustomAdapterDeckList recyViewAdapterAlias() {
+//        return (CustomAdapterDeckList) recyclerView.getAdapter();
+//    }
+
+    private CustomAdapterDecklist_Extra recyViewAdapterAlias() {
+        return (CustomAdapterDecklist_Extra) recyclerView.getAdapter();
     }
 
     @Override
@@ -404,11 +417,10 @@ public class FragmentDeckList extends Fragment implements
         Util.logDebug(TAG, "type: " + dialogType);
         if (dialogType == Util.DialogType.CONFIRM_DECK_DELETE) {
             Util.logDebug(TAG, "delete deck");
-//            deleteDeck(longClickedDeck);
-            deleteDeck(longClickedDeck.getUid());
+            deleteDeck(longClickedDeckUid);
         } else if (dialogType == Util.DialogType.CONFIRM_OPEN_DECK) {
             Util.logDebug(TAG, "open deck");
-            openDeck(longClickedDeck.getUid());
+            openDeck(longClickedDeckUid);
         } else if (dialogType == Util.DialogType.CONFIRM_OPEN_DECK_JUST_CREATED) {
             Util.logDebug(TAG, "open just created deck");
             openDeck(justInsertedDeckUid);
@@ -425,39 +437,22 @@ public class FragmentDeckList extends Fragment implements
         if (dialogType == Util.DialogType.NEW_DECK_NAME) {
             insertNewDeck(text);
         } else if (dialogType == Util.DialogType.DECK_RENAME) {
-//            renameDeck(longClickedDeck, text);
-            renameDeck(longClickedDeck.getUid(), text);
+            renameDeck(longClickedDeckUid, text);
         } else {
             Util.logDebug(TAG, "what the hell was that");
         }
     }
 
-//    private void deleteDeck(DeckEntity deck) {
-//        viewModel.deleteDeck_vm(deck, database2Callback);
-//        if (searchMode) {
+    private void deleteDeck(int targetUid) {
+        viewModel.deleteDeck_vm(targetUid, database2Callback);
+        if (searchMode) {
+            //todo: fix this
 //            List<DeckEntity> currentList = new ArrayList<>(recyViewAdapterAlias().getCurrentList());
 //            currentList.remove(longClickedItemPosition);
 //            recyViewAdapterAlias().submitList(currentList);
 //            recyViewAdapterAlias().notifyItemRemoved(longClickedItemPosition);
-//        }
-//    }
-
-    private void deleteDeck(int targetUid) {
-        viewModel.deleteDeck_vm(targetUid, database2Callback);
-        if (searchMode) {
-            List<DeckEntity> currentList = new ArrayList<>(recyViewAdapterAlias().getCurrentList());
-            currentList.remove(longClickedItemPosition);
-            recyViewAdapterAlias().submitList(currentList);
-            recyViewAdapterAlias().notifyItemRemoved(longClickedItemPosition);
         }
     }
-
-//    private void openDeck(DeckEntity deck) {
-//        viewModel.setSelectedDeckUid(deck.getUid());
-//        if (callBack != null) {
-//            callBack.onDeckSelected();
-//        }
-//    }
 
     private void openDeck(int deckUid) {
         viewModel.setSelectedDeckUid(deckUid);
@@ -467,41 +462,18 @@ public class FragmentDeckList extends Fragment implements
     }
 
     private void insertNewDeck(String content) {
-//        viewModel.insertNewDeck_vm(new DeckEntity(
-//                content, Calendar.getInstance().getTimeInMillis()), database2Callback);
         viewModel.insertNewDeck_vm(content, database2Callback);
     }
-
-//    private void renameDeck(DeckEntity deckInQuestion, String newName) {
-//        /**
-//         *  todo: doing basic stuff for now
-//         *      when entity get complicated, this would get ugly
-//         */
-//        viewModel.updateDeck_vm(
-//                new DeckEntity(
-//                        deckInQuestion.getUid(),
-//                        newName,
-//                        Calendar.getInstance().getTimeInMillis()),
-//                database2Callback);
-//
-//        //todo: switch to new function
-//
-//        if (searchMode) {
-//            List<DeckEntity> currentList = new ArrayList<>(recyViewAdapterAlias().getCurrentList());
-//            currentList.get(longClickedItemPosition).setDeckName(newName);
-//            recyViewAdapterAlias().submitList(currentList);
-//            recyViewAdapterAlias().notifyItemChanged(longClickedItemPosition);
-//        }
-//    }
 
     private void renameDeck(int deckUidInQuestion, String newName) {
         viewModel.updateDeckName_vm(deckUidInQuestion, newName, database2Callback);
 
         if (searchMode) {
-            List<DeckEntity> currentList = new ArrayList<>(recyViewAdapterAlias().getCurrentList());
-            currentList.get(longClickedItemPosition).setDeckName(newName);
-            recyViewAdapterAlias().submitList(currentList);
-            recyViewAdapterAlias().notifyItemChanged(longClickedItemPosition);
+            //todo: fix this
+//            List<DeckEntity> currentList = new ArrayList<>(recyViewAdapterAlias().getCurrentList());
+//            currentList.get(longClickedItemPosition).setDeckName(newName);
+//            recyViewAdapterAlias().submitList(currentList);
+//            recyViewAdapterAlias().notifyItemChanged(longClickedItemPosition);
         }
     }
 

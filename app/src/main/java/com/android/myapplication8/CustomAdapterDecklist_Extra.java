@@ -10,20 +10,21 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.myapplication8.database2.DeckEntity;
+import com.android.myapplication8.database2.DeckEntityExtra;
+import com.android.myapplication8.database2.DeckEntityInterface;
 
-public class CustomAdapterDeckList extends ListAdapter<DeckEntity, CustomAdapterDeckList.DeckItemViewHolder>{
+public class CustomAdapterDecklist_Extra extends ListAdapter<DeckEntityExtra, CustomAdapterDecklist_Extra.DeckItemViewHolder> {
 
-    private static final String TAG = "CustomAdapterDeckList";
+    private static final String TAG = "CustomAdapterDecklist_Extra";
 
-    private CustomAdapterDeckListCallback callback;
+    private CustomAdapterDecklist_ExtraCallback callback;
 
-    public interface CustomAdapterDeckListCallback {
+    public interface CustomAdapterDecklist_ExtraCallback {
         void onItemClick(Util.ClickEvent event, int position);
     }
 
-    public CustomAdapterDeckList(@NonNull DiffUtil.ItemCallback<DeckEntity> diffCallback,
-                                 CustomAdapterDeckListCallback callback) {
+    public CustomAdapterDecklist_Extra(@NonNull DiffUtil.ItemCallback<DeckEntityExtra> diffCallback,
+                                          CustomAdapterDecklist_ExtraCallback callback) {
         super(diffCallback);
         this.callback = callback;
     }
@@ -31,22 +32,18 @@ public class CustomAdapterDeckList extends ListAdapter<DeckEntity, CustomAdapter
     @NonNull
     @Override
     public DeckItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.item_layout_deck_in_list, parent, false);
+        View view =
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout_deck_in_list, parent, false);
         return new DeckItemViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull DeckItemViewHolder holder, int position) {
-        Util.logDebug(TAG, "onBindViewHolder called: " + position);
-        DeckEntity deck = getItem(position);
-        holder.bind(deck.getDeckName());
-        // need position then holder.getAdapterPosition() is the way
-        holder.setOnClickListener(new DeckItemViewHolder.DeckItemViewHolderCallback() {
+        DeckEntityExtra item = getItem(position);
+        holder.bind(item.getDeckName(), item.getCardsCount(), item.getVisitedDate());
+        holder.setOnClickListener(new CustomAdapterDeckList.DeckItemViewHolder.DeckItemViewHolderCallback() {
             @Override
             public void onItemClick(Util.ClickEvent event, int position) {
-                Util.logDebug(TAG, "item clicked at: " + position +
-                        ", click type: " + event);
                 processItemClick(event, position);
             }
         });
@@ -57,8 +54,6 @@ public class CustomAdapterDeckList extends ListAdapter<DeckEntity, CustomAdapter
     }
 
     static class DeckItemViewHolder extends RecyclerView.ViewHolder {
-//        View itemView; // we don't need this, the base class already have one
-        TextView textView;
 
         public interface DeckItemViewHolderCallback {
             void onItemClick(Util.ClickEvent event, int position);
@@ -66,15 +61,14 @@ public class CustomAdapterDeckList extends ListAdapter<DeckEntity, CustomAdapter
 
         public DeckItemViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.textView = itemView.findViewById(R.id.tv_deck_item_deck_title);
         }
 
-        public void setOnClickListener(DeckItemViewHolderCallback callback) {
+        public void setOnClickListener(CustomAdapterDeckList.DeckItemViewHolder.DeckItemViewHolderCallback callback) {
             this.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     callback.onItemClick(Util.ClickEvent.CLICK,
-                            DeckItemViewHolder.this.getLayoutPosition());
+                            CustomAdapterDecklist_Extra.DeckItemViewHolder.this.getLayoutPosition());
                 }
             });
 
@@ -82,7 +76,7 @@ public class CustomAdapterDeckList extends ListAdapter<DeckEntity, CustomAdapter
                 @Override
                 public boolean onLongClick(View view) {
                     callback.onItemClick(Util.ClickEvent.LONG_CLICK,
-                            DeckItemViewHolder.this.getLayoutPosition());
+                            CustomAdapterDecklist_Extra.DeckItemViewHolder.this.getAdapterPosition());
                     //todo: which one???
 //                    DeckItemViewHolder.this.getAdapterPosition();
 //                    DeckItemViewHolder.this.getLayoutPosition();
@@ -91,23 +85,22 @@ public class CustomAdapterDeckList extends ListAdapter<DeckEntity, CustomAdapter
             });
         }
 
-        public void bind(String text) {
-            this.textView.setText(text);
+        public void bind(String deckName, int cardsCount, long visitedDate) {
+            ((TextView)this.itemView.findViewById(R.id.tv_deck_item_deck_title)).setText(deckName);
+            ((TextView)this.itemView.findViewById(R.id.tv_deck_item_cards_count)).setText(String.valueOf(cardsCount));
+            ((TextView)this.itemView.findViewById(R.id.tv_deck_item_last_visited_date)).setText(String.valueOf(visitedDate));
         }
     }
 
-    public static class DeckItemDiff extends DiffUtil.ItemCallback<DeckEntity> {
-
+    public static class ItemDiff extends DiffUtil.ItemCallback<DeckEntityExtra> {
         @Override
-        public boolean areItemsTheSame(@NonNull DeckEntity oldItem, @NonNull DeckEntity newItem) {
-            //mimicking card list adapter
-//            return oldItem == newItem;
+        public boolean areItemsTheSame(@NonNull DeckEntityExtra oldItem, @NonNull DeckEntityExtra newItem) {
             return oldItem.getUid() == newItem.getUid();
         }
 
         @Override
-        public boolean areContentsTheSame(@NonNull DeckEntity oldItem, @NonNull DeckEntity newItem) {
-            return DeckEntity.checkIfSameContent(oldItem, newItem);
+        public boolean areContentsTheSame(@NonNull DeckEntityExtra oldItem, @NonNull DeckEntityExtra newItem) {
+            return oldItem.checkIfSameContentWith(newItem);
         }
     }
 }

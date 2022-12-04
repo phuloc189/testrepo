@@ -3,6 +3,7 @@ package com.android.myapplication8.database2;
 import android.content.Context;
 
 import androidx.lifecycle.LiveData;
+import androidx.sqlite.db.SimpleSQLiteQuery;
 
 import com.android.myapplication8.Util;
 
@@ -47,7 +48,10 @@ public class Database2Wrapper {
 
         void onSearchDeckComplete(DbTask whichTask, List<DeckEntity> deckSearchResult);
 
+        void onSearchDeckCompleteExtra(DbTask whichTask, List<DeckEntityExtra> deckSearchResult);
+
         void onInsertComplete(DbTask whichTask, long newRowId);
+
     }
 
 //    private static final int NUMBER_OF_THREADS = 4;
@@ -66,57 +70,6 @@ public class Database2Wrapper {
     public CardDao cardDaoAlias() {
         return database2Instance.cardDao();
     }
-
-//    public void insertNewDeck(DeckEntity deck) {
-//        dbExecutor.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                long rowId = deckDaoAlias().insert(deck);
-//                if (callback == null){
-//                    return;
-//                }
-//                if (rowId == -1) {
-//                    callback.onComplete_SimpleResult(DbTask.DB_TASK_INSERT_DECK, DbTaskResult.DB_RESULT_NG);
-//                } else {
-//                    callback.onComplete_SimpleResult(DbTask.DB_TASK_INSERT_DECK, DbTaskResult.DB_RESULT_OK);
-//                }
-//            }
-//        });
-//    }
-//
-//    public void updateDeckName(DeckEntity deck) {
-//        dbExecutor.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                int result = deckDaoAlias().update(deck);
-//                if (callback == null){
-//                    return;
-//                }
-//                if (result <= 0) {
-//                    callback.onComplete_SimpleResult(DbTask.DB_TASK_UPDATE_DECK, DbTaskResult.DB_RESULT_NG);
-//                } else {
-//                    callback.onComplete_SimpleResult(DbTask.DB_TASK_UPDATE_DECK, DbTaskResult.DB_RESULT_OK);
-//                }
-//            }
-//        });
-//    }
-//
-//    public void deleteDeck(DeckEntity deck) {
-//        dbExecutor.execute(new Runnable() {
-//            @Override
-//            public void run() {
-//                int result = deckDaoAlias().delete(deck);
-//                if (callback == null){
-//                    return;
-//                }
-//                if (result == 0) {
-//                    callback.onComplete_SimpleResult(DbTask.DB_TASK_DELETE_DECK, DbTaskResult.DB_RESULT_NG);
-//                } else {
-//                    callback.onComplete_SimpleResult(DbTask.DB_TASK_DELETE_DECK, DbTaskResult.DB_RESULT_OK);
-//                }
-//            }
-//        });
-//    }
 
     //------------
 
@@ -190,6 +143,69 @@ public class Database2Wrapper {
 
     public LiveData<List<DeckEntity>> findDecks_Livedata(String searchString) {
         return deckDaoAlias().findDecks_Livedata(searchString);
+    }
+
+    //----------------
+
+    public LiveData<List<DeckEntity>> readAllLiveData_experimental() {
+        return deckDaoAlias().getAllLiveData_experimental();
+    }
+
+    public LiveData<List<DeckEntityExtra>> getAllLiveData_experimental2() {
+        return deckDaoAlias().getAllLiveData_experimental2();
+    }
+
+    public LiveData<List<DeckEntityExtra>> getAllLiveData_raw_extra(Util.SortingOptions optionSortingType
+            , boolean optionDescending) {
+        /*    @Query("SELECT table_DeckEntity.*, COUNT(table_cardentity.deckUid) as cardsCount " +
+            "FROM table_DeckEntity LEFT OUTER JOIN table_cardentity ON table_DeckEntity.uid = table_cardentity.deckUid " +
+            "GROUP BY table_DeckEntity.uid" )
+         */
+        StringBuilder sb = new StringBuilder("SELECT table_DeckEntity.*");
+        sb.append(", COUNT(table_cardentity.deckUid) as cardsCount")
+                .append(" FROM table_DeckEntity").append(" LEFT OUTER JOIN table_cardentity")
+                .append(" ON table_DeckEntity.uid = table_cardentity.deckUid")
+                .append(" GROUP BY table_DeckEntity.uid");
+
+        switch (optionSortingType) {
+            case ALPHABET_ORDER:
+                sb.append(" ORDER BY").append(" deckName");
+                break;
+            case VISITED_ORDER:
+                sb.append(" ORDER BY").append(" visitedDate");
+                break;
+            case CREATION_ORDER:
+            default:
+                sb.append(" ORDER BY").append(" uid");
+        }
+
+        if (optionDescending) {
+            sb.append(" DESC");
+        } else {
+            sb.append(" ASC");
+        }
+
+        sb.append(";");
+
+        return deckDaoAlias().getAllDeckEntitiesPlus_Livedata_rawQuery(new SimpleSQLiteQuery(sb.toString()));
+    }
+
+    public LiveData<List<DeckEntity>> getAllLiveData_raw() {
+        //@Query("SELECT * FROM table_deckentity ORDER BY :field DESC")
+        StringBuilder sb = new StringBuilder("SELECT * FROM").append(" table_deckentity");
+        sb.append(" ORDER BY").append(" uid").append(" DESC;");
+
+        return deckDaoAlias().getAllLiveData_raw(new SimpleSQLiteQuery(sb.toString()));
+    }
+
+    public void findDecksExtra(String searchString, Database2Callback callback) {
+        dbExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                List<DeckEntityExtra> result = deckDaoAlias().findDeckEntitiesPlus(searchString);
+                callback.onSearchDeckCompleteExtra(DbTask.DB_TASK_SEARCH_DECK, result);
+            }
+        });
     }
 
     public void findDecks(String searchString, Database2Callback callback) {

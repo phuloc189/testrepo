@@ -23,7 +23,7 @@ public class CustomAdapter2 extends ListAdapter<ItemClass1, CustomAdapter2.ListI
     @NonNull
     @Override
     public ListItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout_deck_in_list, parent, false);
         return new ListItemViewHolder(view);
     }
 
@@ -47,7 +47,6 @@ public class CustomAdapter2 extends ListAdapter<ItemClass1, CustomAdapter2.ListI
         }
     }
 
-
     static class ListItemViewHolder extends RecyclerView.ViewHolder{
 
         TextView textView;
@@ -55,7 +54,7 @@ public class CustomAdapter2 extends ListAdapter<ItemClass1, CustomAdapter2.ListI
         public ListItemViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            textView = itemView.findViewById(R.id.tv_item_text);
+            textView = itemView.findViewById(R.id.tv_deck_item_deck_title);
         }
 
         public void bind (String text) { //bind???

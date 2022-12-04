@@ -22,6 +22,7 @@ import com.android.myapplication8.ViewModel1;
 import com.android.myapplication8.database2.CardEntity;
 import com.android.myapplication8.database2.Database2Wrapper;
 import com.android.myapplication8.database2.DeckEntity;
+import com.android.myapplication8.database2.DeckEntityExtra;
 import com.android.myapplication8.interfaces.CardListAdapterOnClick;
 import com.android.myapplication8.interfaces.ConfirmDialogCallback;
 import com.android.myapplication8.interfaces.NewCardDialogCallback;
@@ -80,6 +81,11 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
 
             @Override
             public void onSearchDeckComplete(Database2Wrapper.DbTask whichTask, List<DeckEntity> deckSearchResult) {
+
+            }
+
+            @Override
+            public void onSearchDeckCompleteExtra(Database2Wrapper.DbTask whichTask, List<DeckEntityExtra> deckSearchResult) {
 
             }
 

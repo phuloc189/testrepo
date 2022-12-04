@@ -6,6 +6,7 @@ import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -15,6 +16,7 @@ import androidx.lifecycle.viewmodel.CreationExtras;
 import com.android.myapplication8.database2.CardEntity;
 import com.android.myapplication8.database2.Database2Wrapper;
 import com.android.myapplication8.database2.DeckEntity;
+import com.android.myapplication8.database2.DeckEntityExtra;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,7 +32,7 @@ public class ViewModel1 extends AndroidViewModel {
 
     LiveData<List<DeckEntity>> deckList;
 
-    MutableLiveData<DeckEntity> selectedDeck;
+    LiveData<List<DeckEntityExtra>> deckList_withExtra;
 
     MutableLiveData<Integer> selectedDeckUid;
 
@@ -81,21 +83,13 @@ public class ViewModel1 extends AndroidViewModel {
     }
 
     private void init() {
+        deckList = new MutableLiveData<>();//todo: experimental
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication());
         studyingCardsListPointer = new MutableLiveData<>();
         studyingCardsList = new MutableLiveData<>();
         indexArrays = new ArrayList<>();
-        selectedDeck = new MutableLiveData<>();
         selectedDeckUid = new MutableLiveData<>();
     }
-
-//    public void setSelectedDeck(DeckEntity deck) {
-//        this.selectedDeck.setValue(deck);
-//    }
-
-//    public DeckEntity getSelectedDeck_Value() {
-//        return this.selectedDeck.getValue();
-//    }
 
     public void setSelectedDeckUid(int uid) {
         this.selectedDeckUid.setValue(uid);
@@ -103,37 +97,12 @@ public class ViewModel1 extends AndroidViewModel {
 
     public int getSelectedDeckUid_Value() {
         return this.selectedDeckUid.getValue();
-//        return this.selectedDeck.getValue().getUid();//todo: change to real thing
     }
 
     //----------- decks
 
-//    public void insertNewDeck_vm(DeckEntity deck) {
-//        database2.insertNewDeck(deck);
-//    }
-//
-//    public void updateDeck_vm(DeckEntity deck) {
-//        database2.updateDeckName(deck);
-//    }
-//
-//    public void deleteDeck_vm(DeckEntity deck) {
-//        database2.deleteDeck(deck);
-//    }
-
-    public void insertNewDeck_vm(DeckEntity deck, Database2Wrapper.Database2Callback callback) {
-        database2.insertNewDeck(deck, callback);
-    }
-
     public void insertNewDeck_vm(String deckName, Database2Wrapper.Database2Callback callback) {
         database2.insertNewDeck(deckName, callback);
-    }
-
-    public void updateDeck_vm(DeckEntity deck, Database2Wrapper.Database2Callback callback) {
-        database2.updateDeck(deck, callback);
-    }
-
-    public void deleteDeck_vm(DeckEntity deck, Database2Wrapper.Database2Callback callback) {
-        database2.deleteDeck(deck, callback);
     }
 
     public void deleteDeck_vm(int targetUid, Database2Wrapper.Database2Callback callback) {
@@ -150,46 +119,67 @@ public class ViewModel1 extends AndroidViewModel {
                 getApplication().getString(R.string.pref_key_deck_list_sorting_descending),
                 Util.SORTING_DESCENDING_OPTION_DEFAULT_VALUE
         );
-        if (optionDescending) {
-            switch (optionSortingType) {
-                case ALPHABET_ORDER:
-                    deckList = database2.readAll_Sorted_Name_Desc();
-                    break;
-                case VISITED_ORDER:
-                    deckList = database2.readAll_Sorted_VisitDate_Desc();
-                    break;
-                case CREATION_ORDER:
-                default:
-                    deckList = database2.readAll_Sorted_Uid_Desc();
-            }
-        } else {
-            switch (optionSortingType) {
-                case ALPHABET_ORDER:
-                    deckList = database2.readAll_Sorted_Name_Asc();
-                    break;
-                case VISITED_ORDER:
-                    deckList = database2.readAll_Sorted_VisitDate_Asc();
-                    break;
-                case CREATION_ORDER:
-                default:
-                    deckList = database2.readAll();
-            }
-        }
+//        if (optionDescending) {
+//            switch (optionSortingType) {
+//                case ALPHABET_ORDER:
+//                    deckList = database2.readAll_Sorted_Name_Desc();
+//                    break;
+//                case VISITED_ORDER:
+//                    deckList = database2.readAll_Sorted_VisitDate_Desc();
+//                    break;
+//                case CREATION_ORDER:
+//                default:
+//                    deckList = database2.readAll_Sorted_Uid_Desc();
+//            }
+//        } else {
+//            switch (optionSortingType) {
+//                case ALPHABET_ORDER:
+//                    deckList = database2.readAll_Sorted_Name_Asc();
+//                    break;
+//                case VISITED_ORDER:
+//                    deckList = database2.readAll_Sorted_VisitDate_Asc();
+//                    break;
+//                case CREATION_ORDER:
+//                default:
+//                    deckList = database2.readAll();
+//            }
+//        }
+        //todo: experimenting
+//        deckList = database2.readAllLiveData_experimental();
+        deckList = database2.getAllLiveData_raw();
+
+        //don't enable this, not part of experiment
 //        deckList = database2.readAll();
         return deckList;
     }
 
-    public LiveData<List<DeckEntity>> getCurrentDeckList_LiveData() {
-        return deckList;
+    public LiveData<List<DeckEntityExtra>> getAllLiveData_experimental2_vm() {
+//        return database2.getAllLiveData_experimental2();
+
+        Util.SortingOptions optionSortingType = Util.getSortingOption(sharedPreferences.getInt(
+                getApplication().getString(R.string.pref_key_deck_list_sorting_type),
+                Util.SORTING_TYPE_OPTION_DEFAULT_VALUE
+        ));
+        boolean optionDescending = sharedPreferences.getBoolean(
+                getApplication().getString(R.string.pref_key_deck_list_sorting_descending),
+                Util.SORTING_DESCENDING_OPTION_DEFAULT_VALUE
+        );
+        deckList_withExtra = database2.getAllLiveData_raw_extra(optionSortingType, optionDescending);
+        return deckList_withExtra;
+    }
+
+    public void removeDeckListObservers(LifecycleOwner lifecycleOwner) {
+        if (deckList != null) {
+            deckList.removeObservers(lifecycleOwner);
+        }
+    }
+
+    public void findDecksExtra_vm (String searchString, Database2Wrapper.Database2Callback callback) {
+        database2.findDecksExtra(searchString, callback);
     }
 
     public void findDecks_vm (String searchString, Database2Wrapper.Database2Callback callback) {
         database2.findDecks(searchString, callback);
-    }
-
-    public LiveData<List<DeckEntity>> findDecksLiveData_vm (String searchString) {
-        deckList = database2.findDecks_Livedata(searchString);
-        return deckList;
     }
 
     public void updateDeckVisitedDate_vm(int targetUid, long newVisitedDate, Database2Wrapper.Database2Callback callback) {
@@ -370,7 +360,7 @@ public class ViewModel1 extends AndroidViewModel {
              * somehow platform will call this "create" method,
              * but we aren't using this feature, so we reroute it
              */
-            return this.create(modelClass);
+            return MyVmFactory3.this.create(modelClass);
         }
     }
 

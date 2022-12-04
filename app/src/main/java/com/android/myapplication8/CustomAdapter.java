@@ -20,7 +20,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout_deck_in_list, parent, false);
 
         return new ViewHolder(view);
     }
@@ -52,7 +52,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             super(itemView);
             // Define click listener for the ViewHolder's View???
 
-            textView = (TextView)itemView.findViewById(R.id.tv_item_text);
+            textView = (TextView)itemView.findViewById(R.id.tv_deck_item_deck_title);
         }
 
         public TextView getTextView() {
