@@ -72,6 +72,7 @@ public class FragmentStudyScreen extends Fragment implements
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_study_screen, container, false);
 
+        setupDatabaseCallback();
         setupViewModel();
         setupUi(view);
         fetchAndCacheCards();
