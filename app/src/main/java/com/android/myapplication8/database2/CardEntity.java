@@ -1,12 +1,17 @@
 package com.android.myapplication8.database2;
 
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.Calendar;
 
-@Entity(tableName = "table_CardEntity")
+@Entity(tableName = "table_CardEntity",
+foreignKeys = {@ForeignKey(entity = DeckEntity.class,
+parentColumns = "uid",
+childColumns = "deckUid",
+onDelete = ForeignKey.CASCADE)})
 public class CardEntity {
 
     @PrimaryKey(autoGenerate = true)
