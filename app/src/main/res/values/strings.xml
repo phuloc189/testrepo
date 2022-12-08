@@ -45,6 +45,10 @@
     <string name="radio_button_list_sort_visited_order">visited order</string>
     <string name="radio_button_list_sort_alphabet_order">alphabet order</string>
 
+    <string name="top_bar_text_choose_a_deck">=deck select</string>
+    <string name="top_bar_text_cards_preview">cards preview</string>
+    <string name="top_bar_text_study_mode">study</string>
+
     <!-- PREFERENCES -->
 
     <string name="pref_key_random_mode_on">pref_random_mode_on</string>

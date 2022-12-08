@@ -1,11 +1,13 @@
 package com.android.myapplication8.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.android.myapplication8.R;
 import com.android.myapplication8.database2.DeckEntity;
@@ -22,7 +24,6 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
         super.onCreate(savedInstanceState);
         Log.d(TAG, "onCreate: ");
         setContentView(R.layout.activity_main2);
-
         setupToolbar();
 
         launchDeckListFragment(savedInstanceState);
@@ -31,7 +32,12 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
     private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar_activity_main2);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("wait wut???");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -50,6 +56,8 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
                     .addToBackStack("Fragment1")
                     .commit();
         }
+
+        getSupportActionBar().setTitle(getString(R.string.top_bar_text_choose_a_deck));
     }
 
     @Override
@@ -59,6 +67,7 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
                 .replace(R.id.fragment_container_content, FragmentCardList.class, null)
                 .addToBackStack("Fragment2")
                 .commit();
+        getSupportActionBar().setTitle(getString(R.string.top_bar_text_cards_preview));
     }
 
     @Override
@@ -68,5 +77,6 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
                 .replace(R.id.fragment_container_content, FragmentStudyScreen.class, null)
                 .addToBackStack("Fragment3")
                 .commit();
+        getSupportActionBar().setTitle(getString(R.string.top_bar_text_study_mode));
     }
 }
