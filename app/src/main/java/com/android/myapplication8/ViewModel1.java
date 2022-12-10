@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.viewmodel.CreationExtras;
 
 import com.android.myapplication8.database2.CardEntity;
+import com.android.myapplication8.database2.CollectionEntityExtra;
 import com.android.myapplication8.database2.Database2Wrapper;
 import com.android.myapplication8.database2.DeckEntity;
 import com.android.myapplication8.database2.DeckEntityExtra;
@@ -27,8 +28,6 @@ public class ViewModel1 extends AndroidViewModel {
     public static final String TAG = "ViewModel1";
 
     private Database2Wrapper database2;
-
-    private String mark = "no one was here";
 
     LiveData<List<DeckEntity>> deckList;
 
@@ -56,14 +55,6 @@ public class ViewModel1 extends AndroidViewModel {
     MarkingSettingHelperType markingSetting;
 
     int [] markingStat;
-
-    public void setMark (String mark) {
-        this.mark = mark;
-    }
-
-    public String getMark() {
-        return mark;
-    }
 
     /**
      * default constructor (when this class was created)
@@ -319,13 +310,9 @@ public class ViewModel1 extends AndroidViewModel {
         return indexArrays;
     }
 
-    //-------------
-
     public boolean getBackSideFirstSetting() {
         return backSideFirstSetting;
     }
-
-    //-------------
 
     public int[] getMarkingStat() {
         return markingStat;
@@ -334,6 +321,24 @@ public class ViewModel1 extends AndroidViewModel {
     public void shiftMarkingStat(int from, int to){
         markingStat[from]--;
         markingStat[to]++;
+    }
+
+    //--------- collection
+
+    public LiveData<List<CollectionEntityExtra>> getAllCollectionExtraLivedata_vm() {
+        return database2.getAllCollectionExtraLivedata();
+    }
+
+    public void deleteCollection_vm (int targetUid, Database2Wrapper.Database2Callback callback){
+        database2.deleteCollection(targetUid, callback);
+    }
+
+    public void renameCollection_vm (int targetUid, String newName, Database2Wrapper.Database2Callback callback) {
+        database2.renameCollection(targetUid, newName, callback);
+    }
+
+    public void  createCollection_vm (String name, Database2Wrapper.Database2Callback callback) {
+        database2.createCollection(name, callback);
     }
 
     //----------- factory

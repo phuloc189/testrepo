@@ -6,12 +6,14 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {DeckEntity.class, CardEntity.class}, version = 1)
+@Database(entities = {DeckEntity.class, CardEntity.class, CollectionEntity.class}, version = 1)
 public abstract class Database2 extends RoomDatabase {
 
     public abstract DeckDao deckDao();
 
     public abstract CardDao cardDao();
+
+    public abstract CollectionDao collectionDao();
 
     private static volatile Database2 instance;
 

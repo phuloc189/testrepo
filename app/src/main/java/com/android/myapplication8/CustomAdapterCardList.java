@@ -30,7 +30,7 @@ public class CustomAdapterCardList extends ListAdapter<CardEntity, CustomAdapter
     @NonNull
     @Override
     public CardItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout_card_in_list, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_tem_layout_card, parent, false);
         return new CardItemViewHolder(view);
     }
 

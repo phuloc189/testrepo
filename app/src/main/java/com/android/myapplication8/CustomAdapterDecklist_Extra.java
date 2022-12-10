@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.myapplication8.database2.DeckEntityExtra;
-import com.android.myapplication8.database2.DeckEntityInterface;
 
 public class CustomAdapterDecklist_Extra extends ListAdapter<DeckEntityExtra, CustomAdapterDecklist_Extra.DeckItemViewHolder> {
 
@@ -33,7 +32,7 @@ public class CustomAdapterDecklist_Extra extends ListAdapter<DeckEntityExtra, Cu
     @Override
     public DeckItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view =
-        LayoutInflater.from(parent.getContext()).inflate(R.layout.item_layout_deck_in_list, parent, false);
+        LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_ui_deck, parent, false);
         return new DeckItemViewHolder(view);
     }
 

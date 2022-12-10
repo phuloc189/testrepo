@@ -33,6 +33,8 @@ public class Util {
     public static final String BUNDLE_VALUE_DIALOGTYPE_CONFIRM_OPEN_DECK_JUST_CREATED = "bundle_value_dialogtype_confirm_open_deck_just_created";
 
     public static final String BUNDLE_VALUE_DIALOGTYPE_DECK_LIST_SORT_OPTION = "bundle_value_dialogtype_deck_list_sort_option";
+
+    public static final String BUNDLE_VALUE_DIALOGTYPE_CREATE_COLLECTION = "bundle_value_dialogtype_create_collection";
     //////////////
 
     public static final String BUNDLE_KEY_OLD_NAME = "bundle_key_old_name";
@@ -42,6 +44,11 @@ public class Util {
     public static final String BUNDLE_KEY_OLD_MARKING_VALUE = "bundle_key_old_name";
     public static final String BUNDLE_KEY_CURRENT_LIMITED_MARKING_VALUE_SETTING = "bundle_key_current_limited_marking_value_setting";
     public static final String BUNDLE_KEY_NAME_OF_DECK_TOBE_OPENED = "bundle_key_name_of_deck_tobe_opened";
+
+    public static final String INTENT_EXTRA_KEY_MODE_SELECT = "intent_extra_mode_select";
+
+    public static final String INTENT_EXTRA_VALUE_MODE_SELECT_DECK_MANAGEMENT = "intent_extra_value_mode_select_deck_management";
+    public static final String INTENT_EXTRA_VALUE_MODE_SELECT_COLLECTION_MANAGEMENT = "intent_extra_value_mode_select_collection_management";
 
     //////////////
 
@@ -76,7 +83,8 @@ public class Util {
         CONFIRM_DECK_DELETE,
         CONFIRM_OPEN_DECK,
         CONFIRM_CARD_DELETE,
-        CONFIRM_OPEN_DECK_JUST_CREATED
+        CONFIRM_OPEN_DECK_JUST_CREATED,
+        CREATE_COLLECTION
 
     }
 
@@ -146,12 +154,14 @@ public class Util {
                 return R.string.dialog_descr_txt_create_new_card;
             case EDIT_CARD:
                 return R.string.dialog_descr_txt_edit_card;
+            case CREATE_COLLECTION:
+                return R.string.dialog_descr_txt_create_collection;
             default:
                 return R.string.dialog_descr_txt_default_text;
         }
     }
 
-    public static String getStringFromDialogType(Util.DialogType dialogType) {
+    public static String getDialogTypeStringFromDialogType(Util.DialogType dialogType) {
         switch (dialogType) {
             case CONFIRM_DECK_DELETE:
                 return BUNDLE_VALUE_DIALOGTYPE_DECK_DELETE_CONFIRM;
@@ -177,10 +187,11 @@ public class Util {
                 return BUNDLE_VALUE_DIALOGTYPE_LIMIT_MARKING_OPTION;
             case DECK_LIST_SORT_OPTION:
                 return BUNDLE_VALUE_DIALOGTYPE_DECK_LIST_SORT_OPTION;
+            case CREATE_COLLECTION:
+                return BUNDLE_VALUE_DIALOGTYPE_CREATE_COLLECTION;
             default:
                 return "WUT???";
-        }
-
+        }//CREATE_COLLECTION
     }
 
     public static Util.DialogType getDialogTypeFromString(String dialogType) {
@@ -207,6 +218,8 @@ public class Util {
                 return DialogType.LIMIT_MARKING_OPTION;
             case BUNDLE_VALUE_DIALOGTYPE_DECK_LIST_SORT_OPTION:
                 return DialogType.DECK_LIST_SORT_OPTION;
+            case BUNDLE_VALUE_DIALOGTYPE_CREATE_COLLECTION:
+                return DialogType.CREATE_COLLECTION;
             default:
                 return DialogType.NONE;
         }

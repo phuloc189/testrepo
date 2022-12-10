@@ -18,10 +18,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.PopupMenu;
 
-import com.android.myapplication8.CustomAdapterDeckList;
 import com.android.myapplication8.CustomAdapterDecklist_Extra;
 import com.android.myapplication8.database2.DeckEntityExtra;
-import com.android.myapplication8.database2.DeckEntityInterface;
 import com.android.myapplication8.interfaces.ConfirmDialogCallback;
 import com.android.myapplication8.interfaces.DialogResultCallback;
 import com.android.myapplication8.R;
@@ -31,7 +29,6 @@ import com.android.myapplication8.database2.Database2Wrapper;
 import com.android.myapplication8.database2.DeckEntity;
 import com.android.myapplication8.interfaces.DeckListSortSettingCallback;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentDeckList extends Fragment implements
@@ -147,7 +144,6 @@ public class FragmentDeckList extends Fragment implements
 
     private void setupViewModel(){
         viewModel = new ViewModelProvider(requireActivity()).get(ViewModel1.class);
-        viewModel.setMark("i was here");
     }
 
     private void readDatabaseLiveData() {
@@ -367,7 +363,7 @@ public class FragmentDeckList extends Fragment implements
         DialogFragmentDeckListSortOption dialog = new DialogFragmentDeckListSortOption();
         Bundle args = new Bundle();
         args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
-                Util.getStringFromDialogType(Util.DialogType.DECK_LIST_SORT_OPTION));
+                Util.getDialogTypeStringFromDialogType(Util.DialogType.DECK_LIST_SORT_OPTION));
         dialog.setArguments(args);
         dialog.show(getChildFragmentManager(), DialogFragmentDeckListSortOption.TAG);
     }
@@ -376,7 +372,7 @@ public class FragmentDeckList extends Fragment implements
         DialogFragmentNewDeck newDeckDialogFragment = new DialogFragmentNewDeck();
         Bundle args = new Bundle();
         args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
-                Util.getStringFromDialogType(Util.DialogType.NEW_DECK_NAME));
+                Util.getDialogTypeStringFromDialogType(Util.DialogType.NEW_DECK_NAME));
         newDeckDialogFragment.setArguments(args);
         newDeckDialogFragment.show(getChildFragmentManager(), DialogFragmentNewDeck.TAG);
     }
@@ -385,7 +381,7 @@ public class FragmentDeckList extends Fragment implements
         DialogFragmentNewDeck newDeckDialogFragment = new DialogFragmentNewDeck();
         Bundle args = new Bundle();
         args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
-                Util.getStringFromDialogType(Util.DialogType.DECK_RENAME));
+                Util.getDialogTypeStringFromDialogType(Util.DialogType.DECK_RENAME));
         args.putString(Util.BUNDLE_KEY_OLD_NAME, longClickedDeckName);
         newDeckDialogFragment.setArguments(args);
         newDeckDialogFragment.show(getChildFragmentManager(), DialogFragmentNewDeck.TAG);
@@ -395,7 +391,7 @@ public class FragmentDeckList extends Fragment implements
         DialogFragmentConfirm dialogFragment = new DialogFragmentConfirm();
         Bundle args = new Bundle();
         args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
-                Util.getStringFromDialogType(confirmDialogType));
+                Util.getDialogTypeStringFromDialogType(confirmDialogType));
         if (confirmDialogType == Util.DialogType.CONFIRM_OPEN_DECK) {
             args.putString(Util.BUNDLE_KEY_NAME_OF_DECK_TOBE_OPENED, longClickedDeckName);
         }

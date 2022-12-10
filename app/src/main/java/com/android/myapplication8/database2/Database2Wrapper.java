@@ -35,7 +35,11 @@ public class Database2Wrapper {
         DB_TASK_UPDATE_CARD,
         DB_TASK_DELETE_CARD,
         DB_TASK_READ_CARDS_LIVEDATA,
-        DB_TASK_READ_CARDS_FROM_DECK_LIVEDATA
+        DB_TASK_READ_CARDS_FROM_DECK_LIVEDATA,
+        DB_TASK_CREATE_COLLECTION,
+        DB_TASK_READ_COLLECTION,
+        DB_TASK_RENAME_COLLECTION,
+        DB_TASK_DELETE_COLLECTION
     }
 
     public static enum DbTaskResult {
@@ -69,6 +73,10 @@ public class Database2Wrapper {
 
     public CardDao cardDaoAlias() {
         return database2Instance.cardDao();
+    }
+
+    public CollectionDao collectionDaoAlias() {
+        return database2Instance.collectionDao();
     }
 
     //------------
@@ -323,6 +331,47 @@ public class Database2Wrapper {
 
     public LiveData<List<CardEntity>> readAllCardsFromDeckLiveData(int deckUid) {
         return cardDaoAlias().getAllCardsLiveDataFromADeck(deckUid);
+    }
+
+    //----------- collection ----------------
+
+    public LiveData<List<CollectionEntityExtra>> getAllCollectionExtraLivedata() {
+        return collectionDaoAlias().getAllCollectionExtraLivedata();
+    }
+
+    public void deleteCollection (int targetUid, Database2Callback callback) {
+        dbExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                int result = collectionDaoAlias().delete(targetUid);
+                callback.onComplete_SimpleResult(DbTask.DB_TASK_DELETE_COLLECTION,
+                        (result <= 0 ? DbTaskResult.DB_RESULT_NG: DbTaskResult.DB_RESULT_OK));
+            }
+        });
+    }
+
+    public void renameCollection (int targetUid, String newName, Database2Callback callback){
+        dbExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                int result = collectionDaoAlias().updateCollectionName(targetUid, newName);
+                callback.onComplete_SimpleResult(DbTask.DB_TASK_RENAME_COLLECTION,
+                        (result <= 0 ? DbTaskResult.DB_RESULT_NG: DbTaskResult.DB_RESULT_OK));
+            }
+        });
+    }
+
+    public void createCollection(String name, Database2Callback callback) {
+        dbExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                CollectionEntity collection = new CollectionEntity(name);
+                Util.logDebug(TAG, "new name: " + name);
+                long result = collectionDaoAlias().insert(collection);
+                callback.onInsertComplete(DbTask.DB_TASK_CREATE_COLLECTION,
+                        result);
+            }
+        });
     }
 
 }

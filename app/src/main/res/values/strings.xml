@@ -2,6 +2,8 @@
     <string name="app_name">My Application 8</string>
 
     <string name="button_start">START</string>
+    <string name="button_startScrn_manageDeck">MANAGE DECK</string>
+    <string name="button_startScrn_manageCollection">MANAGE COLLECTION</string>
     <string name="button_add_item_to_list">NEW DECK</string>
     <string name="button_list_option">OPTION</string>
 
@@ -23,6 +25,7 @@
     <string name="dialog_descr_txt_card_delete_confirm">about to delete this card, are you sure???</string>
     <string name="dialog_descr_txt_default_text">what the hell was that</string>
     <string name="dialog_descr_txt_default_text2">what the hell was that\nwhat\nwhat\nwhat\nwhat\nwhat\nwhat</string>
+    <string name="dialog_descr_txt_create_collection">creating new collection, name plz</string>
 
     <string name="button_create_new_card">new card</string>
     <string name="button_move_to_study">study this deck</string>
@@ -32,6 +35,8 @@
     <string name="button_study_screen_flip_card">flip</string>
     <string name="button_study_screen_previous_card">previous &lt;&lt;&lt;</string>
     <string name="button_study_screen_edit_card">edit</string>
+
+    <string name="button_collectionList_createNew_text">create new collection</string>
 
     <string name="button_study_screen_ctrl_panel_restart_session">restart session</string>
 

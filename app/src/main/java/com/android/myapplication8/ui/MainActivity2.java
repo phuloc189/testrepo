@@ -4,12 +4,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.android.myapplication8.R;
+import com.android.myapplication8.Util;
 import com.android.myapplication8.database2.DeckEntity;
 
 /**
@@ -26,7 +28,25 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
         setContentView(R.layout.activity_main2);
         setupToolbar();
 
-        launchDeckListFragment(savedInstanceState);
+        String modeOfOp = getIntent().getStringExtra(Util.INTENT_EXTRA_KEY_MODE_SELECT);
+
+        if (modeOfOp.equals(Util.INTENT_EXTRA_VALUE_MODE_SELECT_COLLECTION_MANAGEMENT)){
+            //todo: how to save status of this shit???
+            launchCollectionListFragment();
+
+        } else if (modeOfOp.equals(Util.INTENT_EXTRA_VALUE_MODE_SELECT_DECK_MANAGEMENT)) {
+            launchDeckListFragment(savedInstanceState);
+        }
+
+
+    }
+
+    private void launchCollectionListFragment() {
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .add(R.id.fragment_container_content, FragmentCollectionList.class, null)
+                .addToBackStack("FragmentCollectionList")
+                .commit();
     }
 
     private void setupToolbar() {

@@ -146,7 +146,7 @@ public class FragmentStudyScreen extends Fragment implements
         controlPanelDialog = new DialogFragmentStdScrnControlPanel();
         Bundle args = new Bundle();
         args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
-                Util.getStringFromDialogType(Util.DialogType.STUDY_SCREEN_CTRL_PANEL));
+                Util.getDialogTypeStringFromDialogType(Util.DialogType.STUDY_SCREEN_CTRL_PANEL));
         controlPanelDialog.setArguments(args);
         controlPanelDialog.show(getChildFragmentManager(), DialogFragmentStdScrnControlPanel.TAG);
     }
@@ -326,7 +326,7 @@ public class FragmentStudyScreen extends Fragment implements
     private void openMarkingSelectDialog(int currentSetting) {
         DialogFragmentMarkingEditing limitedMarkingDialog = new DialogFragmentMarkingEditing();
         Bundle args = new Bundle();
-        args.putString(Util.BUNDLE_KEY_DIALOGTYPE, Util.getStringFromDialogType(Util.DialogType.LIMIT_MARKING_OPTION));
+        args.putString(Util.BUNDLE_KEY_DIALOGTYPE, Util.getDialogTypeStringFromDialogType(Util.DialogType.LIMIT_MARKING_OPTION));
         args.putInt(Util.BUNDLE_KEY_CURRENT_LIMITED_MARKING_VALUE_SETTING, currentSetting);
         limitedMarkingDialog.setArguments(args);
         limitedMarkingDialog.show(getChildFragmentManager(), DialogFragmentMarkingEditing.TAG);

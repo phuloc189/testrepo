@@ -29,9 +29,7 @@ public class DialogFragmentNewDeck extends DialogFragment {
 
     EditText editTextInputField1;
 
-    String dialogType;
-
-    Util.DialogType dialogTypeType;
+    Util.DialogType dialogType;
 
     String oldName;
 
@@ -61,10 +59,8 @@ public class DialogFragmentNewDeck extends DialogFragment {
             Util.logDebug(TAG, "can't get any argument");
             return false;
         }
-//        dialogType = args.getString(Util.BUNDLE_KEY_DIALOGTYPE, "what the fuck");
-        dialogTypeType = Util.getDialogTypeFromString(args.getString(Util.BUNDLE_KEY_DIALOGTYPE, "what the fuck"));
-//        if (dialogType.equals(Util.BUNDLE_VALUE_DIALOGTYPE_RENAME_DECK)) {
-        if (dialogTypeType == Util.DialogType.DECK_RENAME) {
+        dialogType = Util.getDialogTypeFromString(args.getString(Util.BUNDLE_KEY_DIALOGTYPE, "what the fuck"));
+        if (dialogType == Util.DialogType.DECK_RENAME) {
             oldName = args.getString(Util.BUNDLE_KEY_OLD_NAME, "");
             if (oldName.length() == 0) {
                 //todo: should i do something about this case???
@@ -80,8 +76,7 @@ public class DialogFragmentNewDeck extends DialogFragment {
         buttonConfirm = view.findViewById(R.id.button_dialog_confirm);
         buttonCancel = view.findViewById(R.id.button_dialog_cancel);
 
-//        textViewDescription.setText(Util.getDialogDescriptionTextId(dialogType));
-        textViewDescription.setText(Util.getDialogDescriptionResId(dialogTypeType));
+        textViewDescription.setText(Util.getDialogDescriptionResId(dialogType));
 
         buttonConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,8 +94,7 @@ public class DialogFragmentNewDeck extends DialogFragment {
             }
         });
 
-//        if (dialogType.equals(Util.BUNDLE_VALUE_DIALOGTYPE_RENAME_DECK)) {
-        if (dialogTypeType == Util.DialogType.DECK_RENAME) {
+        if (dialogType == Util.DialogType.DECK_RENAME) {
             editTextInputField1.setText(oldName);
         }
 
@@ -112,8 +106,7 @@ public class DialogFragmentNewDeck extends DialogFragment {
             editTextInputField1.setError("there's nothin here bruh");
             return;
         }
-//        if (dialogType.equals(Util.BUNDLE_VALUE_DIALOGTYPE_RENAME_DECK) && inputText.equals(oldName)) {
-        if (dialogTypeType == Util.DialogType.DECK_RENAME && inputText.equals(oldName)) {
+        if (dialogType == Util.DialogType.DECK_RENAME && inputText.equals(oldName)) {
             editTextInputField1.setError("dude it's the same name");
             return;
         }
@@ -129,7 +122,7 @@ public class DialogFragmentNewDeck extends DialogFragment {
             Util.logError(TAG, "exception happened: " + e);
             return;
         }
-        callback.onDialogResult_NewText(dialogTypeType, editTextInputField1.getText().toString());
+        callback.onDialogResult_NewText(dialogType, editTextInputField1.getText().toString());
     }
 
 }

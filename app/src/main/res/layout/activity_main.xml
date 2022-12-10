@@ -7,14 +7,23 @@
     tools:context=".ui.MainActivity">
 
     <Button
-        android:id="@+id/button_start"
+        android:id="@+id/button_startScrn_manageDeck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_start"
+        android:text="@string/button_startScrn_manageDeck"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button_startScrn_manageCollection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_startScrn_manageCollection"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_startScrn_manageDeck" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
