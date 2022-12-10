@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.myapplication8.database2.DeckEntity;
+import com.android.myapplication8.interfaces.ViewHolderOnClick;
 
-public class CustomAdapterDeckList extends ListAdapter<DeckEntity, CustomAdapterDeckList.DeckItemViewHolder>{
+public class CustomAdapterDeckList extends ListAdapter<DeckEntity, CustomAdapterDeckList.DeckItemViewHolder>
+implements ViewHolderOnClick {
 
     private static final String TAG = "CustomAdapterDeckList";
 
@@ -41,18 +43,14 @@ public class CustomAdapterDeckList extends ListAdapter<DeckEntity, CustomAdapter
         Util.logDebug(TAG, "onBindViewHolder called: " + position);
         DeckEntity deck = getItem(position);
         holder.bind(deck.getDeckName());
-        // need position then holder.getAdapterPosition() is the way
-        holder.setOnClickListener(new DeckItemViewHolder.DeckItemViewHolderCallback() {
-            @Override
-            public void onItemClick(Util.ClickEvent event, int position) {
-                Util.logDebug(TAG, "item clicked at: " + position +
-                        ", click type: " + event);
-                processItemClick(event, position);
-            }
-        });
+        holder.setOnClickListener(this);
     }
 
-    public void processItemClick(Util.ClickEvent event, int position) {
+    @Override
+    public void onItemClick(Util.ClickEvent event, int position) {
+        // need position then holder.getAdapterPosition() is the way
+        Util.logDebug(TAG, "item clicked at: " + position +
+                ", click type: " + event);
         callback.onItemClick(event, position);
     }
 
@@ -69,7 +67,7 @@ public class CustomAdapterDeckList extends ListAdapter<DeckEntity, CustomAdapter
             this.textView = itemView.findViewById(R.id.tv_deck_item_deck_title);
         }
 
-        public void setOnClickListener(DeckItemViewHolderCallback callback) {
+        public void setOnClickListener(ViewHolderOnClick callback) {
             this.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
