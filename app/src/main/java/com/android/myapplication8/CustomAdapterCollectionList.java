@@ -60,5 +60,6 @@ public class CustomAdapterCollectionList extends ListAdapter<CollectionEntityExt
             ((TextView)itemView.findViewById(R.id.tv_collection_item_title)).setText(collectionName);
             //todo: implement deck count
         }
+
     }
 }

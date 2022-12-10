@@ -17,9 +17,9 @@ import com.android.myapplication8.interfaces.DialogResultCallback;
 import com.android.myapplication8.R;
 import com.android.myapplication8.Util;
 
-public class DialogFragmentNewDeck extends DialogFragment {
+public class DialogFragmentSimpleNameEdit extends DialogFragment {
 
-    public static String TAG = "NewDeckDialogFragment";
+    public static String TAG = "DialogFragmentSimpleNameEdit";
 
     Button buttonConfirm;
 

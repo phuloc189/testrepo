@@ -369,22 +369,22 @@ public class FragmentDeckList extends Fragment implements
     }
 
     private void showDialog_CreateNewDeck() {
-        DialogFragmentNewDeck newDeckDialogFragment = new DialogFragmentNewDeck();
+        DialogFragmentSimpleNameEdit newDeckDialogFragment = new DialogFragmentSimpleNameEdit();
         Bundle args = new Bundle();
         args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
                 Util.getDialogTypeStringFromDialogType(Util.DialogType.NEW_DECK_NAME));
         newDeckDialogFragment.setArguments(args);
-        newDeckDialogFragment.show(getChildFragmentManager(), DialogFragmentNewDeck.TAG);
+        newDeckDialogFragment.show(getChildFragmentManager(), DialogFragmentSimpleNameEdit.TAG);
     }
 
     private void showDialog_DeckRename() {
-        DialogFragmentNewDeck newDeckDialogFragment = new DialogFragmentNewDeck();
+        DialogFragmentSimpleNameEdit newDeckDialogFragment = new DialogFragmentSimpleNameEdit();
         Bundle args = new Bundle();
         args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
                 Util.getDialogTypeStringFromDialogType(Util.DialogType.DECK_RENAME));
         args.putString(Util.BUNDLE_KEY_OLD_NAME, longClickedDeckName);
         newDeckDialogFragment.setArguments(args);
-        newDeckDialogFragment.show(getChildFragmentManager(), DialogFragmentNewDeck.TAG);
+        newDeckDialogFragment.show(getChildFragmentManager(), DialogFragmentSimpleNameEdit.TAG);
     }
 
     private void showDialog_ConfirmDialog(Util.DialogType confirmDialogType) {

@@ -6,7 +6,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -51,7 +50,6 @@ public class FragmentCollectionList extends Fragment implements DialogResultCall
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_collection_list, container, false);
 
         setupDatabaseCallback();
@@ -109,19 +107,18 @@ public class FragmentCollectionList extends Fragment implements DialogResultCall
         view.findViewById(R.id.button_collectionList_createNew).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //todo  dialog for new collection
                 showNewCollectionDialog();
             }
         });
     }
 
     private void showNewCollectionDialog() {
-        DialogFragmentNewDeck dialog = new DialogFragmentNewDeck();
+        DialogFragmentSimpleNameEdit dialog = new DialogFragmentSimpleNameEdit();
         Bundle args = new Bundle();
         args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
                 Util.getDialogTypeStringFromDialogType(Util.DialogType.CREATE_COLLECTION));
         dialog.setArguments(args);
-        dialog.show(getChildFragmentManager(), DialogFragmentNewDeck.TAG);
+        dialog.show(getChildFragmentManager(), DialogFragmentSimpleNameEdit.TAG);
     }
 
     private void setupDatabaseCallback() {
