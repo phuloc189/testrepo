@@ -60,6 +60,7 @@ public class FragmentDeckList extends Fragment implements
     public interface Fragment1Interface {
         void onDeckSelected();
         void onAddRemoveDeckTransition();
+        void moveToStudyMode_ForCollection();
     }
 
     public FragmentDeckList() {
@@ -191,12 +192,6 @@ public class FragmentDeckList extends Fragment implements
 
     private void onNewDeckListFromDatabase2(List<DeckEntityExtra> deckEntityExtras) {
         if (deckEntityExtras != null && deckEntityExtras.size() > 0){
-            for (int i = 0; i < deckEntityExtras.size(); i++) {
-                Util.logDebug(TAG, "deckEntityExtras xxx: " + deckEntityExtras.get(i).uid);
-                Util.logDebug(TAG, "deckEntityExtras name: " + deckEntityExtras.get(i).deckName);
-                Util.logDebug(TAG, "deckEntityExtras date: " + deckEntityExtras.get(i).visitedDate);
-                Util.logDebug(TAG, "deckEntityExtras count: " + deckEntityExtras.get(i).cardsCount);
-            }
             Util.logDebug(TAG, "live data list update");
             recyViewAdapterAlias().submitList(deckEntityExtras);
         } else {
@@ -229,6 +224,7 @@ public class FragmentDeckList extends Fragment implements
         buttonCreateNewDeck = view.findViewById(R.id.button_add_item_to_decks_list);
         buttonSortingOption = view.findViewById(R.id.button_decks_list_list_sort_option);
         Button buttonAddRemoveDeck = view.findViewById(R.id.button_decks_list_add_remove_existing_deck_for_collection);
+        Button buttonCollectionStudy = view.findViewById(R.id.button_decks_list_collection_study);
         SearchView searchView = view.findViewById(R.id.searchView_deck_list);
 
         buttonCreateNewDeck.setOnClickListener(new View.OnClickListener() {
@@ -268,12 +264,19 @@ public class FragmentDeckList extends Fragment implements
         });
 
         if (viewModel.getSelectedCollectionUid_Value() < 0){
-            buttonAddRemoveDeck.setVisibility(View.GONE);
+            view.findViewById(R.id.linearLayout_uiGroup_collection).setVisibility(View.GONE);
         } else {
             buttonAddRemoveDeck.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     callBack.onAddRemoveDeckTransition();
+                }
+            });
+            buttonCollectionStudy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    viewModel.setStudyMode(Util.StudyMode.COLLECTION);
+                    callBack.moveToStudyMode_ForCollection();
                 }
             });
         }

@@ -48,11 +48,28 @@
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/button_decks_list_add_remove_existing_deck_for_collection"
+    <LinearLayout
+        android:id="@+id/linearLayout_uiGroup_collection"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_deck_list_add_remove_existing_deck"/>
+        android:orientation="vertical">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="For collection:" />
 
+        <Button
+            android:id="@+id/button_decks_list_add_remove_existing_deck_for_collection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_deck_list_add_remove_existing_deck"/>
+
+        <Button
+            android:id="@+id/button_decks_list_collection_study"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_deck_list_collection_study"/>
+
+    </LinearLayout>
 </LinearLayout>

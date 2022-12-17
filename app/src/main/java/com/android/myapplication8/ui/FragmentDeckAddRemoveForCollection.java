@@ -136,7 +136,7 @@ public class FragmentDeckAddRemoveForCollection extends Fragment {
     private void setupButton(View view) {
         Button confirmButton = view.findViewById(R.id.button_add_remove_screen_confirm);
         Button cancelButton = view.findViewById(R.id.button_add_remove_screen_cancel);
-        // todo: do something with these button
+
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

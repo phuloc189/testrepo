@@ -105,7 +105,16 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
     }
 
     @Override
+    public void moveToStudyMode_ForCollection() {
+        loadStudyScreen();
+    }
+
+    @Override
     public void moveToStudyScreen() {
+        loadStudyScreen();
+    }
+
+    private void loadStudyScreen() {
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.fragment_container_content, FragmentStudyScreen.class, null)

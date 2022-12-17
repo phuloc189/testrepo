@@ -25,5 +25,11 @@ public interface CardDao {
     LiveData<List<CardEntity>> getAllCardsLiveData();
 
     @Query("SELECT * FROM table_CardEntity WHERE deckUid = :deckUid")
-    LiveData<List<CardEntity>> getAllCardsLiveDataFromADeck(int deckUid);
+    LiveData<List<CardEntity>> getAllCardsLiveDataFromDeck(int deckUid);
+
+    @Query("SELECT * FROM table_CardEntity " +
+            "JOIN table_collectiondeckmapping " +
+            "ON table_CardEntity.deckUid = table_collectiondeckmapping.deckUid " +
+            "AND table_collectiondeckmapping.collectionUid = :collectionUid")
+    List<CardEntity> getAllCardsFromCollection(int collectionUid);
 }

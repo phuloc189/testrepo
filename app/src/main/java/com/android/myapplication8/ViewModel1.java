@@ -38,6 +38,8 @@ public class ViewModel1 extends AndroidViewModel {
 
     MutableLiveData<Integer> selectedCollectionUid;
 
+    MutableLiveData<Util.StudyMode> studyMode;
+
     LiveData<List<CardEntity>> cardsList;
 
     // it's actually cardsList but we need this to do stuff like persisting changes for ui data,
@@ -84,6 +86,7 @@ public class ViewModel1 extends AndroidViewModel {
         indexArrays = new ArrayList<>();
         selectedDeckUid = new MutableLiveData<>();
         selectedCollectionUid = new MutableLiveData<>(-1);
+        studyMode = new MutableLiveData<>();
     }
 
     public void setSelectedDeckUid(int uid) {
@@ -232,7 +235,7 @@ public class ViewModel1 extends AndroidViewModel {
 
     //-----------
 
-    public void cacheSelectedDeck() {
+    public void cacheCardsFromSelectedDeck() {
         List<CardEntity> studyingCardsList_value = cardsList.getValue();
         studyingCardsList.setValue(studyingCardsList_value);
 
@@ -248,6 +251,10 @@ public class ViewModel1 extends AndroidViewModel {
 //        if (randomSetting && indexArrays.size() > 0) {
 //            Collections.shuffle(indexArrays);
 //        }
+    }
+
+    public void cacheCards(List<CardEntity> cardsForStudying) {
+        studyingCardsList.setValue(cardsForStudying);
     }
 
     public void fetchPrefSetting() {
@@ -266,7 +273,7 @@ public class ViewModel1 extends AndroidViewModel {
     public void reloadDeck() {
         indexArrays.clear();
         markingStat = new int[Util.CARD_MARKING_MAX_NUMBER_OF_VALUES];
-        List<CardEntity> studyingCardsList_value = cardsList.getValue();
+        List<CardEntity> studyingCardsList_value = studyingCardsList.getValue();
         if (studyingCardsList_value == null || studyingCardsList_value.size() == 0) {
             return;
         }
@@ -289,6 +296,11 @@ public class ViewModel1 extends AndroidViewModel {
 
     public MutableLiveData<List<CardEntity>> getStudyingCardsList() {
         return studyingCardsList;
+    }
+
+    public void getAllCardsFromCollection_vm(int collectionUid,
+                                   Database2Wrapper.Database2Callback_CardsEntity callback) {
+        database2.getAllCardsFromCollection(collectionUid, callback);
     }
 
     //-----------
@@ -362,7 +374,7 @@ public class ViewModel1 extends AndroidViewModel {
         database2.createCollection(name, callback);
     }
 
-    // ---------------
+    // ---------- selected deck
 
     public void setSelectedCollectionUid(int uid) {
         selectedCollectionUid.setValue(uid);
@@ -370,6 +382,16 @@ public class ViewModel1 extends AndroidViewModel {
 
     public int getSelectedCollectionUid_Value() {
         return selectedCollectionUid.getValue();
+    }
+
+    // ---------- study mode
+
+    public void setStudyMode(Util.StudyMode mode) {
+        studyMode.setValue(mode);
+    }
+
+    public Util.StudyMode getStudyMode_value() {
+        return studyMode.getValue();
     }
 
     //----------- factory

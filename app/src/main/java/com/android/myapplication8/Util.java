@@ -64,6 +64,11 @@ public class Util {
 
     //////////////
 
+    public enum StudyMode {
+        DECK,
+        COLLECTION
+    }
+
     public enum ClickEvent {
         NONE,
         CLICK,

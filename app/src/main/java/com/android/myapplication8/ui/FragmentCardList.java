@@ -134,6 +134,7 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
 
     private void requestTransitionToStudyScreen() {
         try {
+            viewModel.setStudyMode(Util.StudyMode.DECK);
             Fragment2Interface callback = (Fragment2Interface) requireActivity();
             callback.moveToStudyScreen();
         } catch (Exception e) {

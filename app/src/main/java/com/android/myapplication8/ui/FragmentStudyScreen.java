@@ -42,6 +42,8 @@ public class FragmentStudyScreen extends Fragment implements
 
     Database2Wrapper.Database2Callback database2Callback;
 
+    Database2Wrapper.Database2Callback_CardsEntity database2Callback_cardsEntity;
+
     Button nextButton;
     Button previousButton;
     Button flipButton;
@@ -179,7 +181,17 @@ public class FragmentStudyScreen extends Fragment implements
     }
 
     private void fetchAndCacheCards() {
-        viewModel.cacheSelectedDeck();
+        if (viewModel.getStudyMode_value() == Util.StudyMode.DECK) {
+            viewModel.cacheCardsFromSelectedDeck();
+            reloadDeck();
+        } else if (viewModel.getStudyMode_value() == Util.StudyMode.COLLECTION &&
+                viewModel.getSelectedCollectionUid_Value() > 0) {
+            viewModel.getAllCardsFromCollection_vm(viewModel.getSelectedCollectionUid_Value(), database2Callback_cardsEntity);
+        }
+    }
+
+    private void onCardFetchResult(List<CardEntity> cardsFetchResult) {
+        viewModel.cacheCards(cardsFetchResult);
         reloadDeck();
     }
 
@@ -266,6 +278,22 @@ public class FragmentStudyScreen extends Fragment implements
 
             @Override
             public void onInsertComplete(Database2Wrapper.DbTask whichTask, long newRowId) {
+            }
+        };
+
+        database2Callback_cardsEntity = new Database2Wrapper.Database2Callback_CardsEntity() {
+            @Override
+            public void onComplete_FetchingCards(Database2Wrapper.DbTask whichTask, List<CardEntity> cardsFetchResult) {
+                Util.logDebug(TAG, "onComplete_FetchingCards result: " + cardsFetchResult.size());
+                if (whichTask == Database2Wrapper.DbTask.DB_TASK_FETCH_CARDS_FROM_COLLECTION) {
+                    requireActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            onCardFetchResult(cardsFetchResult);
+                        }
+                    });
+
+                }
 
             }
         };

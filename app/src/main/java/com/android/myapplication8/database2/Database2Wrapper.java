@@ -42,7 +42,8 @@ public class Database2Wrapper {
         DB_TASK_RENAME_COLLECTION,
         DB_TASK_DELETE_COLLECTION,
         DB_TASK_ADD_DECKS_TO_COLLECTION,
-        DB_TASK_REMOVE_DECKS_FROM_COLLECTION
+        DB_TASK_REMOVE_DECKS_FROM_COLLECTION,
+        DB_TASK_FETCH_CARDS_FROM_COLLECTION
     }
 
     public static enum DbTaskResult {
@@ -58,7 +59,10 @@ public class Database2Wrapper {
         void onSearchDeckCompleteExtra(DbTask whichTask, List<DeckEntityExtra> deckSearchResult);
 
         void onInsertComplete(DbTask whichTask, long newRowId);
+    }
 
+    public interface Database2Callback_CardsEntity {
+        void onComplete_FetchingCards(DbTask whichTask, List<CardEntity> cardsFetchResult);
     }
 
 //    private static final int NUMBER_OF_THREADS = 4;
@@ -345,7 +349,17 @@ public class Database2Wrapper {
     }
 
     public LiveData<List<CardEntity>> readAllCardsFromDeckLiveData(int deckUid) {
-        return cardDaoAlias().getAllCardsLiveDataFromADeck(deckUid);
+        return cardDaoAlias().getAllCardsLiveDataFromDeck(deckUid);
+    }
+
+    public void getAllCardsFromCollection(int collectionUid, Database2Callback_CardsEntity callback) {
+        dbExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                List<CardEntity> result = cardDaoAlias().getAllCardsFromCollection(collectionUid);
+                callback.onComplete_FetchingCards(DbTask.DB_TASK_FETCH_CARDS_FROM_COLLECTION, result);
+            }
+        });
     }
 
     //----------- collection ----------------
