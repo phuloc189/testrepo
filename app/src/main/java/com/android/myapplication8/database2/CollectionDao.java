@@ -20,12 +20,11 @@ public interface CollectionDao {
     @Query("UPDATE table_CollectionEntity SET collectionName = :newName WHERE uid = :targetUid")
     int updateCollectionName(int targetUid, String newName);
 
-    @Query("SELECT * FROM table_CollectionEntity")
-    public LiveData<CollectionEntity> getAllCollectionLivedata();
-
-    @Query("SELECT * FROM table_CollectionEntity")
-    public LiveData<List<CollectionEntityExtra>> getAllCollectionExtraLivedata();
-
-    //todo: a get method with deck number in it
+    @Query("SELECT table_CollectionEntity.*, COUNT(table_CollectionDeckMapping.deckUid) as deckCount" +
+            " FROM table_CollectionEntity " +
+            " left outer JOIN table_CollectionDeckMapping " +
+            " ON table_CollectionEntity.uid = table_CollectionDeckMapping.collectionUid" +
+            " group by table_CollectionEntity.uid")
+    LiveData<List<CollectionEntityExtra>> getAllCollectionExtraLivedata2();
 
 }

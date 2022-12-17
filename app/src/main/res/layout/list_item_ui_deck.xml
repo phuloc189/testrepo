@@ -12,7 +12,7 @@
         android:id="@+id/tv_deck_item_deck_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="what? (default text)"/>
+        android:text="name"/>
 
     <TextView
         android:id="@+id/tv_deck_item_last_visited_date"

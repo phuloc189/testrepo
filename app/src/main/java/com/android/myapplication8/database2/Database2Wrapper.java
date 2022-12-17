@@ -7,6 +7,7 @@ import androidx.sqlite.db.SimpleSQLiteQuery;
 
 import com.android.myapplication8.Util;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -39,7 +40,9 @@ public class Database2Wrapper {
         DB_TASK_CREATE_COLLECTION,
         DB_TASK_READ_COLLECTION,
         DB_TASK_RENAME_COLLECTION,
-        DB_TASK_DELETE_COLLECTION
+        DB_TASK_DELETE_COLLECTION,
+        DB_TASK_ADD_DECKS_TO_COLLECTION,
+        DB_TASK_REMOVE_DECKS_FROM_COLLECTION
     }
 
     public static enum DbTaskResult {
@@ -77,6 +80,10 @@ public class Database2Wrapper {
 
     public CollectionDao collectionDaoAlias() {
         return database2Instance.collectionDao();
+    }
+
+    public CollectionToDeckMapDao collectionToDeckMapDaoAlias() {
+        return database2Instance.collectionToDeckMapDao();
     }
 
     //------------
@@ -161,6 +168,14 @@ public class Database2Wrapper {
 
     public LiveData<List<DeckEntityExtra>> getAllLiveData_experimental2() {
         return deckDaoAlias().getAllLiveData_experimental2();
+    }
+
+    public LiveData<List<DeckEntityExtra>> getAllLiveDataExtra_forCollection(int collectionUid) {
+        return deckDaoAlias().getAllLiveDataExtra_forCollection(collectionUid);
+    }
+
+    public LiveData<List<DeckEntityExtra_CollectionCheckList>> getAllLiveData_CollectionChecklist(int collectionUid) {
+        return deckDaoAlias().getAllLiveData_CollectionChecklist(collectionUid);
     }
 
     public LiveData<List<DeckEntityExtra>> getAllLiveData_raw_extra(Util.SortingOptions optionSortingType
@@ -336,7 +351,7 @@ public class Database2Wrapper {
     //----------- collection ----------------
 
     public LiveData<List<CollectionEntityExtra>> getAllCollectionExtraLivedata() {
-        return collectionDaoAlias().getAllCollectionExtraLivedata();
+        return collectionDaoAlias().getAllCollectionExtraLivedata2();
     }
 
     public void deleteCollection (int targetUid, Database2Callback callback) {
@@ -373,5 +388,60 @@ public class Database2Wrapper {
             }
         });
     }
+
+    // ------------  collection-deck map  --------------
+
+    public void insertDecksToCollection(int collectionUid, Integer[] deckUidList, Database2Callback callback) {
+        if (deckUidList == null || deckUidList.length == 0){
+            callback.onComplete_SimpleResult(DbTask.DB_TASK_ADD_DECKS_TO_COLLECTION,
+                    DbTaskResult.DB_RESULT_NG);
+            return;
+        }
+        dbExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                List<CollectionToDeckMap> mapList = new ArrayList<>();
+                for (Integer deckUid: deckUidList) {
+                    mapList.add(new CollectionToDeckMap(collectionUid, deckUid));
+                }
+                List<Long> results = collectionToDeckMapDaoAlias().insertListOfDecks(mapList);
+
+                if (results != null && results.size()> 0) {
+                    callback.onComplete_SimpleResult(DbTask.DB_TASK_ADD_DECKS_TO_COLLECTION,
+                            DbTaskResult.DB_RESULT_OK);
+                } else {
+                    callback.onComplete_SimpleResult(DbTask.DB_TASK_ADD_DECKS_TO_COLLECTION,
+                            DbTaskResult.DB_RESULT_NG);
+                }
+            }
+        });
+    }
+
+    public void removeDecksFromCollection(int collectionUid, Integer[] deckUidList, Database2Callback callback) {
+        if (deckUidList == null || deckUidList.length == 0){
+            callback.onComplete_SimpleResult(DbTask.DB_TASK_REMOVE_DECKS_FROM_COLLECTION,
+                    DbTaskResult.DB_RESULT_NG);
+            return;
+        }
+        dbExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                List<CollectionToDeckMap> mapList = new ArrayList<>();
+                for (Integer deckUid: deckUidList) {
+                    mapList.add(new CollectionToDeckMap(collectionUid, deckUid));
+                }
+                int results = collectionToDeckMapDaoAlias().deleteListOfDecks(mapList);
+
+                if (results > 0) {
+                    callback.onComplete_SimpleResult(DbTask.DB_TASK_REMOVE_DECKS_FROM_COLLECTION,
+                            DbTaskResult.DB_RESULT_OK);
+                } else {
+                    callback.onComplete_SimpleResult(DbTask.DB_TASK_REMOVE_DECKS_FROM_COLLECTION,
+                            DbTaskResult.DB_RESULT_NG);
+                }
+            }
+        });
+    }
+
 
 }

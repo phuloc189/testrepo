@@ -4,7 +4,6 @@ import androidx.room.Ignore;
 
 public class CollectionEntityExtra extends CollectionEntity{
 
-    @Ignore
     public int deckCount;
 
     @Override

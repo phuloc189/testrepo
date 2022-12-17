@@ -58,6 +58,7 @@ implements ViewHolderOnClick {
 //        View itemView; // we don't need this, the base class already have one
         TextView textView;
 
+        //todo: WHO THE FUCK IMPLEMENT THIS AND HOW????
         public interface DeckItemViewHolderCallback {
             void onItemClick(Util.ClickEvent event, int position);
         }

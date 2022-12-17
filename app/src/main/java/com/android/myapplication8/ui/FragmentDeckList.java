@@ -59,6 +59,7 @@ public class FragmentDeckList extends Fragment implements
 
     public interface Fragment1Interface {
         void onDeckSelected();
+        void onAddRemoveDeckTransition();
     }
 
     public FragmentDeckList() {
@@ -77,9 +78,9 @@ public class FragmentDeckList extends Fragment implements
         View view = inflater.inflate(R.layout.fragment_deck_list, container, false);
 
         //todo: handle back key to and from this screen
+        setupViewModel();
         setupDatabaseCallback();
         setupListUi(view);
-        setupViewModel();
         readDatabaseLiveData();
         setupButton(view);
 
@@ -164,15 +165,28 @@ public class FragmentDeckList extends Fragment implements
 //                    }
 //                });
 
-        viewModel.getAllLiveData_experimental2_vm().observe(
-                getViewLifecycleOwner(),
-                new Observer<List<DeckEntityExtra>>() {
-                    @Override
-                    public void onChanged(List<DeckEntityExtra> deckEntityExtras) {
-                        onNewDeckListFromDatabase2(deckEntityExtras);
+        if (viewModel.getSelectedCollectionUid_Value() > 0) {
+            Util.logDebug(TAG, "reading deck for collection: ");
+            viewModel.getAllLiveDataExtra_forCollection(viewModel.getSelectedCollectionUid_Value()).observe(
+                    getViewLifecycleOwner(),
+                    new Observer<List<DeckEntityExtra>>() {
+                        @Override
+                        public void onChanged(List<DeckEntityExtra> deckEntityExtras) {
+                            onNewDeckListFromDatabase2(deckEntityExtras);
+                        }
                     }
-                }
-        );
+            );
+        } else {
+            viewModel.getAllLiveData_experimental2_vm().observe(
+                    getViewLifecycleOwner(),
+                    new Observer<List<DeckEntityExtra>>() {
+                        @Override
+                        public void onChanged(List<DeckEntityExtra> deckEntityExtras) {
+                            onNewDeckListFromDatabase2(deckEntityExtras);
+                        }
+                    }
+            );
+        }
     }
 
     private void onNewDeckListFromDatabase2(List<DeckEntityExtra> deckEntityExtras) {
@@ -214,6 +228,7 @@ public class FragmentDeckList extends Fragment implements
     private void setupButton(View view) {
         buttonCreateNewDeck = view.findViewById(R.id.button_add_item_to_decks_list);
         buttonSortingOption = view.findViewById(R.id.button_decks_list_list_sort_option);
+        Button buttonAddRemoveDeck = view.findViewById(R.id.button_decks_list_add_remove_existing_deck_for_collection);
         SearchView searchView = view.findViewById(R.id.searchView_deck_list);
 
         buttonCreateNewDeck.setOnClickListener(new View.OnClickListener() {
@@ -251,6 +266,17 @@ public class FragmentDeckList extends Fragment implements
                 return false;
             }
         });
+
+        if (viewModel.getSelectedCollectionUid_Value() < 0){
+            buttonAddRemoveDeck.setVisibility(View.GONE);
+        } else {
+            buttonAddRemoveDeck.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    callBack.onAddRemoveDeckTransition();
+                }
+            });
+        }
     }
 
     private void transitionToSearchMode(){

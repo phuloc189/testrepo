@@ -105,7 +105,25 @@ public interface DeckDao {
             "FROM table_DeckEntity LEFT OUTER JOIN table_cardentity ON table_DeckEntity.uid = table_cardentity.deckUid " +
             "WHERE deckName LIKE '%' || :searchString || '%' " +
             "GROUP BY table_DeckEntity.uid")
-    List<DeckEntityExtra> findDeckEntitiesPlus(String searchString); //todo: expose
+    List<DeckEntityExtra> findDeckEntitiesPlus(String searchString);
+
+
+    @Query("SELECT table_DeckEntity.*, COUNT(table_cardentity.deckUid) as cardsCount " +
+            "FROM table_DeckEntity " +
+            "LEFT OUTER JOIN table_cardentity ON table_DeckEntity.uid = table_cardentity.deckUid " +
+            "JOIN table_CollectionDeckMapping ON table_DeckEntity.uid = table_CollectionDeckMapping.deckUid and table_CollectionDeckMapping.collectionUid = :collectionUid " +
+            "GROUP BY table_DeckEntity.uid" )
+    LiveData<List<DeckEntityExtra>> getAllLiveDataExtra_forCollection(int collectionUid);
+
+
+    @Query("SELECT table_DeckEntity.*, table_CollectionDeckMapping.collectionUid as collectionUid " +
+            "FROM table_DeckEntity " +
+            "LEFT OUTER JOIN table_CollectionDeckMapping ON table_DeckEntity.uid = table_CollectionDeckMapping.deckUid " +
+            "and table_CollectionDeckMapping.collectionUid = :collectionUid ")
+    LiveData<List<DeckEntityExtra_CollectionCheckList>> getAllLiveData_CollectionChecklist(int collectionUid);
+
+
+
 
 
 

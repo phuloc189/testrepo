@@ -3,6 +3,7 @@ package com.android.myapplication8.ui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,14 +13,18 @@ import android.view.MenuItem;
 
 import com.android.myapplication8.R;
 import com.android.myapplication8.Util;
+import com.android.myapplication8.ViewModel1;
 import com.android.myapplication8.database2.DeckEntity;
 
 /**
  * first activity right after start activity
  */
 public class MainActivity2 extends AppCompatActivity implements FragmentDeckList.Fragment1Interface,
-        FragmentCardList.Fragment2Interface {
+        FragmentCardList.Fragment2Interface, FragmentCollectionList.FragmentCollectionListCallback,
+        FragmentDeckAddRemoveForCollection.FragmentDeckAddRemoveForCollectionCallback {
     public static String TAG = "MainActivity2";
+
+    ViewModel1 viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,15 +35,16 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
 
         String modeOfOp = getIntent().getStringExtra(Util.INTENT_EXTRA_KEY_MODE_SELECT);
 
-        if (modeOfOp.equals(Util.INTENT_EXTRA_VALUE_MODE_SELECT_COLLECTION_MANAGEMENT)){
-            //todo: how to save status of this shit???
-            launchCollectionListFragment();
+        viewModel = new ViewModelProvider(this).get(ViewModel1.class);
 
-        } else if (modeOfOp.equals(Util.INTENT_EXTRA_VALUE_MODE_SELECT_DECK_MANAGEMENT)) {
-            launchDeckListFragment(savedInstanceState);
+        if (savedInstanceState == null) {
+            if (modeOfOp.equals(Util.INTENT_EXTRA_VALUE_MODE_SELECT_COLLECTION_MANAGEMENT)){
+                //todo: how to save status of this shit???
+                launchCollectionListFragment();
+            } else if (modeOfOp.equals(Util.INTENT_EXTRA_VALUE_MODE_SELECT_DECK_MANAGEMENT)) {
+                launchDeckListFragment();
+            }
         }
-
-
     }
 
     private void launchCollectionListFragment() {
@@ -67,15 +73,14 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
         return true;
     }
 
-    void launchDeckListFragment(Bundle savedInstanceState) {
-        if(savedInstanceState == null ) { // so that we only do it once, and wont do it again in case such as config change
-            Log.d(TAG, "onCreate: launching");
-            getSupportFragmentManager().beginTransaction()
-                    .setReorderingAllowed(true)
-                    .add(R.id.fragment_container_content, FragmentDeckList.class, null)
-                    .addToBackStack("Fragment1")
-                    .commit();
-        }
+    void launchDeckListFragment() {
+        // so that we only do it once, and wont do it again in case such as config change
+        Log.d(TAG, "onCreate: launching");
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .add(R.id.fragment_container_content, FragmentDeckList.class, null)
+                .addToBackStack("FragmentDeckList")
+                .commit();
 
         getSupportActionBar().setTitle(getString(R.string.top_bar_text_choose_a_deck));
     }
@@ -85,9 +90,18 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.fragment_container_content, FragmentCardList.class, null)
-                .addToBackStack("Fragment2")
+                .addToBackStack("FragmentCardList")
                 .commit();
         getSupportActionBar().setTitle(getString(R.string.top_bar_text_cards_preview));
+    }
+
+    @Override
+    public void onAddRemoveDeckTransition() {
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .replace(R.id.fragment_container_content, FragmentDeckAddRemoveForCollection.class, null)
+                .addToBackStack("FragmentDeckAddRemoveForCollection")
+                .commit();
     }
 
     @Override
@@ -95,8 +109,18 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.fragment_container_content, FragmentStudyScreen.class, null)
-                .addToBackStack("Fragment3")
+                .addToBackStack("FragmentStudyScreen")
                 .commit();
         getSupportActionBar().setTitle(getString(R.string.top_bar_text_study_mode));
+    }
+
+    @Override
+    public void onCollectionSelected() {
+        launchDeckListFragment();
+    }
+
+    @Override
+    public void settingComplete() {
+        getSupportFragmentManager().popBackStack();
     }
 }

@@ -18,6 +18,7 @@ import com.android.myapplication8.database2.CollectionEntityExtra;
 import com.android.myapplication8.database2.Database2Wrapper;
 import com.android.myapplication8.database2.DeckEntity;
 import com.android.myapplication8.database2.DeckEntityExtra;
+import com.android.myapplication8.database2.DeckEntityExtra_CollectionCheckList;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,6 +35,8 @@ public class ViewModel1 extends AndroidViewModel {
     LiveData<List<DeckEntityExtra>> deckList_withExtra;
 
     MutableLiveData<Integer> selectedDeckUid;
+
+    MutableLiveData<Integer> selectedCollectionUid;
 
     LiveData<List<CardEntity>> cardsList;
 
@@ -80,6 +83,7 @@ public class ViewModel1 extends AndroidViewModel {
         studyingCardsList = new MutableLiveData<>();
         indexArrays = new ArrayList<>();
         selectedDeckUid = new MutableLiveData<>();
+        selectedCollectionUid = new MutableLiveData<>(-1);
     }
 
     public void setSelectedDeckUid(int uid) {
@@ -157,6 +161,23 @@ public class ViewModel1 extends AndroidViewModel {
         );
         deckList_withExtra = database2.getAllLiveData_raw_extra(optionSortingType, optionDescending);
         return deckList_withExtra;
+    }
+
+    public LiveData<List<DeckEntityExtra>> getAllLiveDataExtra_forCollection(int collectionUid) {
+        //todo: decklist_withextra assignment
+        return database2.getAllLiveDataExtra_forCollection(collectionUid);
+    }
+
+    public LiveData<List<DeckEntityExtra_CollectionCheckList>> getAllLiveData_CollectionChecklist_vm(int collectionUid) {
+        return database2.getAllLiveData_CollectionChecklist(collectionUid);
+    }
+
+    public void insertDecksToCollection_vm(int collectionUid, Integer[] deckUidList, Database2Wrapper.Database2Callback callback) {
+        database2.insertDecksToCollection(collectionUid, deckUidList, callback);
+    }
+
+    public void removeDecksFromCollection_vm(int collectionUid, Integer[] deckUidList, Database2Wrapper.Database2Callback callback) {
+        database2.removeDecksFromCollection(collectionUid, deckUidList, callback);
     }
 
     public void removeDeckListObservers(LifecycleOwner lifecycleOwner) {
@@ -339,6 +360,16 @@ public class ViewModel1 extends AndroidViewModel {
 
     public void  createCollection_vm (String name, Database2Wrapper.Database2Callback callback) {
         database2.createCollection(name, callback);
+    }
+
+    // ---------------
+
+    public void setSelectedCollectionUid(int uid) {
+        selectedCollectionUid.setValue(uid);
+    }
+
+    public int getSelectedCollectionUid_Value() {
+        return selectedCollectionUid.getValue();
     }
 
     //----------- factory

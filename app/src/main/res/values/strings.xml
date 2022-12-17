@@ -6,6 +6,7 @@
     <string name="button_startScrn_manageCollection">MANAGE COLLECTION</string>
     <string name="button_add_item_to_list">NEW DECK</string>
     <string name="button_list_option">OPTION</string>
+    <string name="button_deck_list_add_remove_existing_deck">add/remove existing deck</string>
 
     <string name="button_dialog_confirm">Confirm</string>
     <string name="button_dialog_cancel">Cancel</string>

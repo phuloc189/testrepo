@@ -1,7 +1,9 @@
 package com.android.myapplication8.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,7 +26,8 @@ import com.android.myapplication8.interfaces.DialogResultCallback;
 
 import java.util.List;
 
-public class FragmentCollectionList extends Fragment implements DialogResultCallback {
+public class FragmentCollectionList extends Fragment implements DialogResultCallback,
+        CustomAdapterCollectionList.CustomAdapterCollectionListCallback {
 
     public static final String TAG = "FragmentCollectionList";
 
@@ -33,6 +36,14 @@ public class FragmentCollectionList extends Fragment implements DialogResultCall
     ViewModel1 viewModel;
 
     RecyclerView recyclerView;
+
+    int itemClickedPosition;
+
+    FragmentCollectionListCallback callback;
+
+    public interface FragmentCollectionListCallback {
+        void onCollectionSelected();
+    }
 
     public FragmentCollectionList() {
         // Required empty public constructor
@@ -75,6 +86,10 @@ public class FragmentCollectionList extends Fragment implements DialogResultCall
 
     private void onListUpdateFromDatabase(List<CollectionEntityExtra> newData) {
         if (newData != null && newData.size() > 0){
+//            for (CollectionEntityExtra entityExtra: newData) {
+//                Util.logDebug(TAG, "item uid: " + entityExtra.getUid());
+//                Util.logDebug(TAG, "item uid: " + entityExtra.getUid());
+//            }
             recyViewAdapterAlias().submitList(newData);
         } else {
             if (newData == null)
@@ -95,7 +110,7 @@ public class FragmentCollectionList extends Fragment implements DialogResultCall
         recyclerView = view.findViewById(R.id.recyView_CollectionListScrn_CollectionList);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
         recyclerView.setAdapter(new CustomAdapterCollectionList(
-                new CustomAdapterCollectionList.CollectionItemDiff()
+                new CustomAdapterCollectionList.CollectionItemDiff(), this
         ));
     }
 
@@ -151,5 +166,39 @@ public class FragmentCollectionList extends Fragment implements DialogResultCall
         if (dialogType == Util.DialogType.CREATE_COLLECTION) {
             viewModel.createCollection_vm(text, dbCallback);
         }
+    }
+
+    @Override
+    public void onItemClick(Util.ClickEvent event, int position) {
+        /*
+            todo: implement
+                delete,
+                rename,
+                confirm dialog
+         */
+        if (event == Util.ClickEvent.CLICK) {
+            itemClickedPosition = position;
+            viewModel.setSelectedCollectionUid(
+                    recyViewAdapterAlias().getCurrentList().get(position).getUid()
+            );
+            callback.onCollectionSelected();
+        }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            callback = (FragmentCollectionListCallback) context;
+        } catch (Exception e) {
+            Util.logError(TAG, "exception happened: " + e);
+            callback = null;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        callback = null;
     }
 }

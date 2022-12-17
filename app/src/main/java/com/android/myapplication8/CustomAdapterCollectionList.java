@@ -11,13 +11,21 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.myapplication8.database2.CollectionEntityExtra;
+import com.android.myapplication8.interfaces.ViewHolderOnClick;
 
 public class CustomAdapterCollectionList extends ListAdapter<CollectionEntityExtra,
-        CustomAdapterCollectionList.CollectionItemViewHolder> {
+        CustomAdapterCollectionList.CollectionItemViewHolder> implements ViewHolderOnClick {
 
+    CustomAdapterCollectionListCallback callback;
 
-    public CustomAdapterCollectionList(@NonNull DiffUtil.ItemCallback<CollectionEntityExtra> diffCallback) {
+    public interface CustomAdapterCollectionListCallback{
+        void onItemClick(Util.ClickEvent event, int position);
+    }
+
+    public CustomAdapterCollectionList(@NonNull DiffUtil.ItemCallback<CollectionEntityExtra> diffCallback,
+                                       CustomAdapterCollectionListCallback callback) {
         super(diffCallback);
+        this.callback = callback;
     }
 
     @NonNull
@@ -30,8 +38,15 @@ public class CustomAdapterCollectionList extends ListAdapter<CollectionEntityExt
 
     @Override
     public void onBindViewHolder(@NonNull CollectionItemViewHolder holder, int position) {
-        holder.bindData(getItem(position).getCollectionName());
-        //todo: callback for item onclick
+        holder.bindData(getItem(position).getCollectionName(),
+                getItem(position).getDeckCount());
+
+        holder.setOnClickListener(this);
+    }
+
+    @Override
+    public void onItemClick(Util.ClickEvent event, int position) {
+        callback.onItemClick(event, position);
     }
 
     public static class CollectionItemDiff extends DiffUtil.ItemCallback<CollectionEntityExtra>{
@@ -48,17 +63,30 @@ public class CustomAdapterCollectionList extends ListAdapter<CollectionEntityExt
 
     static class CollectionItemViewHolder extends RecyclerView.ViewHolder{
 
-        public interface CollectionItemVhCallback {
-            void onItemClick(Util.ClickEvent event, int position);
-        }
-
         public CollectionItemViewHolder(@NonNull View itemView) {
             super(itemView);
         }
 
-        public void bindData(String collectionName) {
+        public void bindData(String collectionName, int deckCount) {
             ((TextView)itemView.findViewById(R.id.tv_collection_item_title)).setText(collectionName);
+            ((TextView)itemView.findViewById(R.id.tv_collection_item_deck_count)).setText(String.valueOf(deckCount));
             //todo: implement deck count
+        }
+
+        public void setOnClickListener(ViewHolderOnClick callback) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    callback.onItemClick(Util.ClickEvent.CLICK, getAdapterPosition());
+                }
+            });
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    callback.onItemClick(Util.ClickEvent.LONG_CLICK, getAdapterPosition());
+                    return true;
+                }
+            });
         }
 
     }

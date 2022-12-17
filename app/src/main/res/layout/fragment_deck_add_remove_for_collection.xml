@@ -3,18 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.FragmentDeckList"
+    tools:context=".ui.FragmentDeckAddRemoveForCollection"
     android:orientation="vertical"
     android:background="@color/white"
     android:clickable="true"
     android:focusable="true">
-
-<!--    &lt;!&ndash; TODO: Update blank fragment layout &ndash;&gt;-->
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:textSize="100dp"-->
-<!--        android:text="@string/hello_blank_fragment" />-->
 
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView_deck_list"
@@ -33,26 +26,44 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button_add_item_to_decks_list"
+            android:id="@+id/button_add_remove_screen_confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/button_add_item_to_list"/>
+            android:text="@string/button_dialog_confirm"/>
 
         <Button
-            android:id="@+id/button_decks_list_list_sort_option"
+            android:id="@+id/button_add_remove_screen_cancel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/button_list_option"/>
+            android:text="@string/button_dialog_cancel"/>
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/button_decks_list_add_remove_existing_deck_for_collection"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/button_deck_list_add_remove_existing_deck"/>
-
 
 </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    xmlns:tools="http://schemas.android.com/tools"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    tools:context=".ui.FragmentDeckAddRemoveForCollection">-->
+
+<!--    &lt;!&ndash; TODO: Update blank fragment layout &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:text="@string/hello_blank_fragment" />-->
+
+<!--</FrameLayout>-->
