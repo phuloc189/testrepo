@@ -22,10 +22,7 @@ public class MainActivity extends AppCompatActivity {
         buttonManageDeck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity2.class);
-                intent.putExtra(Util.INTENT_EXTRA_KEY_MODE_SELECT, Util.INTENT_EXTRA_VALUE_MODE_SELECT_DECK_MANAGEMENT);
-                startActivity(intent);
-                finish();
+                nextActivity(Util.INTENT_EXTRA_VALUE_MODE_SELECT_DECK_MANAGEMENT);
             }
         });
 
@@ -33,11 +30,15 @@ public class MainActivity extends AppCompatActivity {
         buttonManageCollection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity2.class);
-                intent.putExtra(Util.INTENT_EXTRA_KEY_MODE_SELECT, Util.INTENT_EXTRA_VALUE_MODE_SELECT_COLLECTION_MANAGEMENT);
-                startActivity(intent);
-                finish();
+                nextActivity(Util.INTENT_EXTRA_VALUE_MODE_SELECT_COLLECTION_MANAGEMENT);
             }
         });
+    }
+
+    private void nextActivity(String intentValue_ModeSelect) {
+//        todo: consider going back using the event from up button on app bar
+        Intent intent = new Intent(getApplicationContext(), MainActivity2.class);
+        intent.putExtra(Util.INTENT_EXTRA_KEY_MODE_SELECT, intentValue_ModeSelect);
+        startActivity(intent);
     }
 }
