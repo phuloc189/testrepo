@@ -68,9 +68,9 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_toolbar0, menu);
-//        return super.onCreateOptionsMenu(menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
+//        getMenuInflater().inflate(R.menu.menu_toolbar0, menu);
+//        return true;
     }
 
     void launchDeckListFragment() {

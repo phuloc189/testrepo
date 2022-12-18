@@ -4,7 +4,10 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuHost;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -12,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,8 +53,6 @@ public class FragmentDeckList extends Fragment implements
     Database2Wrapper.Database2Callback database2Callback;
 
     Button buttonCreateNewDeck;
-
-    Button buttonSortingOption;
 
     boolean searchMode = false;
 
@@ -190,6 +193,29 @@ public class FragmentDeckList extends Fragment implements
         }
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        MenuHost menuHost = requireActivity();
+        menuHost.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                Util.logDebug(TAG, "on create menu");
+                menuInflater.inflate(R.menu.menu_toolbar0, menu);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.menu_item_sorting_option){
+                    showDialog_DeckSortOption();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }, getViewLifecycleOwner());
+    }
+
     private void onNewDeckListFromDatabase2(List<DeckEntityExtra> deckEntityExtras) {
         if (deckEntityExtras != null && deckEntityExtras.size() > 0){
             Util.logDebug(TAG, "live data list update");
@@ -222,7 +248,6 @@ public class FragmentDeckList extends Fragment implements
 
     private void setupButton(View view) {
         buttonCreateNewDeck = view.findViewById(R.id.button_add_item_to_decks_list);
-        buttonSortingOption = view.findViewById(R.id.button_decks_list_list_sort_option);
         Button buttonAddRemoveDeck = view.findViewById(R.id.button_decks_list_add_remove_existing_deck_for_collection);
         Button buttonCollectionStudy = view.findViewById(R.id.button_decks_list_collection_study);
         SearchView searchView = view.findViewById(R.id.searchView_deck_list);
@@ -231,12 +256,6 @@ public class FragmentDeckList extends Fragment implements
             @Override
             public void onClick(View view) {
                 showDialog_CreateNewDeck();
-            }
-        });
-        buttonSortingOption.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDialog_DeckSortOption();
             }
         });
 

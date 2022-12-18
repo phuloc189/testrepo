@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/action_favorite"
-        android:icon="@drawable/ic_launcher_background"
-        android:title="action_favorite"
-        app:showAsAction="always"/>
+<!--    <item-->
+<!--        android:id="@+id/menu_item_favorite"-->
+<!--        android:icon="@drawable/ic_launcher_background"-->
+<!--        android:title="action_favorite"-->
+<!--        app:showAsAction="always"/>-->
 
-    <item android:id="@+id/action_settings"
-        android:title="action_settings"
+    <item android:id="@+id/menu_item_sorting_option"
+        android:title="@string/menu_item_text_sorting_option"
         app:showAsAction="never"/>
 </menu>
