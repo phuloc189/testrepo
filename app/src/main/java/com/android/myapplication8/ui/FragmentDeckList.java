@@ -139,6 +139,11 @@ public class FragmentDeckList extends Fragment implements
                 //  todo: choose between int or long???
                 askUserIfTheyAlsoWantToOpenDeck((int) newRowId);
             }
+
+            @Override
+            public void onGetDeckResult(Database2Wrapper.DbTask whichTask, DeckEntity deck) {
+
+            }
         };
     }
 

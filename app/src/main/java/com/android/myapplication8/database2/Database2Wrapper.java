@@ -31,7 +31,8 @@ public class Database2Wrapper {
         DB_TASK_DELETE_DECK,
         DB_TASK_DELETE_DECK_WITH_UID,
         DB_TASK_READ_DECKS_LIVEDATA,
-        DB_TASK_SEARCH_DECK,
+        DB_TASK_SEARCH_DECKS,
+        DB_TASK_GET_DECK_WITH_ID,
         DB_TASK_INSERT_CARD,
         DB_TASK_UPDATE_CARD,
         DB_TASK_DELETE_CARD,
@@ -59,6 +60,8 @@ public class Database2Wrapper {
         void onSearchDeckCompleteExtra(DbTask whichTask, List<DeckEntityExtra> deckSearchResult);
 
         void onInsertComplete(DbTask whichTask, long newRowId);
+
+        void onGetDeckResult(DbTask whichTask, DeckEntity deck);
     }
 
     public interface Database2Callback_CardsEntity {
@@ -166,6 +169,20 @@ public class Database2Wrapper {
 
     //----------------
 
+    public void getDeckWithId(int deckUid, Database2Callback callback) {
+        dbExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                DeckEntity result = deckDaoAlias().getDeckWithId(deckUid);
+                if (result == null) {
+                    callback.onComplete_SimpleResult(DbTask.DB_TASK_GET_DECK_WITH_ID, DbTaskResult.DB_RESULT_NG);
+                } else {
+                    callback.onGetDeckResult(DbTask.DB_TASK_GET_DECK_WITH_ID, result);
+                }
+            }
+        });
+    }
+
 //    public LiveData<List<DeckEntity>> readAllLiveData_experimental() {
 //        return deckDaoAlias().getAllLiveData_experimental();
 //    }
@@ -230,7 +247,7 @@ public class Database2Wrapper {
             @Override
             public void run() {
                 List<DeckEntityExtra> result = deckDaoAlias().findDeckEntitiesPlus(searchString);
-                callback.onSearchDeckCompleteExtra(DbTask.DB_TASK_SEARCH_DECK, result);
+                callback.onSearchDeckCompleteExtra(DbTask.DB_TASK_SEARCH_DECKS, result);
             }
         });
     }
@@ -240,7 +257,7 @@ public class Database2Wrapper {
             @Override
             public void run() {
                 List<DeckEntity> result = deckDaoAlias().findDecks(searchString);
-                callback.onSearchDeckComplete(DbTask.DB_TASK_SEARCH_DECK, result);
+                callback.onSearchDeckComplete(DbTask.DB_TASK_SEARCH_DECKS, result);
             }
         });
     }

@@ -17,6 +17,12 @@
 <!--        android:textSize="50dp"-->
 <!--        android:text="hello_blank_fragment2" />-->
 
+    <TextView
+        android:id="@+id/tv_cardList_current_deck"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_current_deck_name" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_card_list"
         android:layout_width="match_parent"

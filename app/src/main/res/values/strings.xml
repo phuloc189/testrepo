@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">My Application 8</string>
 
+    <string name="tv_current_deck_name">Cards from deck: %1$s</string>
+
     <string name="button_start">START</string>
     <string name="button_startScrn_manageDeck">MANAGE DECK</string>
     <string name="button_startScrn_manageCollection">MANAGE COLLECTION</string>

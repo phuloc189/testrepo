@@ -123,6 +123,9 @@ public interface DeckDao {
     LiveData<List<DeckEntityExtra_CollectionCheckList>> getAllLiveData_CollectionChecklist(int collectionUid);
 
 
+    @Query("SELECT * FROM table_DeckEntity " +
+            "WHERE uid = :deckUid")
+    DeckEntity getDeckWithId(int deckUid);
 
 
 

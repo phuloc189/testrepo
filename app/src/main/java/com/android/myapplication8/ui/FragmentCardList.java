@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import com.android.myapplication8.CustomAdapterCardList;
 import com.android.myapplication8.R;
@@ -43,6 +44,8 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
 
     Button studyDeckButton;
 
+    TextView currentDeckName;
+
     Database2Wrapper.Database2Callback database2Callback;
 
     public interface Fragment2Interface {
@@ -65,8 +68,8 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
         setupDatabaseCallback();
         setupViewModel();
         setupList(view);
-        setupButton(view);
-        readDatabaseLiveData();
+        setupUi(view);
+        readDatabase();
         updateDeckVisitedDate();
 
         return view;
@@ -93,6 +96,11 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
             public void onInsertComplete(Database2Wrapper.DbTask whichTask, long newRowId) {
 
             }
+
+            @Override
+            public void onGetDeckResult(Database2Wrapper.DbTask whichTask, DeckEntity deck) {
+                currentDeckName.setText(getString(R.string.tv_current_deck_name, deck.getDeckName()));
+            }
         };
     }
 
@@ -114,8 +122,9 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
         recyclerView.setAdapter(new CustomAdapterCardList(new CustomAdapterCardList.CardItemDiff(), this));
     }
 
-    private void setupButton(View view){
+    private void setupUi(View view){
         Button createCardButton = view.findViewById(R.id.button_create_new_card);
+        currentDeckName = view.findViewById(R.id.tv_cardList_current_deck);
         createCardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -146,7 +155,7 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
         return (CustomAdapterCardList) recyclerView.getAdapter();
     }
 
-    private void readDatabaseLiveData() {
+    private void readDatabase() {
         Util.logDebug(TAG, "read from deckUid: " + viewModel.getSelectedDeckUid_Value());
         viewModel.readAllCardsFromDeckLiveData_vm(viewModel.getSelectedDeckUid_Value())
                 .observe(this.getViewLifecycleOwner(), new Observer<List<CardEntity>>() {
@@ -160,6 +169,7 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
                         }
                     }
                 });
+        viewModel.getDeckWithId_vm(viewModel.getSelectedDeckUid_Value(), database2Callback);
     }
 
     @Override

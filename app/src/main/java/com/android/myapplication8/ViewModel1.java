@@ -99,6 +99,10 @@ public class ViewModel1 extends AndroidViewModel {
 
     //----------- decks
 
+    public void getDeckWithId_vm(int deckUid, Database2Wrapper.Database2Callback callback) {
+        database2.getDeckWithId(deckUid, callback);
+    }
+
     public void insertNewDeck_vm(String deckName, Database2Wrapper.Database2Callback callback) {
         database2.insertNewDeck(deckName, callback);
     }
