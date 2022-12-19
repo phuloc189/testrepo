@@ -125,9 +125,7 @@ public interface DeckDao {
 
     @Query("SELECT * FROM table_DeckEntity " +
             "WHERE uid = :deckUid")
-    DeckEntity getDeckWithId(int deckUid);
-
-
+    LiveData<DeckEntity> getDeckWithId_LiveData(int deckUid);
 
 
     //---------------

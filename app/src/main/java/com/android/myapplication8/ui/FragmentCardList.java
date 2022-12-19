@@ -2,6 +2,10 @@ package com.android.myapplication8.ui;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.view.MenuHost;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -9,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +32,7 @@ import com.android.myapplication8.database2.DeckEntity;
 import com.android.myapplication8.database2.DeckEntityExtra;
 import com.android.myapplication8.interfaces.CardListAdapterOnClick;
 import com.android.myapplication8.interfaces.ConfirmDialogCallback;
+import com.android.myapplication8.interfaces.DialogResultCallback;
 import com.android.myapplication8.interfaces.NewCardDialogCallback;
 
 import java.util.Calendar;
@@ -33,7 +40,7 @@ import java.util.Date;
 import java.util.List;
 
 public class FragmentCardList extends Fragment implements NewCardDialogCallback,
-        CardListAdapterOnClick, ConfirmDialogCallback {
+        CardListAdapterOnClick, ConfirmDialogCallback, DialogResultCallback {
     public static final String TAG = "FragmentCardList";
 
     ViewModel1 viewModel;
@@ -44,7 +51,9 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
 
     Button studyDeckButton;
 
-    TextView currentDeckName;
+    TextView tvCurrentDeckName;
+
+    String currentDeckName;
 
     Database2Wrapper.Database2Callback database2Callback;
 
@@ -53,6 +62,12 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
     }
 
     public FragmentCardList() {
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setupOptionMenu();
     }
 
     @Override
@@ -97,11 +112,31 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
 
             }
 
+            //todo: delete this interface method
             @Override
             public void onGetDeckResult(Database2Wrapper.DbTask whichTask, DeckEntity deck) {
-                currentDeckName.setText(getString(R.string.tv_current_deck_name, deck.getDeckName()));
             }
         };
+    }
+
+    private void setupOptionMenu() {
+        MenuHost menuHost = requireActivity();
+        menuHost.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menuInflater.inflate(R.menu.menu_cards_screen_option, menu);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.menu_item_change_deck_name){
+                    showDialog_DeckRename();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }, getViewLifecycleOwner());
     }
 
     private void updateDeckVisitedDate() {
@@ -124,7 +159,7 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
 
     private void setupUi(View view){
         Button createCardButton = view.findViewById(R.id.button_create_new_card);
-        currentDeckName = view.findViewById(R.id.tv_cardList_current_deck);
+        tvCurrentDeckName = view.findViewById(R.id.tv_cardList_current_deck);
         createCardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -169,7 +204,15 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
                         }
                     }
                 });
-        viewModel.getDeckWithId_vm(viewModel.getSelectedDeckUid_Value(), database2Callback);
+
+        viewModel.getDeckWithId_LiveData_vm(viewModel.getSelectedDeckUid_Value())
+                .observe(this.getViewLifecycleOwner(), new Observer<DeckEntity>() {
+                    @Override
+                    public void onChanged(DeckEntity deck) {
+                        currentDeckName = deck.getDeckName();
+                        tvCurrentDeckName.setText(getString(R.string.tv_current_deck_name, deck.getDeckName()));
+                    }
+                });
     }
 
     @Override
@@ -181,8 +224,22 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
         } else if (dialogType == Util.DialogType.EDIT_CARD) {
             handleCardEdit(longClickedCard, frontText, backText);
         }
+    }
 
+    @Override
+    public void onDialogResult_Confirm(Util.DialogType dialogType) {
+        if (dialogType == Util.DialogType.CONFIRM_CARD_DELETE) {
+            handleCardDelete(longClickedCard);
+        }
+    }
 
+    @Override
+    public void onDialogResult_NewText(Util.DialogType dialogType, String text) {
+        if(dialogType == Util.DialogType.DECK_RENAME) {
+            viewModel.updateDeckName_vm(
+                    viewModel.getSelectedDeckUid_Value(),
+                    text, database2Callback);
+        }
     }
 
     private void addNewCardToDb(String frontText, String backText) {
@@ -251,19 +308,22 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
         newCardDialogFragment.show(getChildFragmentManager(), DialogFragmentNewCard.TAG);
     }
 
+    private void showDialog_DeckRename() {
+        DialogFragmentSimpleNameEdit newDeckDialogFragment = new DialogFragmentSimpleNameEdit();
+        Bundle args = new Bundle();
+        args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
+                Util.getDialogTypeStringFromDialogType(Util.DialogType.DECK_RENAME));
+        args.putString(Util.BUNDLE_KEY_OLD_NAME, currentDeckName);
+        newDeckDialogFragment.setArguments(args);
+        newDeckDialogFragment.show(getChildFragmentManager(), DialogFragmentSimpleNameEdit.TAG);
+    }
+
     private void showNewCardDialog() {
         DialogFragmentNewCard newCardDialogFragment = new DialogFragmentNewCard();
         Bundle args = new Bundle();
         args.putString(Util.BUNDLE_KEY_DIALOGTYPE, Util.BUNDLE_VALUE_DIALOGTYPE_NEW_CARD);
         newCardDialogFragment.setArguments(args);
         newCardDialogFragment.show(getChildFragmentManager(), DialogFragmentNewCard.TAG);
-    }
-
-    @Override
-    public void onDialogResult_Confirm(Util.DialogType dialogType) {
-        if (dialogType == Util.DialogType.CONFIRM_CARD_DELETE) {
-            handleCardDelete(longClickedCard);
-        }
     }
 
     private void handleCardDelete(CardEntity card){

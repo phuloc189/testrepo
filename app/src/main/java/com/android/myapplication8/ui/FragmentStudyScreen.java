@@ -3,6 +3,7 @@ package com.android.myapplication8.ui;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.view.MenuHost;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
@@ -83,11 +84,16 @@ public class FragmentStudyScreen extends Fragment implements
         setupDatabaseCallback();
         setupViewModel();
         setupUi(view);
-        setupOptionsMenu();
         fetchAndCacheCards();
         displayCardContent();
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setupOptionsMenu();
     }
 
     private void setupOptionsMenu() {

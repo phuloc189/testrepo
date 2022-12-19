@@ -169,18 +169,8 @@ public class Database2Wrapper {
 
     //----------------
 
-    public void getDeckWithId(int deckUid, Database2Callback callback) {
-        dbExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                DeckEntity result = deckDaoAlias().getDeckWithId(deckUid);
-                if (result == null) {
-                    callback.onComplete_SimpleResult(DbTask.DB_TASK_GET_DECK_WITH_ID, DbTaskResult.DB_RESULT_NG);
-                } else {
-                    callback.onGetDeckResult(DbTask.DB_TASK_GET_DECK_WITH_ID, result);
-                }
-            }
-        });
+    public LiveData<DeckEntity> getDeckWithId_LiveData(int deckUid) {
+        return deckDaoAlias().getDeckWithId_LiveData(deckUid);
     }
 
 //    public LiveData<List<DeckEntity>> readAllLiveData_experimental() {
