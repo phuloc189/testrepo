@@ -3,6 +3,7 @@ package com.android.myapplication8.ui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
@@ -15,6 +16,8 @@ import com.android.myapplication8.R;
 import com.android.myapplication8.Util;
 import com.android.myapplication8.ViewModel1;
 import com.android.myapplication8.database2.DeckEntity;
+
+import java.util.Objects;
 
 /**
  * first activity right after start activity
@@ -32,6 +35,7 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
         Log.d(TAG, "onCreate: ");
         setContentView(R.layout.activity_main2);
         setupToolbar();
+        setupBackstackListener();
 
         String modeOfOp = getIntent().getStringExtra(Util.INTENT_EXTRA_KEY_MODE_SELECT);
 
@@ -47,11 +51,50 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
         }
     }
 
+    private void setupBackstackListener() {
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                handleBackStackChanged();
+            }
+        });
+    }
+
+    private void handleBackStackChanged() {
+        FragmentManager manager = getSupportFragmentManager();
+        if (manager.getBackStackEntryCount() == 0) {
+            finish();
+            return;
+        }
+        Log.d(TAG, "BackStackChanged: currently: " +
+                getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() -1).getName());
+
+        switch (manager.getBackStackEntryAt(manager.getBackStackEntryCount() - 1).getName()) {
+            case FragmentDeckList.TAG:
+                getSupportActionBar().setTitle(R.string.top_bar_text_choose_a_deck);
+                break;
+            case FragmentCardList.TAG:
+                getSupportActionBar().setTitle(R.string.top_bar_text_cards_preview);
+                break;
+            case FragmentStudyScreen.TAG:
+                getSupportActionBar().setTitle(R.string.top_bar_text_study_mode);
+                break;
+            case FragmentCollectionList.TAG:
+                getSupportActionBar().setTitle(R.string.top_bar_text_collection_screen);
+                break;
+            case FragmentDeckAddRemoveForCollection.TAG:
+                getSupportActionBar().setTitle(R.string.top_bar_text_add_remove_deck_for_collection);
+                break;
+            default:
+                Util.logDebug(TAG, "wtf");
+        }
+    }
+
     private void launchCollectionListFragment() {
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
                 .add(R.id.fragment_container_content, FragmentCollectionList.class, null)
-                .addToBackStack("FragmentCollectionList")
+                .addToBackStack(FragmentCollectionList.TAG)
                 .commit();
     }
 
@@ -79,10 +122,8 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
                 .add(R.id.fragment_container_content, FragmentDeckList.class, null)
-                .addToBackStack("FragmentDeckList")
+                .addToBackStack(FragmentDeckList.TAG)
                 .commit();
-
-        getSupportActionBar().setTitle(getString(R.string.top_bar_text_choose_a_deck));
     }
 
     @Override
@@ -90,9 +131,8 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.fragment_container_content, FragmentCardList.class, null)
-                .addToBackStack("FragmentCardList")
+                .addToBackStack(FragmentCardList.TAG)
                 .commit();
-        getSupportActionBar().setTitle(getString(R.string.top_bar_text_cards_preview));
     }
 
     @Override
@@ -100,7 +140,7 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.fragment_container_content, FragmentDeckAddRemoveForCollection.class, null)
-                .addToBackStack("FragmentDeckAddRemoveForCollection")
+                .addToBackStack(FragmentDeckAddRemoveForCollection.TAG)
                 .commit();
     }
 
@@ -118,9 +158,8 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
         getSupportFragmentManager().beginTransaction()
                 .setReorderingAllowed(true)
                 .replace(R.id.fragment_container_content, FragmentStudyScreen.class, null)
-                .addToBackStack("FragmentStudyScreen")
+                .addToBackStack(FragmentStudyScreen.TAG)
                 .commit();
-        getSupportActionBar().setTitle(getString(R.string.top_bar_text_study_mode));
     }
 
     @Override

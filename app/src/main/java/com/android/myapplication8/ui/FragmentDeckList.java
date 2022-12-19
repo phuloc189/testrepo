@@ -38,7 +38,7 @@ import java.util.List;
 
 public class FragmentDeckList extends Fragment implements
         DialogResultCallback, ConfirmDialogCallback, DeckListSortSettingCallback {
-    public static String TAG = "FragmentDeckList";
+    public static final String TAG = "FragmentDeckList";
 
     RecyclerView recyclerView;
 

@@ -67,10 +67,10 @@ public interface DeckDao {
     LiveData<List<DeckEntity>> getAllLiveData_Sorted_Name_Desc();
     //---------------
 
-    @Query("SELECT table_DeckEntity.*, COUNT(table_cardentity.deckUid) as cardsCount " +
-            "FROM table_DeckEntity LEFT OUTER JOIN table_cardentity ON table_DeckEntity.uid = table_cardentity.deckUid " +
-            "GROUP BY table_DeckEntity.uid" )
-    LiveData<List<DeckEntity>> getAllLiveData_experimental();//todo: experimental
+//    @Query("SELECT table_DeckEntity.*, COUNT(table_cardentity.deckUid) as cardsCount " +
+//            "FROM table_DeckEntity LEFT OUTER JOIN table_cardentity ON table_DeckEntity.uid = table_cardentity.deckUid " +
+//            "GROUP BY table_DeckEntity.uid" )
+//    LiveData<List<DeckEntity>> getAllLiveData_experimental();//todo: experimental
 
     @Query("SELECT table_DeckEntity.*, COUNT(table_cardentity.deckUid) as cardsCount " +
             "FROM table_DeckEntity LEFT OUTER JOIN table_cardentity ON table_DeckEntity.uid = table_cardentity.deckUid " +

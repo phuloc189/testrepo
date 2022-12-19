@@ -53,9 +53,11 @@
     <string name="radio_button_list_sort_visited_order">visited order</string>
     <string name="radio_button_list_sort_alphabet_order">alphabet order</string>
 
-    <string name="top_bar_text_choose_a_deck">=deck select</string>
+    <string name="top_bar_text_choose_a_deck">deck select</string>
     <string name="top_bar_text_cards_preview">cards preview</string>
-    <string name="top_bar_text_study_mode">study</string>
+    <string name="top_bar_text_study_mode">let\'s do this</string>
+    <string name="top_bar_text_collection_screen">collection select</string>
+    <string name="top_bar_text_add_remove_deck_for_collection">add/remove decks</string>
 
     <!-- PREFERENCES -->
 

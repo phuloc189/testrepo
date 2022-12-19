@@ -166,9 +166,9 @@ public class Database2Wrapper {
 
     //----------------
 
-    public LiveData<List<DeckEntity>> readAllLiveData_experimental() {
-        return deckDaoAlias().getAllLiveData_experimental();
-    }
+//    public LiveData<List<DeckEntity>> readAllLiveData_experimental() {
+//        return deckDaoAlias().getAllLiveData_experimental();
+//    }
 
     public LiveData<List<DeckEntityExtra>> getAllLiveData_experimental2() {
         return deckDaoAlias().getAllLiveData_experimental2();

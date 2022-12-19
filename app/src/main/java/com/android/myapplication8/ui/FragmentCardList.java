@@ -33,7 +33,7 @@ import java.util.List;
 
 public class FragmentCardList extends Fragment implements NewCardDialogCallback,
         CardListAdapterOnClick, ConfirmDialogCallback {
-    public static String TAG = "FragmentCardList";
+    public static final String TAG = "FragmentCardList";
 
     ViewModel1 viewModel;
 
