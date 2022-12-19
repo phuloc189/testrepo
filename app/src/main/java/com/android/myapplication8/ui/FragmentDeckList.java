@@ -201,7 +201,7 @@ public class FragmentDeckList extends Fragment implements
             @Override
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 Util.logDebug(TAG, "on create menu");
-                menuInflater.inflate(R.menu.menu_toolbar0, menu);
+                menuInflater.inflate(R.menu.menu_deck_screen_option, menu);
             }
 
             @Override

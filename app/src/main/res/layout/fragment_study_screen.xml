@@ -23,21 +23,12 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <Button
-        android:id="@+id/button_study_screen_option"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_study_screen_option"
-        android:layout_margin="10dp"
-        app:layout_constraintStart_toEndOf="@id/button_study_screen_restart"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <Button
         android:id="@+id/button_study_screen_edit_card"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_study_screen_edit_card"
         android:layout_margin="10dp"
-        app:layout_constraintStart_toEndOf="@id/button_study_screen_option"
+        app:layout_constraintStart_toEndOf="@id/button_study_screen_restart"
         app:layout_constraintTop_toTopOf="parent"/>
 
 <!--todo: put this in a scroll view-->

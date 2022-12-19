@@ -17,6 +17,7 @@
     <string name="menu_item_text_card_edit">edit card</string>
     <string name="menu_item_text_card_delete">delete card</string>
     <string name="menu_item_text_sorting_option">sorting options</string>
+    <string name="menu_item_text_options">options</string>
 
     <string name="dialog_descr_txt_deck_delete_confirm">about to delete this deck, are you sure???</string>
     <string name="dialog_descr_txt_create_new_deck">creating new deck, name plz</string>

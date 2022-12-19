@@ -2,11 +2,17 @@ package com.android.myapplication8.ui;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.core.view.MenuHost;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -77,10 +83,31 @@ public class FragmentStudyScreen extends Fragment implements
         setupDatabaseCallback();
         setupViewModel();
         setupUi(view);
+        setupOptionsMenu();
         fetchAndCacheCards();
         displayCardContent();
 
         return view;
+    }
+
+    private void setupOptionsMenu() {
+        MenuHost menuHost = requireActivity();
+        menuHost.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menuInflater.inflate(R.menu.menu_study_screen_option, menu);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.menu_item_sorting) {
+                    showControlPanelDialog();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }, getViewLifecycleOwner());
     }
 
     private void setupViewModel() {
@@ -92,7 +119,6 @@ public class FragmentStudyScreen extends Fragment implements
         previousButton = view.findViewById(R.id.button_study_screen_previous_card);
         flipButton = view.findViewById(R.id.button_study_screen_flip_card);
         Button editButton = view.findViewById(R.id.button_study_screen_edit_card);
-        Button controlPanelButton = view.findViewById(R.id.button_study_screen_option);
         Button restartButton = view.findViewById(R.id.button_study_screen_restart);
         cardContentDisplay = view.findViewById(R.id.textView_studyScreen_card_content);
         cardMarkingDisplay = view.findViewById(R.id.textView_studyScreen_card_marking);
@@ -121,12 +147,6 @@ public class FragmentStudyScreen extends Fragment implements
             @Override
             public void onClick(View view) {
                 showCardEditDialog();
-            }
-        });
-        controlPanelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showControlPanelDialog();
             }
         });
         restartButton.setOnClickListener(new View.OnClickListener() {
