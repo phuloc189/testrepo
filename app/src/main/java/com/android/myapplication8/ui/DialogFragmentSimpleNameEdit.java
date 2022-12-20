@@ -33,6 +33,23 @@ public class DialogFragmentSimpleNameEdit extends DialogFragment {
 
     String oldName;
 
+    boolean renaming = false;
+
+    public static DialogFragmentSimpleNameEdit newInstance(Util.DialogType dialogType,
+                                                           String stringParam1) {
+
+        Bundle args = new Bundle();
+        args.putString(Util.BUNDLE_KEY_DIALOGTYPE, Util.getDialogTypeStringFromDialogType(dialogType));
+
+        if (dialogType == Util.DialogType.DECK_RENAME || dialogType == Util.DialogType.COLLECTION_RENAME) {
+            args.putString(Util.BUNDLE_KEY_OLD_NAME, stringParam1);
+        }
+
+        DialogFragmentSimpleNameEdit fragment = new DialogFragmentSimpleNameEdit();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -60,7 +77,9 @@ public class DialogFragmentSimpleNameEdit extends DialogFragment {
             return false;
         }
         dialogType = Util.getDialogTypeFromString(args.getString(Util.BUNDLE_KEY_DIALOGTYPE, "what the fuck"));
-        if (dialogType == Util.DialogType.DECK_RENAME) {
+        if (dialogType == Util.DialogType.DECK_RENAME ||
+        dialogType == Util.DialogType.COLLECTION_RENAME) {
+            renaming = true;
             oldName = args.getString(Util.BUNDLE_KEY_OLD_NAME, "");
             if (oldName.length() == 0) {
                 //todo: should i do something about this case???
@@ -94,7 +113,7 @@ public class DialogFragmentSimpleNameEdit extends DialogFragment {
             }
         });
 
-        if (dialogType == Util.DialogType.DECK_RENAME) {
+        if (renaming) {
             editTextInputField1.setText(oldName);
         }
 
@@ -106,7 +125,7 @@ public class DialogFragmentSimpleNameEdit extends DialogFragment {
             editTextInputField1.setError("there's nothin here bruh");
             return;
         }
-        if (dialogType == Util.DialogType.DECK_RENAME && inputText.equals(oldName)) {
+        if (renaming && inputText.equals(oldName)) {
             editTextInputField1.setError("dude it's the same name");
             return;
         }

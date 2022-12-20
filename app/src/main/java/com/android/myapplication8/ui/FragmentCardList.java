@@ -291,10 +291,8 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
     }
 
     private void showCardDeleteConfirmDialog() {
-        DialogFragmentConfirm confirmDialogFragment = new DialogFragmentConfirm();
-        Bundle args = new Bundle();
-        args.putString(Util.BUNDLE_KEY_DIALOGTYPE, Util.BUNDLE_VALUE_DIALOGTYPE_DELETE_CARD_CONFIRM);
-        confirmDialogFragment.setArguments(args);
+        DialogFragmentConfirm confirmDialogFragment =
+                DialogFragmentConfirm.newInstance(Util.DialogType.CONFIRM_CARD_DELETE, null);
         confirmDialogFragment.show(getChildFragmentManager(), DialogFragmentConfirm.TAG);
     }
 
@@ -309,12 +307,8 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
     }
 
     private void showDialog_DeckRename() {
-        DialogFragmentSimpleNameEdit newDeckDialogFragment = new DialogFragmentSimpleNameEdit();
-        Bundle args = new Bundle();
-        args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
-                Util.getDialogTypeStringFromDialogType(Util.DialogType.DECK_RENAME));
-        args.putString(Util.BUNDLE_KEY_OLD_NAME, currentDeckName);
-        newDeckDialogFragment.setArguments(args);
+        DialogFragmentSimpleNameEdit newDeckDialogFragment =
+                DialogFragmentSimpleNameEdit.newInstance(Util.DialogType.DECK_RENAME, currentDeckName);
         newDeckDialogFragment.show(getChildFragmentManager(), DialogFragmentSimpleNameEdit.TAG);
     }
 

@@ -30,6 +30,20 @@ public class DialogFragmentConfirm extends DialogFragment {
 
     String openedDeckName;
 
+    public static DialogFragmentConfirm newInstance(Util.DialogType dialogType
+            , String stringParam1 ) {
+
+        Bundle args = new Bundle();
+        args.putString(Util.BUNDLE_KEY_DIALOGTYPE, Util.getDialogTypeStringFromDialogType(dialogType));
+        if (dialogType == Util.DialogType.CONFIRM_OPEN_DECK) {
+            args.putString(Util.BUNDLE_KEY_NAME_OF_DECK_TOBE_OPENED, stringParam1);
+        }
+
+        DialogFragmentConfirm fragment = new DialogFragmentConfirm();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

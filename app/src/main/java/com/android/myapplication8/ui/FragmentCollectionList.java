@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 
 import com.android.myapplication8.CustomAdapterCollectionList;
 import com.android.myapplication8.R;
@@ -22,12 +24,13 @@ import com.android.myapplication8.database2.CollectionEntityExtra;
 import com.android.myapplication8.database2.Database2Wrapper;
 import com.android.myapplication8.database2.DeckEntity;
 import com.android.myapplication8.database2.DeckEntityExtra;
+import com.android.myapplication8.interfaces.ConfirmDialogCallback;
 import com.android.myapplication8.interfaces.DialogResultCallback;
 
 import java.util.List;
 
 public class FragmentCollectionList extends Fragment implements DialogResultCallback,
-        CustomAdapterCollectionList.CustomAdapterCollectionListCallback {
+        CustomAdapterCollectionList.CustomAdapterCollectionListCallback, ConfirmDialogCallback {
 
     public static final String TAG = "FragmentCollectionList";
 
@@ -38,6 +41,10 @@ public class FragmentCollectionList extends Fragment implements DialogResultCall
     RecyclerView recyclerView;
 
     int itemClickedPosition;
+
+    String longClickedItemName;
+
+    int longClickedItemUid;
 
     FragmentCollectionListCallback callback;
 
@@ -122,19 +129,30 @@ public class FragmentCollectionList extends Fragment implements DialogResultCall
         view.findViewById(R.id.button_collectionList_createNew).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showNewCollectionDialog();
+                showDialog_NewCollection();
             }
         });
     }
 
-    private void showNewCollectionDialog() {
-        DialogFragmentSimpleNameEdit dialog = new DialogFragmentSimpleNameEdit();
-        Bundle args = new Bundle();
-        args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
-                Util.getDialogTypeStringFromDialogType(Util.DialogType.CREATE_COLLECTION));
-        dialog.setArguments(args);
+    private void showDialog_NewCollection() {
+        DialogFragmentSimpleNameEdit dialog =
+                DialogFragmentSimpleNameEdit.newInstance(Util.DialogType.CREATE_COLLECTION, null);
         dialog.show(getChildFragmentManager(), DialogFragmentSimpleNameEdit.TAG);
     }
+
+    private void showDialog_ConfirmDialog(Util.DialogType dialogType) {
+        DialogFragmentConfirm dialogFragment = DialogFragmentConfirm.newInstance(dialogType, null);
+        dialogFragment.show(getChildFragmentManager(), DialogFragmentConfirm.TAG);
+    }
+
+    private void showDialog_Rename(String oldName) {
+        Util.logDebug(TAG, "renaming");
+        DialogFragmentSimpleNameEdit dialogFragment =
+                DialogFragmentSimpleNameEdit.newInstance(Util.DialogType.COLLECTION_RENAME, oldName);
+        dialogFragment.show(getChildFragmentManager(), DialogFragmentSimpleNameEdit.TAG);
+    }
+
+
 
     private void setupDatabaseCallback() {
         //todo: put more logic in here
@@ -170,23 +188,51 @@ public class FragmentCollectionList extends Fragment implements DialogResultCall
     public void onDialogResult_NewText(Util.DialogType dialogType, String text) {
         if (dialogType == Util.DialogType.CREATE_COLLECTION) {
             viewModel.createCollection_vm(text, dbCallback);
+        } else if (dialogType == Util.DialogType.COLLECTION_RENAME) {
+            viewModel.renameCollection_vm(longClickedItemUid, text, dbCallback);
         }
     }
 
     @Override
+    public void onDialogResult_Confirm(Util.DialogType dialogType) {
+        if (dialogType == Util.DialogType.CONFIRM_COLLECTION_DELETE) {
+            viewModel.deleteCollection_vm(longClickedItemUid, dbCallback);
+        }
+    }
+
+    private void showPopUpMenu(View view) {
+        PopupMenu menu = new PopupMenu(requireContext(), view);
+        menu.getMenuInflater().inflate(R.menu.collection_list_item_option_menu, menu.getMenu());
+        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.menu_item_collection_delete) {
+                    showDialog_ConfirmDialog(Util.DialogType.CONFIRM_COLLECTION_DELETE);
+                } else if (menuItem.getItemId() == R.id.menu_item_collection_rename) {
+                    showDialog_Rename(longClickedItemName);
+                }
+                return false;
+            }
+        });
+        menu.show();
+    }
+
+
+
+    @Override
     public void onItemClick(Util.ClickEvent event, int position) {
-        /*
-            todo: implement
-                delete,
-                rename,
-                confirm dialog
-         */
         if (event == Util.ClickEvent.CLICK) {
             itemClickedPosition = position;
             viewModel.setSelectedCollectionUid(
                     recyViewAdapterAlias().getCurrentList().get(position).getUid()
             );
             callback.onCollectionSelected();
+        } else if (event == Util.ClickEvent.LONG_CLICK) {
+            itemClickedPosition = position;
+            longClickedItemName = recyViewAdapterAlias().getCurrentList().get(position).getCollectionName();
+            longClickedItemUid = recyViewAdapterAlias().getCurrentList().get(position).getUid();
+            RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForAdapterPosition(position);
+            showPopUpMenu(viewHolder.itemView);
         }
     }
 

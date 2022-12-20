@@ -150,7 +150,7 @@ public class FragmentDeckList extends Fragment implements
 
     private void askUserIfTheyAlsoWantToOpenDeck(int newRowId) {
         justInsertedDeckUid = newRowId;
-        showDialog_ConfirmDialog(Util.DialogType.CONFIRM_OPEN_DECK_JUST_CREATED);
+        showDialog_ConfirmDialog(Util.DialogType.CONFIRM_OPEN_DECK_JUST_CREATED, null);
     }
 
     private void setupViewModel(){
@@ -369,7 +369,7 @@ public class FragmentDeckList extends Fragment implements
         } else if (event == Util.ClickEvent.CLICK){
             longClickedDeckUid = recyViewAdapterAlias().getCurrentList().get(position).getUid();
             longClickedDeckName = recyViewAdapterAlias().getCurrentList().get(position).getDeckName();
-            showDialog_ConfirmDialog(Util.DialogType.CONFIRM_OPEN_DECK);
+            showDialog_ConfirmDialog(Util.DialogType.CONFIRM_OPEN_DECK, longClickedDeckName);
         }
     }
 
@@ -397,7 +397,7 @@ public class FragmentDeckList extends Fragment implements
          *      https://stackoverflow.com/questions/64335374/how-to-resolve-resource-ids-will-be-non-final-in-android-gradle-plugin-version
          */
         if (item.getItemId() == R.id.menu_item_deck_delete){
-            showDialog_ConfirmDialog(Util.DialogType.CONFIRM_DECK_DELETE);
+            showDialog_ConfirmDialog(Util.DialogType.CONFIRM_DECK_DELETE, null);
             /*
              * "return true if the event was handled, false otherwise"
              * (interface rule)
@@ -423,33 +423,20 @@ public class FragmentDeckList extends Fragment implements
     }
 
     private void showDialog_CreateNewDeck() {
-        DialogFragmentSimpleNameEdit newDeckDialogFragment = new DialogFragmentSimpleNameEdit();
-        Bundle args = new Bundle();
-        args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
-                Util.getDialogTypeStringFromDialogType(Util.DialogType.NEW_DECK_NAME));
-        newDeckDialogFragment.setArguments(args);
+        DialogFragmentSimpleNameEdit newDeckDialogFragment =
+                DialogFragmentSimpleNameEdit.newInstance(Util.DialogType.NEW_DECK_NAME, null);
         newDeckDialogFragment.show(getChildFragmentManager(), DialogFragmentSimpleNameEdit.TAG);
     }
 
     private void showDialog_DeckRename() {
-        DialogFragmentSimpleNameEdit newDeckDialogFragment = new DialogFragmentSimpleNameEdit();
-        Bundle args = new Bundle();
-        args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
-                Util.getDialogTypeStringFromDialogType(Util.DialogType.DECK_RENAME));
-        args.putString(Util.BUNDLE_KEY_OLD_NAME, longClickedDeckName);
-        newDeckDialogFragment.setArguments(args);
+        DialogFragmentSimpleNameEdit newDeckDialogFragment =
+                DialogFragmentSimpleNameEdit.newInstance(Util.DialogType.DECK_RENAME, longClickedDeckName);
         newDeckDialogFragment.show(getChildFragmentManager(), DialogFragmentSimpleNameEdit.TAG);
     }
 
-    private void showDialog_ConfirmDialog(Util.DialogType confirmDialogType) {
-        DialogFragmentConfirm dialogFragment = new DialogFragmentConfirm();
-        Bundle args = new Bundle();
-        args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
-                Util.getDialogTypeStringFromDialogType(confirmDialogType));
-        if (confirmDialogType == Util.DialogType.CONFIRM_OPEN_DECK) {
-            args.putString(Util.BUNDLE_KEY_NAME_OF_DECK_TOBE_OPENED, longClickedDeckName);
-        }
-        dialogFragment.setArguments(args);
+    private void showDialog_ConfirmDialog(Util.DialogType confirmDialogType, String stringParam) {
+        DialogFragmentConfirm dialogFragment =
+                DialogFragmentConfirm.newInstance(confirmDialogType, stringParam);
         dialogFragment.show(getChildFragmentManager(), DialogFragmentConfirm.TAG);
     }
 

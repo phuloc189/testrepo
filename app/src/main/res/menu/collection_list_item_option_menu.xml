@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_item_collection_delete"
+        android:title="@string/menu_item_text_collection_delete" />
+    <item android:id="@+id/menu_item_collection_rename"
+        android:title="@string/menu_item_text_collection_rename" />
+</menu>

@@ -35,6 +35,11 @@ public class Util {
     public static final String BUNDLE_VALUE_DIALOGTYPE_DECK_LIST_SORT_OPTION = "bundle_value_dialogtype_deck_list_sort_option";
 
     public static final String BUNDLE_VALUE_DIALOGTYPE_CREATE_COLLECTION = "bundle_value_dialogtype_create_collection";
+
+    public static final String BUNDLE_VALUE_DIALOGTYPE_CONFIRM_COLLECTION_DELETE = "bundle_value_dialogtype_confirm_collection_delete";
+
+    public static final String BUNDLE_VALUE_DIALOGTYPE_COLLECTION_RENAME = "bundle_value_dialogtype_collection_rename";
+
     //////////////
 
     public static final String BUNDLE_KEY_OLD_NAME = "bundle_key_old_name";
@@ -79,6 +84,7 @@ public class Util {
         NONE,
         NEW_DECK_NAME,
         DECK_RENAME,
+        COLLECTION_RENAME,
         NEW_CARD,
         EDIT_CARD,
         CARD_MARKING_EDIT,
@@ -89,6 +95,7 @@ public class Util {
         CONFIRM_OPEN_DECK,
         CONFIRM_CARD_DELETE,
         CONFIRM_OPEN_DECK_JUST_CREATED,
+        CONFIRM_COLLECTION_DELETE,
         CREATE_COLLECTION
 
     }
@@ -161,6 +168,10 @@ public class Util {
                 return R.string.dialog_descr_txt_edit_card;
             case CREATE_COLLECTION:
                 return R.string.dialog_descr_txt_create_collection;
+            case CONFIRM_COLLECTION_DELETE:
+                return R.string.dialog_descr_txt_collection_delete_confirm;
+            case COLLECTION_RENAME:
+                return R.string.dialog_descr_txt_collection_rename;
             default:
                 return R.string.dialog_descr_txt_default_text;
         }
@@ -194,6 +205,10 @@ public class Util {
                 return BUNDLE_VALUE_DIALOGTYPE_DECK_LIST_SORT_OPTION;
             case CREATE_COLLECTION:
                 return BUNDLE_VALUE_DIALOGTYPE_CREATE_COLLECTION;
+            case CONFIRM_COLLECTION_DELETE:
+                return BUNDLE_VALUE_DIALOGTYPE_CONFIRM_COLLECTION_DELETE;
+            case COLLECTION_RENAME:
+                return BUNDLE_VALUE_DIALOGTYPE_COLLECTION_RENAME;
             default:
                 return "WUT???";
         }//CREATE_COLLECTION
@@ -225,6 +240,10 @@ public class Util {
                 return DialogType.DECK_LIST_SORT_OPTION;
             case BUNDLE_VALUE_DIALOGTYPE_CREATE_COLLECTION:
                 return DialogType.CREATE_COLLECTION;
+            case BUNDLE_VALUE_DIALOGTYPE_CONFIRM_COLLECTION_DELETE:
+                return DialogType.CONFIRM_COLLECTION_DELETE;
+            case BUNDLE_VALUE_DIALOGTYPE_COLLECTION_RENAME:
+                return DialogType.COLLECTION_RENAME;
             default:
                 return DialogType.NONE;
         }

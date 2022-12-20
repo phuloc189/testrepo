@@ -21,6 +21,8 @@
     <string name="menu_item_text_sorting_option">sorting options</string>
     <string name="menu_item_text_options">options</string>
     <string name="menu_item_text_change_deck_name">change deck name</string>
+    <string name="menu_item_text_collection_rename">rename collection</string>
+    <string name="menu_item_text_collection_delete">delete collection</string>
 
     <string name="dialog_descr_txt_deck_delete_confirm">about to delete this deck, are you sure???</string>
     <string name="dialog_descr_txt_create_new_deck">creating new deck, name plz</string>
@@ -33,6 +35,8 @@
     <string name="dialog_descr_txt_default_text">what the hell was that</string>
     <string name="dialog_descr_txt_default_text2">what the hell was that\nwhat\nwhat\nwhat\nwhat\nwhat\nwhat</string>
     <string name="dialog_descr_txt_create_collection">creating new collection, name plz</string>
+    <string name="dialog_descr_txt_collection_delete_confirm">are you sure you want to delete this collection?</string>
+    <string name="dialog_descr_txt_collection_rename">renaming collection, new name plz</string>
 
     <string name="button_create_new_card">new card</string>
     <string name="button_move_to_study">study this deck</string>
