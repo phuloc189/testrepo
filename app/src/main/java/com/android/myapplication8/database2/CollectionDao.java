@@ -27,4 +27,7 @@ public interface CollectionDao {
             " group by table_CollectionEntity.uid")
     LiveData<List<CollectionEntityExtra>> getAllCollectionExtraLivedata2();
 
+    @Query("SELECT * FROM table_CollectionEntity WHERE uid = :collectionUid")
+    LiveData<CollectionEntity> getCollectionWithUid(int collectionUid);
+
 }

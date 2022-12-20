@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.viewmodel.CreationExtras;
 
 import com.android.myapplication8.database2.CardEntity;
+import com.android.myapplication8.database2.CollectionEntity;
 import com.android.myapplication8.database2.CollectionEntityExtra;
 import com.android.myapplication8.database2.Database2Wrapper;
 import com.android.myapplication8.database2.DeckEntity;
@@ -366,6 +367,10 @@ public class ViewModel1 extends AndroidViewModel {
 
     public LiveData<List<CollectionEntityExtra>> getAllCollectionExtraLivedata_vm() {
         return database2.getAllCollectionExtraLivedata();
+    }
+
+    public LiveData<CollectionEntity> getCollectionWithUid_vm(int collectionUid){
+        return database2.getCollectionWithUid(collectionUid);
     }
 
     public void deleteCollection_vm (int targetUid, Database2Wrapper.Database2Callback callback){

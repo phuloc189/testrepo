@@ -375,6 +375,10 @@ public class Database2Wrapper {
         return collectionDaoAlias().getAllCollectionExtraLivedata2();
     }
 
+    public LiveData<CollectionEntity> getCollectionWithUid(int collectionUid){
+        return collectionDaoAlias().getCollectionWithUid(collectionUid);
+    }
+
     public void deleteCollection (int targetUid, Database2Callback callback) {
         dbExecutor.execute(new Runnable() {
             @Override

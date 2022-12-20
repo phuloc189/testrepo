@@ -22,8 +22,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import com.android.myapplication8.CustomAdapterDecklist_Extra;
+import com.android.myapplication8.database2.CollectionEntity;
 import com.android.myapplication8.database2.DeckEntityExtra;
 import com.android.myapplication8.interfaces.ConfirmDialogCallback;
 import com.android.myapplication8.interfaces.DialogResultCallback;
@@ -54,6 +56,8 @@ public class FragmentDeckList extends Fragment implements
     Database2Wrapper.Database2Callback database2Callback;
 
     Button buttonCreateNewDeck;
+
+    TextView textView_currentCollectionInfo;
 
     boolean searchMode = false;
 
@@ -86,8 +90,8 @@ public class FragmentDeckList extends Fragment implements
         setupViewModel();
         setupDatabaseCallback();
         setupListUi(view);
+        setupUi(view);
         readDatabaseLiveData();
-        setupButton(view);
 
 
         return view;
@@ -186,6 +190,15 @@ public class FragmentDeckList extends Fragment implements
                         }
                     }
             );
+            viewModel.getCollectionWithUid_vm(viewModel.getSelectedCollectionUid_Value()).observe(
+                    getViewLifecycleOwner(),
+                    new Observer<CollectionEntity>() {
+                        @Override
+                        public void onChanged(CollectionEntity collectionEntity) {
+                            textView_currentCollectionInfo.setText(getString(R.string.tv_current_collection_info, collectionEntity.getCollectionName()));
+                        }
+                    }
+            );
         } else {
             viewModel.getAllLiveData_experimental2_vm().observe(
                     getViewLifecycleOwner(),
@@ -252,11 +265,12 @@ public class FragmentDeckList extends Fragment implements
 //        }
 //    }
 
-    private void setupButton(View view) {
+    private void setupUi(View view) {
         buttonCreateNewDeck = view.findViewById(R.id.button_add_item_to_decks_list);
         Button buttonAddRemoveDeck = view.findViewById(R.id.button_decks_list_add_remove_existing_deck_for_collection);
         Button buttonCollectionStudy = view.findViewById(R.id.button_decks_list_collection_study);
         SearchView searchView = view.findViewById(R.id.searchView_deck_list);
+        textView_currentCollectionInfo = view.findViewById(R.id.tv_deckScreen_currentCollectionInfo);
 
         buttonCreateNewDeck.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -288,9 +302,11 @@ public class FragmentDeckList extends Fragment implements
             }
         });
 
-        if (viewModel.getSelectedCollectionUid_Value() < 0){
+        if (viewModel.getSelectedCollectionUid_Value() <= 0){
             view.findViewById(R.id.linearLayout_uiGroup_collection).setVisibility(View.GONE);
+            textView_currentCollectionInfo.setVisibility(View.GONE);
         } else {
+            searchView.setVisibility(View.GONE);
             buttonAddRemoveDeck.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

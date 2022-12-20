@@ -210,7 +210,7 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
                     @Override
                     public void onChanged(DeckEntity deck) {
                         currentDeckName = deck.getDeckName();
-                        tvCurrentDeckName.setText(getString(R.string.tv_current_deck_name, deck.getDeckName()));
+                        tvCurrentDeckName.setText(getString(R.string.tv_current_deck_info, deck.getDeckName()));
                     }
                 });
     }
