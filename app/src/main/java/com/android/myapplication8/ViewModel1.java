@@ -156,7 +156,6 @@ public class ViewModel1 extends AndroidViewModel {
     }
 
     public LiveData<List<DeckEntityExtra>> getAllLiveData_experimental2_vm() {
-//        return database2.getAllLiveData_experimental2();
 
         Util.SortingOptions optionSortingType = Util.getSortingOption(sharedPreferences.getInt(
                 getApplication().getString(R.string.pref_key_deck_list_sorting_type),
@@ -171,8 +170,8 @@ public class ViewModel1 extends AndroidViewModel {
     }
 
     public LiveData<List<DeckEntityExtra>> getAllLiveDataExtra_forCollection(int collectionUid) {
-        //todo: decklist_withextra assignment
-        return database2.getAllLiveDataExtra_forCollection(collectionUid);
+        deckList_withExtra = database2.getAllLiveDataExtra_forCollection(collectionUid);
+        return deckList_withExtra;
     }
 
     public LiveData<List<DeckEntityExtra_CollectionCheckList>> getAllLiveData_CollectionChecklist_vm(int collectionUid) {
@@ -190,6 +189,9 @@ public class ViewModel1 extends AndroidViewModel {
     public void removeDeckListObservers(LifecycleOwner lifecycleOwner) {
         if (deckList != null) {
             deckList.removeObservers(lifecycleOwner);
+        }
+        if (deckList_withExtra != null) {
+            deckList_withExtra.removeObservers(lifecycleOwner);
         }
     }
 

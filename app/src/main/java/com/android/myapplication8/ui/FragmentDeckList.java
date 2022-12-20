@@ -34,6 +34,7 @@ import com.android.myapplication8.database2.Database2Wrapper;
 import com.android.myapplication8.database2.DeckEntity;
 import com.android.myapplication8.interfaces.DeckListSortSettingCallback;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentDeckList extends Fragment implements
@@ -495,11 +496,10 @@ public class FragmentDeckList extends Fragment implements
     private void deleteDeck(int targetUid) {
         viewModel.deleteDeck_vm(targetUid, database2Callback);
         if (searchMode) {
-            //todo: fix this
-//            List<DeckEntity> currentList = new ArrayList<>(recyViewAdapterAlias().getCurrentList());
-//            currentList.remove(longClickedItemPosition);
-//            recyViewAdapterAlias().submitList(currentList);
-//            recyViewAdapterAlias().notifyItemRemoved(longClickedItemPosition);
+            List<DeckEntityExtra> currentList = new ArrayList<>(recyViewAdapterAlias().getCurrentList());
+            currentList.remove(longClickedItemPosition);
+            recyViewAdapterAlias().submitList(currentList);
+            recyViewAdapterAlias().notifyItemRemoved(longClickedItemPosition);
         }
     }
 
@@ -518,11 +518,10 @@ public class FragmentDeckList extends Fragment implements
         viewModel.updateDeckName_vm(deckUidInQuestion, newName, database2Callback);
 
         if (searchMode) {
-            //todo: fix this
-//            List<DeckEntity> currentList = new ArrayList<>(recyViewAdapterAlias().getCurrentList());
-//            currentList.get(longClickedItemPosition).setDeckName(newName);
-//            recyViewAdapterAlias().submitList(currentList);
-//            recyViewAdapterAlias().notifyItemChanged(longClickedItemPosition);
+            List<DeckEntityExtra> currentList = new ArrayList<>(recyViewAdapterAlias().getCurrentList());
+            currentList.get(longClickedItemPosition).setDeckName(newName);
+            recyViewAdapterAlias().submitList(currentList);
+            recyViewAdapterAlias().notifyItemChanged(longClickedItemPosition);
         }
     }
 
