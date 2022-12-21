@@ -211,7 +211,7 @@ public class FragmentStudyScreen extends Fragment implements
             viewModel.cacheCardsFromSelectedDeck();
             reloadDeck();
         } else if (viewModel.getStudyMode_value() == Util.StudyMode.COLLECTION &&
-                viewModel.getSelectedCollectionUid_Value() > 0) {
+                viewModel.isInCollectionMode()) { //todo: do something with this condition expression
             viewModel.getAllCardsFromCollection_vm(viewModel.getSelectedCollectionUid_Value(), database2Callback_cardsEntity);
         }
     }

@@ -65,6 +65,8 @@ public class FragmentDeckList extends Fragment implements
 
     int justInsertedDeckUid;
 
+    String currentCollectionName;
+
     public interface Fragment1Interface {
         void onDeckSelected();
         void onAddRemoveDeckTransition();
@@ -179,7 +181,7 @@ public class FragmentDeckList extends Fragment implements
 //                    }
 //                });
 
-        if (viewModel.getSelectedCollectionUid_Value() > 0) {
+        if (viewModel.isInCollectionMode()) {
             Util.logDebug(TAG, "reading deck for collection: ");
             viewModel.getAllLiveDataExtra_forCollection(viewModel.getSelectedCollectionUid_Value()).observe(
                     getViewLifecycleOwner(),
@@ -195,6 +197,7 @@ public class FragmentDeckList extends Fragment implements
                     new Observer<CollectionEntity>() {
                         @Override
                         public void onChanged(CollectionEntity collectionEntity) {
+                            currentCollectionName  = collectionEntity.getCollectionName();
                             textView_currentCollectionInfo.setText(getString(R.string.tv_current_collection_info, collectionEntity.getCollectionName()));
                         }
                     }
@@ -221,12 +224,18 @@ public class FragmentDeckList extends Fragment implements
             public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
                 Util.logDebug(TAG, "on create menu");
                 menuInflater.inflate(R.menu.menu_deck_screen_option, menu);
+                if (viewModel.isInCollectionMode()) {
+                    menuInflater.inflate(R.menu.menu_deck_screen_option_collection_mode, menu);
+                }
             }
 
             @Override
             public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
                 if (menuItem.getItemId() == R.id.menu_item_sorting_option){
                     showDialog_DeckSortOption();
+                    return true;
+                } else if (menuItem.getItemId() == R.id.menu_item_collection_rename_option_menu) {
+                    showDialog_CollectionRename();
                     return true;
                 } else {
                     return false;
@@ -302,7 +311,7 @@ public class FragmentDeckList extends Fragment implements
             }
         });
 
-        if (viewModel.getSelectedCollectionUid_Value() <= 0){
+        if (!viewModel.isInCollectionMode()){
             view.findViewById(R.id.linearLayout_uiGroup_collection).setVisibility(View.GONE);
             textView_currentCollectionInfo.setVisibility(View.GONE);
         } else {
@@ -450,6 +459,12 @@ public class FragmentDeckList extends Fragment implements
         newDeckDialogFragment.show(getChildFragmentManager(), DialogFragmentSimpleNameEdit.TAG);
     }
 
+    private void showDialog_CollectionRename() {
+        DialogFragmentSimpleNameEdit dialog =
+                DialogFragmentSimpleNameEdit.newInstance(Util.DialogType.COLLECTION_RENAME, currentCollectionName);
+        dialog.show(getChildFragmentManager(), DialogFragmentSimpleNameEdit.TAG);
+    }
+
     private void showDialog_ConfirmDialog(Util.DialogType confirmDialogType, String stringParam) {
         DialogFragmentConfirm dialogFragment =
                 DialogFragmentConfirm.newInstance(confirmDialogType, stringParam);
@@ -491,6 +506,8 @@ public class FragmentDeckList extends Fragment implements
             insertNewDeck(text);
         } else if (dialogType == Util.DialogType.DECK_RENAME) {
             renameDeck(longClickedDeckUid, text);
+        } else if (dialogType == Util.DialogType.COLLECTION_RENAME) {
+            renameCollection(text);
         } else {
             Util.logDebug(TAG, "what the hell was that");
         }
@@ -526,6 +543,11 @@ public class FragmentDeckList extends Fragment implements
             recyViewAdapterAlias().submitList(currentList);
             recyViewAdapterAlias().notifyItemChanged(longClickedItemPosition);
         }
+    }
+
+    private void renameCollection (String newName) {
+        viewModel.renameCollection_vm(viewModel.getSelectedCollectionUid_Value(),
+                newName, database2Callback);
     }
 
     private void onDbTaskComplete(Database2Wrapper.DbTask whichTask

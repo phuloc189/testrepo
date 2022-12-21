@@ -395,6 +395,10 @@ public class ViewModel1 extends AndroidViewModel {
         return selectedCollectionUid.getValue();
     }
 
+    public boolean isInCollectionMode() {
+        return (selectedCollectionUid.getValue() > 0);
+    }
+
     // ---------- study mode
 
     public void setStudyMode(Util.StudyMode mode) {
