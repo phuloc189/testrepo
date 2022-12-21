@@ -85,7 +85,7 @@ public class FragmentStudyScreen extends Fragment implements
         setupViewModel();
         setupUi(view);
         fetchAndCacheCards();
-        displayCardContent();
+        fetchCardContent();
 
         return view;
     }
@@ -221,7 +221,7 @@ public class FragmentStudyScreen extends Fragment implements
         reloadDeck();
     }
 
-    private void displayCardContent() {
+    private void fetchCardContent() {
         viewModel.getStudyingCardsListPointer().observe(
                 getViewLifecycleOwner(), new Observer<Integer>() {
                     @Override
@@ -231,9 +231,20 @@ public class FragmentStudyScreen extends Fragment implements
                             previousButton.setVisibility(View.INVISIBLE);
                             flipButton.setVisibility(View.INVISIBLE);
                             return;
+                        } else {
+                            if (integer == 0) {
+                                previousButton.setVisibility(View.INVISIBLE);
+                            } else {
+                                previousButton.setVisibility(View.VISIBLE);
+                            }
+
+                            if (integer == (viewModel.getIndexArrays().size() -1)) {
+                                nextButton.setVisibility(View.INVISIBLE);
+                            } else {
+                                nextButton.setVisibility(View.VISIBLE);
+                            }
                         }
-                        ontoTheDisplay(integer);
-                        //todo: enable/disable next/previous button
+                        displayCardContent(integer);
                     }
                 }
         );
@@ -275,10 +286,10 @@ public class FragmentStudyScreen extends Fragment implements
         List<CardEntity> newList = viewModel.getStudyingCardsList_Value();
         newList.set(viewModel.getIndexArrays().get(viewModel.getStudyingCardsListPointer_Value()), card);
         viewModel.getStudyingCardsList().setValue(newList);
-        ontoTheDisplay(viewModel.getStudyingCardsListPointer_Value());
+        displayCardContent(viewModel.getStudyingCardsListPointer_Value());
     }
 
-    private void ontoTheDisplay(int index) {
+    private void displayCardContent(int index) {
         displayingFront = !(viewModel.getBackSideFirstSetting());
         displayedCard = viewModel.getStudyingCardsList_Value().get(viewModel.getIndexArrays().get(index));
         cardContentDisplay.setText(getCardContentToDisplay());
