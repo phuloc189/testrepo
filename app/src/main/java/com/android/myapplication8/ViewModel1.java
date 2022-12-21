@@ -274,6 +274,10 @@ public class ViewModel1 extends AndroidViewModel {
         markingSetting = new MarkingSettingHelperType(markingSetting_int);
     }
 
+    public MarkingSettingHelperType getMarkingSetting() {
+        return markingSetting;
+    }
+
     /**
      * filter and sort deck
      */
@@ -287,7 +291,7 @@ public class ViewModel1 extends AndroidViewModel {
         int cardsListSize = studyingCardsList_value.size();
 
         for (int i = 0; i < cardsListSize; i++ ) {
-            if (markingSetting.checkIfMarkingEnabled(studyingCardsList_value.get(i).getMarking0())){
+            if (markingSetting.checkIfMatch(studyingCardsList_value.get(i).getMarking0())){
                 indexArrays.add(i);
             }
             markingStat[studyingCardsList_value.get(i).getMarking0()]++;

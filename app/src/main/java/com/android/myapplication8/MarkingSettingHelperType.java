@@ -23,11 +23,11 @@ public class MarkingSettingHelperType {
         return result;
     }
 
-    public boolean checkIfMarkingEnabled(int valueToBeChecked) {
-        if (valueToBeChecked < 0 || valueToBeChecked > (Util.CARD_MARKING_MAX_NUMBER_OF_VALUES - 1)) {
+    public boolean checkIfMatch(int markingValue) {
+        if (markingValue < 0 || markingValue > (Util.CARD_MARKING_MAX_NUMBER_OF_VALUES - 1)) {
             return false;
         }
-        return (markingValue_int & (1 << valueToBeChecked)) > 0;
+        return (markingValue_int & (1 << markingValue)) > 0;
     }
 
     public void setMarking(int which, boolean value) {

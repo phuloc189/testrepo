@@ -1,5 +1,6 @@
 package com.android.myapplication8.ui;
 
+import android.graphics.Paint;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.myapplication8.MarkingSettingHelperType;
 import com.android.myapplication8.R;
 import com.android.myapplication8.Util;
 import com.android.myapplication8.ViewModel1;
@@ -41,9 +43,9 @@ public class FragmentStudyScreen extends Fragment implements
 
     CardEntity displayedCard;
 
-    TextView cardContentDisplay;
+    TextView tvCardContentDisplay;
 
-    TextView cardMarkingDisplay;
+    TextView tvCardMarkingDisplay;
 
     TextView tvStudyProgress;
 
@@ -128,8 +130,8 @@ public class FragmentStudyScreen extends Fragment implements
         flipButton = view.findViewById(R.id.button_study_screen_flip_card);
         Button editButton = view.findViewById(R.id.button_study_screen_edit_card);
         Button restartButton = view.findViewById(R.id.button_study_screen_restart);
-        cardContentDisplay = view.findViewById(R.id.textView_studyScreen_card_content);
-        cardMarkingDisplay = view.findViewById(R.id.textView_studyScreen_card_marking);
+        tvCardContentDisplay = view.findViewById(R.id.textView_studyScreen_card_content);
+        tvCardMarkingDisplay = view.findViewById(R.id.textView_studyScreen_card_marking);
         tvStudyProgress = view.findViewById(R.id.tv_studyScreen_studyProgress);
 
 
@@ -149,7 +151,7 @@ public class FragmentStudyScreen extends Fragment implements
             @Override
             public void onClick(View view) {
                 displayingFront = !displayingFront;
-                cardContentDisplay.setText(getCardContentToDisplay());
+                tvCardContentDisplay.setText(getCardContentToDisplay());
             }
         });
         editButton.setOnClickListener(new View.OnClickListener() {
@@ -165,7 +167,7 @@ public class FragmentStudyScreen extends Fragment implements
             }
         });
 
-        cardMarkingDisplay.setOnClickListener(new View.OnClickListener() {
+        tvCardMarkingDisplay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showMarkingEditDialog();
@@ -310,8 +312,15 @@ public class FragmentStudyScreen extends Fragment implements
     private void displayCardContent(int index) {
         displayingFront = !(viewModel.getBackSideFirstSetting());
         displayedCard = viewModel.getStudyingCardsList_Value().get(viewModel.getIndexArrays().get(index));
-        cardContentDisplay.setText(getCardContentToDisplay());
-        cardMarkingDisplay.setText(String.valueOf(displayedCard.getMarking0()));
+        tvCardContentDisplay.setText(getCardContentToDisplay());
+        tvCardMarkingDisplay.setText(String.valueOf(displayedCard.getMarking0()));
+
+        if (!viewModel.getMarkingSetting().checkIfMatch(displayedCard.getMarking0())) {
+            tvCardContentDisplay.setPaintFlags(tvCardContentDisplay.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+        } else {
+            tvCardContentDisplay.setPaintFlags(tvCardContentDisplay.getPaintFlags() & (~Paint.STRIKE_THRU_TEXT_FLAG));
+        }
+
     }
 
     private void setupDatabaseCallback() {
