@@ -14,13 +14,25 @@
 <!--        android:textSize="50dp"/>-->
 
     <Button
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
         android:id="@+id/button_study_screen_restart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_study_screen_restart"
         android:layout_margin="10dp"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/tv_studyScreen_studyProgress"
         app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_studyScreen_studyProgress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="progress text"
+        app:layout_constraintTop_toTopOf="@id/button_study_screen_restart"
+        app:layout_constraintBottom_toBottomOf="@id/button_study_screen_restart"
+        app:layout_constraintStart_toEndOf="@id/button_study_screen_restart"
+        app:layout_constraintEnd_toStartOf="@id/button_study_screen_edit_card"/>
 
     <Button
         android:id="@+id/button_study_screen_edit_card"
@@ -28,8 +40,9 @@
         android:layout_height="wrap_content"
         android:text="@string/button_study_screen_edit_card"
         android:layout_margin="10dp"
-        app:layout_constraintStart_toEndOf="@id/button_study_screen_restart"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintStart_toEndOf="@id/tv_studyScreen_studyProgress"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 <!--todo: put this in a scroll view-->
     <TextView

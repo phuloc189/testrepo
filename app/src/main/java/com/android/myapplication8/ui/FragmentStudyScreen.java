@@ -45,6 +45,8 @@ public class FragmentStudyScreen extends Fragment implements
 
     TextView cardMarkingDisplay;
 
+    TextView tvStudyProgress;
+
     DialogFragmentStdScrnControlPanel controlPanelDialog;
 
     Database2Wrapper.Database2Callback database2Callback;
@@ -128,6 +130,7 @@ public class FragmentStudyScreen extends Fragment implements
         Button restartButton = view.findViewById(R.id.button_study_screen_restart);
         cardContentDisplay = view.findViewById(R.id.textView_studyScreen_card_content);
         cardMarkingDisplay = view.findViewById(R.id.textView_studyScreen_card_marking);
+        tvStudyProgress = view.findViewById(R.id.tv_studyScreen_studyProgress);
 
 
         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -226,24 +229,8 @@ public class FragmentStudyScreen extends Fragment implements
                 getViewLifecycleOwner(), new Observer<Integer>() {
                     @Override
                     public void onChanged(Integer integer) {
-                        if (integer < 0){
-                            nextButton.setVisibility(View.INVISIBLE);
-                            previousButton.setVisibility(View.INVISIBLE);
-                            flipButton.setVisibility(View.INVISIBLE);
-                            return;
-                        } else {
-                            if (integer == 0) {
-                                previousButton.setVisibility(View.INVISIBLE);
-                            } else {
-                                previousButton.setVisibility(View.VISIBLE);
-                            }
-
-                            if (integer == (viewModel.getIndexArrays().size() -1)) {
-                                nextButton.setVisibility(View.INVISIBLE);
-                            } else {
-                                nextButton.setVisibility(View.VISIBLE);
-                            }
-                        }
+                        updateNavigationButton(integer);
+                        updateProgressInfo(integer);
                         displayCardContent(integer);
                     }
                 }
@@ -279,6 +266,37 @@ public class FragmentStudyScreen extends Fragment implements
         displayedCard.setBackText(backText);
 
         updateDisplayedCard(displayedCard);
+    }
+
+    private void updateProgressInfo(int pointerIndex) {
+        if (pointerIndex < 0) {
+            tvStudyProgress.setText("oops: " + pointerIndex);
+            return;
+        }
+        String progressText = (pointerIndex + 1) + " / " + viewModel.getIndexArrays().size();
+        tvStudyProgress.setText(progressText);
+    }
+
+    private void updateNavigationButton(int pointerIndex) {
+        if (pointerIndex < 0) {
+            nextButton.setVisibility(View.INVISIBLE);
+            previousButton.setVisibility(View.INVISIBLE);
+            flipButton.setVisibility(View.INVISIBLE);
+            return;
+        } else {
+            if (pointerIndex == 0) {
+                previousButton.setVisibility(View.INVISIBLE);
+            } else {
+                previousButton.setVisibility(View.VISIBLE);
+            }
+
+            if (pointerIndex == (viewModel.getIndexArrays().size() -1)) {
+                nextButton.setVisibility(View.INVISIBLE);
+            } else {
+                nextButton.setVisibility(View.VISIBLE);
+            }
+        }
+
     }
 
     private void updateDisplayedCard(CardEntity card) {
@@ -354,32 +372,12 @@ public class FragmentStudyScreen extends Fragment implements
 
         controlPanelDialog = null;
 
-        /**
-         *  todo:
-         *      when "show back side" change
-         *          show back side/front side upon next card
-         *
-         */
-
         if (restartRequested) {
-            /**
-             *  todo: handle restart request
-             *      ???call the same function that the restart button use
-              */
             reloadDeck();
         } else if (settingChanged) {
             Util.logDebug(TAG, "load setting without restart: ");
             viewModel.fetchPrefSetting();
         }
-        /**
-         *  todo: how to handle restart
-         *      start from the beginning index
-         *      shuffle the list again if random mode is on
-         *      what about selected marking:
-         *          should already be filtered before hand???
-         *          what if user change card marking during learning session???
-         *
-         */
     }
 
     private void reloadDeck() {
