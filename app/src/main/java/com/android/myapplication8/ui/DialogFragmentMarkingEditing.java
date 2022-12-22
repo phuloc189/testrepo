@@ -125,7 +125,15 @@ public class DialogFragmentMarkingEditing extends DialogFragment {
     private CharSequence[] initListOfItems(){
         CharSequence[] items = new CharSequence[Util.CARD_MARKING_MAX_NUMBER_OF_VALUES];
         for (int i = 0; i< items.length; i++ ){
-            items[i] = (String.valueOf(i) + " - currently have " + markingStat[i] + " card(s)");
+            String infoTxt;
+            if (markingStat[i] == 0) {
+                infoTxt = " - none";
+            } else if (markingStat[i] == 1) {
+                infoTxt = " - only one";
+            } else {
+                infoTxt =  " - " + markingStat[i] + " cards in total";
+            }
+            items[i] = (String.valueOf(i) + infoTxt);
         }
         return items;
     }
