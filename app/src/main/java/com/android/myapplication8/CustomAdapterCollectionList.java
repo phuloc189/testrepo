@@ -69,8 +69,8 @@ public class CustomAdapterCollectionList extends ListAdapter<CollectionEntityExt
 
         public void bindData(String collectionName, int deckCount) {
             ((TextView)itemView.findViewById(R.id.tv_collection_item_title)).setText(collectionName);
-            ((TextView)itemView.findViewById(R.id.tv_collection_item_deck_count)).setText(String.valueOf(deckCount));
-            //todo: implement deck count
+            ((TextView)itemView.findViewById(R.id.tv_collection_item_deck_count)).setText(
+                    friendlyDecksCount(deckCount));
         }
 
         public void setOnClickListener(ViewHolderOnClick callback) {
@@ -87,6 +87,16 @@ public class CustomAdapterCollectionList extends ListAdapter<CollectionEntityExt
                     return true;
                 }
             });
+        }
+
+        private String friendlyDecksCount(int decksCount) {
+            if (decksCount == 0) {
+                return "Empty";
+            } else if (decksCount == 1) {
+                return "Has one deck";
+            } else {
+                return "Has " + decksCount + " decks";
+            }
         }
 
     }
