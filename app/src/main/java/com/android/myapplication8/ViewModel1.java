@@ -157,22 +157,32 @@ public class ViewModel1 extends AndroidViewModel {
     }
 
     public LiveData<List<DeckEntityExtra>> getAllLiveData_experimental2_vm() {
-
-        Util.SortingOptions optionSortingType = Util.getSortingOption(sharedPreferences.getInt(
-                getApplication().getString(R.string.pref_key_deck_list_sorting_type),
-                Util.SORTING_TYPE_OPTION_DEFAULT_VALUE
-        ));
-        boolean optionDescending = sharedPreferences.getBoolean(
-                getApplication().getString(R.string.pref_key_deck_list_sorting_descending),
-                Util.SORTING_DESCENDING_OPTION_DEFAULT_VALUE
-        );
-        deckList_withExtra = database2.getAllLiveData_raw_extra(optionSortingType, optionDescending);
+        deckList_withExtra = database2.getAllLiveDataExtra_raw(
+                getSortingType(),
+                getOptionDescending());
         return deckList_withExtra;
     }
 
     public LiveData<List<DeckEntityExtra>> getAllLiveDataExtra_forCollection(int collectionUid) {
-        deckList_withExtra = database2.getAllLiveDataExtra_forCollection(collectionUid);
+        deckList_withExtra = database2.getAllLiveDataExtra_forCollection_raw(
+                getSortingType(),
+                getOptionDescending(),
+                collectionUid);
         return deckList_withExtra;
+    }
+
+    private Util.SortingOptions getSortingType() {
+        return Util.getSortingOption(sharedPreferences.getInt(
+                getApplication().getString(R.string.pref_key_deck_list_sorting_type),
+                Util.SORTING_TYPE_OPTION_DEFAULT_VALUE
+        ));
+    }
+
+    private boolean getOptionDescending() {
+        return sharedPreferences.getBoolean(
+                getApplication().getString(R.string.pref_key_deck_list_sorting_descending),
+                Util.SORTING_DESCENDING_OPTION_DEFAULT_VALUE
+        );
     }
 
     public LiveData<List<DeckEntityExtra_CollectionCheckList>> getAllLiveData_CollectionChecklist_vm(int collectionUid) {

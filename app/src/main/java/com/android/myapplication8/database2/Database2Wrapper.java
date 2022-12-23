@@ -200,17 +200,33 @@ public class Database2Wrapper {
         return deckDaoAlias().getAllLiveData_CollectionChecklist(collectionUid);
     }
 
-    public LiveData<List<DeckEntityExtra>> getAllLiveData_raw_extra(Util.SortingOptions optionSortingType
+    public LiveData<List<DeckEntityExtra>> getAllLiveDataExtra_raw(Util.SortingOptions optionSortingType
             , boolean optionDescending) {
+        return getAllLiveDataExtra_forCollection_raw(optionSortingType, optionDescending, 0);
+    }
+
+    public LiveData<List<DeckEntityExtra>> getAllLiveDataExtra_forCollection_raw(Util.SortingOptions optionSortingType
+            , boolean optionDescending, int collectionUid) {
         /*    @Query("SELECT table_DeckEntity.*, COUNT(table_cardentity.deckUid) as cardsCount " +
             "FROM table_DeckEntity LEFT OUTER JOIN table_cardentity ON table_DeckEntity.uid = table_cardentity.deckUid " +
             "GROUP BY table_DeckEntity.uid" )
          */
+
         StringBuilder sb = new StringBuilder("SELECT table_DeckEntity.*");
         sb.append(", COUNT(table_cardentity.deckUid) as cardsCount")
-                .append(" FROM table_DeckEntity").append(" LEFT OUTER JOIN table_cardentity")
-                .append(" ON table_DeckEntity.uid = table_cardentity.deckUid")
-                .append(" GROUP BY table_DeckEntity.uid");
+                .append(" FROM table_DeckEntity")
+                .append(" LEFT OUTER JOIN table_cardentity")
+                .append(" ON table_DeckEntity.uid = table_cardentity.deckUid");
+
+        if (collectionUid > 0) {
+            sb.append(" JOIN table_CollectionDeckMapping")
+                    .append(" ON table_DeckEntity.uid = table_CollectionDeckMapping.deckUid")
+                    .append(" AND table_CollectionDeckMapping.collectionUid = ")
+                    .append(String.valueOf(collectionUid));
+        }
+
+
+        sb.append(" GROUP BY table_DeckEntity.uid");
 
         switch (optionSortingType) {
             case ALPHABET_ORDER:
