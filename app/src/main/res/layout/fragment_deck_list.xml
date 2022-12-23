@@ -9,13 +9,6 @@
     android:clickable="true"
     android:focusable="true">
 
-<!--    &lt;!&ndash; TODO: Update blank fragment layout &ndash;&gt;-->
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:textSize="100dp"-->
-<!--        android:text="@string/hello_blank_fragment" />-->
-
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView_deck_list"
         android:layout_width="match_parent"

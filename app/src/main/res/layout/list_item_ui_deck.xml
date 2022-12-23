@@ -15,16 +15,16 @@
         android:text="name"/>
 
     <TextView
-        android:id="@+id/tv_deck_item_last_visited_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="date"/>
-
-    <TextView
         android:id="@+id/tv_deck_item_cards_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="card count"/>
+
+    <TextView
+        android:id="@+id/tv_deck_item_last_visited_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="date"/>
 
 </LinearLayout>
 

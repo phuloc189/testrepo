@@ -253,11 +253,6 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
         Util.logDebug(TAG, "result: " + taskResult);
     }
 
-    private void testtimeProcessing() {
-        long currentl = Calendar.getInstance().getTimeInMillis();
-        Date current = new Date(currentl);
-    }
-
     @Override
     public void cardListAdapterOnItemClick(Util.ClickEvent event, int position, CardEntity card) {
         Util.logDebug(TAG, "adapter on click: ");

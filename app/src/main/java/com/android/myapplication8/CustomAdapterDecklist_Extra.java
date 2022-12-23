@@ -86,8 +86,22 @@ public class CustomAdapterDecklist_Extra extends ListAdapter<DeckEntityExtra, Cu
 
         public void bind(String deckName, int cardsCount, long visitedDate) {
             ((TextView)this.itemView.findViewById(R.id.tv_deck_item_deck_title)).setText(deckName);
-            ((TextView)this.itemView.findViewById(R.id.tv_deck_item_cards_count)).setText(String.valueOf(cardsCount));
-            ((TextView)this.itemView.findViewById(R.id.tv_deck_item_last_visited_date)).setText(String.valueOf(visitedDate));
+            ((TextView)this.itemView.findViewById(R.id.tv_deck_item_cards_count)).setText(friendlyCardsCount(cardsCount));
+            ((TextView)this.itemView.findViewById(R.id.tv_deck_item_last_visited_date)).setText(friendlyTimeEstimate(visitedDate));
+        }
+
+        private String friendlyCardsCount(int cardsCount) {
+            if (cardsCount == 0) {
+                return "Empty";
+            } else if (cardsCount == 1) {
+                return "Has one card";
+            } else {
+                return "Has " + cardsCount + " cards";
+            }
+        }
+
+        private String friendlyTimeEstimate(long pointInThePast) {
+            return "Last visited: " + SimpleTimeEstimater.howLongUntilNow(pointInThePast);
         }
     }
 
