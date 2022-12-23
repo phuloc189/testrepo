@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.myapplication8.database2.DeckEntityExtra_CollectionCheckList;
+import com.android.myapplication8.database2.entity.DeckEntityExtra_CollectionCheckList;
 import com.android.myapplication8.interfaces.ViewHolderOnClick_CheckList;
 
 import java.util.Arrays;

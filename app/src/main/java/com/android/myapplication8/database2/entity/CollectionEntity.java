@@ -1,4 +1,4 @@
-package com.android.myapplication8.database2;
+package com.android.myapplication8.database2.entity;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
@@ -17,7 +17,8 @@ public class CollectionEntity implements CollectionEntityInterface{
 
     }
 
-    @Ignore CollectionEntity(String name) {
+    @Ignore
+    public CollectionEntity(String name) {
         collectionName = name;
     }
 

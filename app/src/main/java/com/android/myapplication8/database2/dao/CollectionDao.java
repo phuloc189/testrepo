@@ -1,10 +1,12 @@
-package com.android.myapplication8.database2;
+package com.android.myapplication8.database2.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
-import androidx.room.Update;
+
+import com.android.myapplication8.database2.entity.CollectionEntity;
+import com.android.myapplication8.database2.entity.CollectionEntityExtra;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.android.myapplication8.ui;
+package com.android.myapplication8.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -20,9 +20,9 @@ import com.android.myapplication8.R;
 import com.android.myapplication8.Util;
 import com.android.myapplication8.ViewModel1;
 import com.android.myapplication8.database2.Database2Wrapper;
-import com.android.myapplication8.database2.DeckEntity;
-import com.android.myapplication8.database2.DeckEntityExtra;
-import com.android.myapplication8.database2.DeckEntityExtra_CollectionCheckList;
+import com.android.myapplication8.database2.entity.DeckEntity;
+import com.android.myapplication8.database2.entity.DeckEntityExtra;
+import com.android.myapplication8.database2.entity.DeckEntityExtra_CollectionCheckList;
 
 import java.util.List;
 

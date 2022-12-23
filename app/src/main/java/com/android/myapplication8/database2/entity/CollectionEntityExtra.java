@@ -1,6 +1,4 @@
-package com.android.myapplication8.database2;
-
-import androidx.room.Ignore;
+package com.android.myapplication8.database2.entity;
 
 public class CollectionEntityExtra extends CollectionEntity{
 

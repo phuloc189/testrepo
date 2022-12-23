@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.myapplication8.database2.DeckEntity;
+import com.android.myapplication8.database2.entity.DeckEntity;
 import com.android.myapplication8.interfaces.ViewHolderOnClick;
 
 public class CustomAdapterDeckList extends ListAdapter<DeckEntity, CustomAdapterDeckList.DeckItemViewHolder>

@@ -1,4 +1,4 @@
-package com.android.myapplication8.ui;
+package com.android.myapplication8.ui.fragment;
 
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -20,17 +20,19 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.android.myapplication8.MarkingSettingHelperType;
 import com.android.myapplication8.R;
 import com.android.myapplication8.Util;
 import com.android.myapplication8.ViewModel1;
-import com.android.myapplication8.database2.CardEntity;
+import com.android.myapplication8.database2.entity.CardEntity;
 import com.android.myapplication8.database2.Database2Wrapper;
-import com.android.myapplication8.database2.DeckEntity;
-import com.android.myapplication8.database2.DeckEntityExtra;
+import com.android.myapplication8.database2.entity.DeckEntity;
+import com.android.myapplication8.database2.entity.DeckEntityExtra;
 import com.android.myapplication8.interfaces.MarkingEditCallback;
 import com.android.myapplication8.interfaces.NewCardDialogCallback;
 import com.android.myapplication8.interfaces.StdScrnControlPanelCallback;
+import com.android.myapplication8.ui.dialog.DialogFragmentMarkingEditing;
+import com.android.myapplication8.ui.dialog.DialogFragmentNewCard;
+import com.android.myapplication8.ui.dialog.DialogFragmentStdScrnControlPanel;
 
 import java.util.List;
 

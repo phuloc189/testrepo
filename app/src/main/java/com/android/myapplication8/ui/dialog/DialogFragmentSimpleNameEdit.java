@@ -1,4 +1,4 @@
-package com.android.myapplication8.ui;
+package com.android.myapplication8.ui.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

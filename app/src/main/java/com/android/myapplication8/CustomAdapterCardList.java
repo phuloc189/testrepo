@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.myapplication8.database2.CardEntity;
+import com.android.myapplication8.database2.entity.CardEntity;
 import com.android.myapplication8.interfaces.CardListAdapterOnClick;
 import com.android.myapplication8.interfaces.ViewHolderOnClick;
 

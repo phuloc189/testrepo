@@ -6,7 +6,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -15,9 +14,11 @@ import android.view.MenuItem;
 import com.android.myapplication8.R;
 import com.android.myapplication8.Util;
 import com.android.myapplication8.ViewModel1;
-import com.android.myapplication8.database2.DeckEntity;
-
-import java.util.Objects;
+import com.android.myapplication8.ui.fragment.FragmentCardList;
+import com.android.myapplication8.ui.fragment.FragmentCollectionList;
+import com.android.myapplication8.ui.fragment.FragmentDeckAddRemoveForCollection;
+import com.android.myapplication8.ui.fragment.FragmentDeckList;
+import com.android.myapplication8.ui.fragment.FragmentStudyScreen;
 
 /**
  * first activity right after start activity

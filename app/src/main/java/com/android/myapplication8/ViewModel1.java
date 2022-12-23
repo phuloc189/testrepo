@@ -13,13 +13,13 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.viewmodel.CreationExtras;
 
-import com.android.myapplication8.database2.CardEntity;
-import com.android.myapplication8.database2.CollectionEntity;
-import com.android.myapplication8.database2.CollectionEntityExtra;
+import com.android.myapplication8.database2.entity.CardEntity;
+import com.android.myapplication8.database2.entity.CollectionEntity;
+import com.android.myapplication8.database2.entity.CollectionEntityExtra;
 import com.android.myapplication8.database2.Database2Wrapper;
-import com.android.myapplication8.database2.DeckEntity;
-import com.android.myapplication8.database2.DeckEntityExtra;
-import com.android.myapplication8.database2.DeckEntityExtra_CollectionCheckList;
+import com.android.myapplication8.database2.entity.DeckEntity;
+import com.android.myapplication8.database2.entity.DeckEntityExtra;
+import com.android.myapplication8.database2.entity.DeckEntityExtra_CollectionCheckList;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,4 +1,4 @@
-package com.android.myapplication8.database2;
+package com.android.myapplication8.database2.entity;
 
 import androidx.room.Entity;
 import androidx.room.ForeignKey;

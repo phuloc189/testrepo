@@ -1,4 +1,4 @@
-package com.android.myapplication8.ui;
+package com.android.myapplication8.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -25,16 +25,19 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.android.myapplication8.CustomAdapterDecklist_Extra;
-import com.android.myapplication8.database2.CollectionEntity;
-import com.android.myapplication8.database2.DeckEntityExtra;
+import com.android.myapplication8.database2.entity.CollectionEntity;
+import com.android.myapplication8.database2.entity.DeckEntityExtra;
 import com.android.myapplication8.interfaces.ConfirmDialogCallback;
 import com.android.myapplication8.interfaces.DialogResultCallback;
 import com.android.myapplication8.R;
 import com.android.myapplication8.Util;
 import com.android.myapplication8.ViewModel1;
 import com.android.myapplication8.database2.Database2Wrapper;
-import com.android.myapplication8.database2.DeckEntity;
+import com.android.myapplication8.database2.entity.DeckEntity;
 import com.android.myapplication8.interfaces.DeckListSortSettingCallback;
+import com.android.myapplication8.ui.dialog.DialogFragmentConfirm;
+import com.android.myapplication8.ui.dialog.DialogFragmentDeckListSortOption;
+import com.android.myapplication8.ui.dialog.DialogFragmentSimpleNameEdit;
 
 import java.util.ArrayList;
 import java.util.List;

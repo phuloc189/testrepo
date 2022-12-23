@@ -1,4 +1,4 @@
-package com.android.myapplication8.ui;
+package com.android.myapplication8.ui.fragment;
 
 import android.os.Bundle;
 
@@ -26,17 +26,19 @@ import com.android.myapplication8.CustomAdapterCardList;
 import com.android.myapplication8.R;
 import com.android.myapplication8.Util;
 import com.android.myapplication8.ViewModel1;
-import com.android.myapplication8.database2.CardEntity;
+import com.android.myapplication8.database2.entity.CardEntity;
 import com.android.myapplication8.database2.Database2Wrapper;
-import com.android.myapplication8.database2.DeckEntity;
-import com.android.myapplication8.database2.DeckEntityExtra;
+import com.android.myapplication8.database2.entity.DeckEntity;
+import com.android.myapplication8.database2.entity.DeckEntityExtra;
 import com.android.myapplication8.interfaces.CardListAdapterOnClick;
 import com.android.myapplication8.interfaces.ConfirmDialogCallback;
 import com.android.myapplication8.interfaces.DialogResultCallback;
 import com.android.myapplication8.interfaces.NewCardDialogCallback;
+import com.android.myapplication8.ui.dialog.DialogFragmentConfirm;
+import com.android.myapplication8.ui.dialog.DialogFragmentNewCard;
+import com.android.myapplication8.ui.dialog.DialogFragmentSimpleNameEdit;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class FragmentCardList extends Fragment implements NewCardDialogCallback,

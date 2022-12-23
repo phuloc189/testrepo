@@ -1,4 +1,4 @@
-package com.android.myapplication8.database2;
+package com.android.myapplication8.database2.entity;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -7,7 +7,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "table_DeckEntity")
-public class DeckEntity implements DeckEntityInterface{
+public class DeckEntity implements DeckEntityInterface {
 
     @PrimaryKey(autoGenerate = true)
     public int uid;

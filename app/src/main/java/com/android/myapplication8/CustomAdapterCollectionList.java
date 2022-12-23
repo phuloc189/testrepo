@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.myapplication8.database2.CollectionEntityExtra;
+import com.android.myapplication8.database2.entity.CollectionEntityExtra;
 import com.android.myapplication8.interfaces.ViewHolderOnClick;
 
 public class CustomAdapterCollectionList extends ListAdapter<CollectionEntityExtra,

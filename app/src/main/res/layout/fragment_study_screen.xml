@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.FragmentStudyScreen">
+    tools:context=".ui.fragment.FragmentStudyScreen">
 
 <!--    &lt;!&ndash; TODO: Update blank fragment layout &ndash;&gt;-->
 <!--    <TextView-->

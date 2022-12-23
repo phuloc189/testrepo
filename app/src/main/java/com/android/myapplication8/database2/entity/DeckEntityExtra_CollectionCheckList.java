@@ -1,4 +1,4 @@
-package com.android.myapplication8.database2;
+package com.android.myapplication8.database2.entity;
 
 public class DeckEntityExtra_CollectionCheckList extends DeckEntity {
     public int collectionUid;

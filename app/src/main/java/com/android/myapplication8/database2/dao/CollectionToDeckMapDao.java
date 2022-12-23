@@ -1,9 +1,11 @@
-package com.android.myapplication8.database2;
+package com.android.myapplication8.database2.dao;
 
 
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
+
+import com.android.myapplication8.database2.entity.CollectionToDeckMap;
 
 import java.util.List;
 
