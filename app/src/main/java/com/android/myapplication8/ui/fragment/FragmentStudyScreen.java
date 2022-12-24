@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.myapplication8.R;
@@ -52,6 +53,8 @@ public class FragmentStudyScreen extends Fragment implements
     TextView tvCardMarkingDisplay;
 
     TextView tvStudyProgress;
+
+    ScrollView scrollViewCardContent;
 
     DialogFragmentStdScrnControlPanel controlPanelDialog;
 
@@ -138,6 +141,7 @@ public class FragmentStudyScreen extends Fragment implements
         tvCardMarkingDisplay = view.findViewById(R.id.textView_studyScreen_card_marking);
         tvStudyProgress = view.findViewById(R.id.tv_studyScreen_studyProgress);
         tvDisplayedSide = view.findViewById(R.id.textView_studyScreen_cardSide);
+        scrollViewCardContent = view.findViewById(R.id.scrollView_studyScreen_card_content);
 
 
         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -239,7 +243,7 @@ public class FragmentStudyScreen extends Fragment implements
                     public void onChanged(Integer integer) {
                         updateNavigationButton(integer);
                         updateProgressInfo(integer);
-                        displayCardContent(integer);
+                        displayCardContent(integer, true);
                     }
                 }
         );
@@ -254,7 +258,8 @@ public class FragmentStudyScreen extends Fragment implements
             // todo: explore more elegant option than this POS
             viewModel.shiftMarkingStat(displayedCard.getMarking0(), newValue);
             displayedCard.setMarking0(newValue);
-            updateDisplayedCard(displayedCard);
+            updateCard(displayedCard);
+            displayCardContent(viewModel.getStudyingCardsListPointer_Value(), false);
         } else if (dialogType == Util.DialogType.LIMIT_MARKING_OPTION) {
             try {
                 controlPanelDialog.childDialogClosed(newValue);
@@ -273,7 +278,8 @@ public class FragmentStudyScreen extends Fragment implements
         displayedCard.setFrontText(frontText);
         displayedCard.setBackText(backText);
 
-        updateDisplayedCard(displayedCard);
+        updateCard(displayedCard);
+        displayCardContent(viewModel.getStudyingCardsListPointer_Value(), true);
     }
 
     private void updateProgressInfo(int pointerIndex) {
@@ -304,18 +310,19 @@ public class FragmentStudyScreen extends Fragment implements
                 nextButton.setVisibility(View.VISIBLE);
             }
         }
-
     }
 
-    private void updateDisplayedCard(CardEntity card) {
+    private void updateCard(CardEntity card) {
         viewModel.updateCard_vm(card, database2Callback);
         List<CardEntity> newList = viewModel.getStudyingCardsList_Value();
         newList.set(viewModel.getIndexArrays().get(viewModel.getStudyingCardsListPointer_Value()), card);
         viewModel.getStudyingCardsList().setValue(newList);
-        displayCardContent(viewModel.getStudyingCardsListPointer_Value());
     }
 
-    private void displayCardContent(int index) {
+    private void displayCardContent(int index, boolean scrollReset) {
+        if (scrollReset){
+            scrollViewCardContent.scrollTo(0, 0);
+        }
         displayingFront = !(viewModel.getBackSideFirstSetting());
         displayedCard = viewModel.getStudyingCardsList_Value().get(viewModel.getIndexArrays().get(index));
         tvCardContentDisplay.setText(getCardContentToDisplay());
