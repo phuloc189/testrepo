@@ -368,9 +368,7 @@ public class FragmentStudyScreen extends Fragment implements
                             onCardFetchResult(cardsFetchResult);
                         }
                     });
-
                 }
-
             }
         };
     }

@@ -107,6 +107,9 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            getSupportFragmentManager().popBackStack();
+        }
         return super.onOptionsItemSelected(item);
     }
 
