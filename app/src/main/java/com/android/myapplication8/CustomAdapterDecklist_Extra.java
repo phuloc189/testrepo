@@ -11,8 +11,11 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.myapplication8.database2.entity.DeckEntityExtra;
+import com.android.myapplication8.interfaces.ViewHolderOnClick;
 
-public class CustomAdapterDecklist_Extra extends ListAdapter<DeckEntityExtra, CustomAdapterDecklist_Extra.DeckItemViewHolder> {
+public class CustomAdapterDecklist_Extra
+        extends ListAdapter<DeckEntityExtra, CustomAdapterDecklist_Extra.DeckItemViewHolder>
+        implements ViewHolderOnClick {
 
     private static final String TAG = "CustomAdapterDecklist_Extra";
 
@@ -40,29 +43,21 @@ public class CustomAdapterDecklist_Extra extends ListAdapter<DeckEntityExtra, Cu
     public void onBindViewHolder(@NonNull DeckItemViewHolder holder, int position) {
         DeckEntityExtra item = getItem(position);
         holder.bind(item.getDeckName(), item.getCardsCount(), item.getVisitedDate());
-        holder.setOnClickListener(new CustomAdapterDeckList.DeckItemViewHolder.DeckItemViewHolderCallback() {
-            @Override
-            public void onItemClick(Util.ClickEvent event, int position) {
-                processItemClick(event, position);
-            }
-        });
+        holder.setOnClickListener(this);
     }
 
-    public void processItemClick(Util.ClickEvent event, int position) {
+    @Override
+    public void onItemClick(Util.ClickEvent event, int position) {
         callback.onItemClick(event, position);
     }
 
     static class DeckItemViewHolder extends RecyclerView.ViewHolder {
 
-        public interface DeckItemViewHolderCallback {
-            void onItemClick(Util.ClickEvent event, int position);
-        }
-
         public DeckItemViewHolder(@NonNull View itemView) {
             super(itemView);
         }
 
-        public void setOnClickListener(CustomAdapterDeckList.DeckItemViewHolder.DeckItemViewHolderCallback callback) {
+        public void setOnClickListener(ViewHolderOnClick callback) {
             this.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
