@@ -185,8 +185,21 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
 
                     viewModel.insertNewCard_vm(
                             new CardEntity(viewModel.getSelectedDeckUid_Value(),
-                                    "deck " + viewModel.getSelectedDeckUid_Value() + " card " + recyViewAdapterAlias().getCurrentList().size() + " front text test",
-                                    "deck " + viewModel.getSelectedDeckUid_Value() + " card " + recyViewAdapterAlias().getCurrentList().size() + " back text test "
+                                    "deck " + viewModel.getSelectedDeckUid_Value() + " card " + recyViewAdapterAlias().getCurrentList().size() +
+                                            " front text ",
+                                    "deck " + viewModel.getSelectedDeckUid_Value() + " card " + recyViewAdapterAlias().getCurrentList().size() +
+                                            " back text "
+                                            + "xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx "
+                                            + "xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx "
+                                            + "xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx "
+                                            + "xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx "
+                                            + "xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx "
+                                            + "xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx "
+                                            + "xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx "
+                                            + "xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx "
+                                            + "xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx "
+                                            + "xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx "
+                                            + "xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx "
                             ),
                             database2Callback
                     );

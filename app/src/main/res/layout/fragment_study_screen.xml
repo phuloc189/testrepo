@@ -55,19 +55,25 @@
         app:layout_constraintTop_toBottomOf="@id/button_study_screen_restart"
         />
 
-<!--todo: put this in a scroll view-->
-    <TextView
-        android:id="@+id/textView_studyScreen_card_content"
+    <ScrollView
+        android:id="@+id/scrollView_studyScreen_card_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="what the hell is this"
-        android:minLines="10"
-        android:background="@color/grey1"
-        android:textColor="@color/black"
+        android:layout_height="200dp"
         android:layout_margin="10dp"
         android:padding="10dp"
+        android:background="@color/grey1"
         app:layout_constraintTop_toBottomOf="@id/textView_studyScreen_cardSide"
-        />
+        >
+        <TextView
+            android:id="@+id/textView_studyScreen_card_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="what the hell is this"
+            android:textColor="@color/black"
+            app:layout_constraintTop_toBottomOf="@id/textView_studyScreen_cardSide"
+            />
+
+    </ScrollView>
 
     <TextView
         android:id="@+id/textView_studyScreen_card_marking"
@@ -80,7 +86,7 @@
         android:layout_margin="10dp"
         android:padding="10dp"
         android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/textView_studyScreen_card_content"
+        app:layout_constraintTop_toBottomOf="@id/scrollView_studyScreen_card_content"
         />
 
     <Button
