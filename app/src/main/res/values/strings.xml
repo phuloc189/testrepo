@@ -40,6 +40,7 @@
     <string name="dialog_descr_txt_collection_rename">renaming collection, new name plz</string>
 
     <string name="button_create_new_card">new card</string>
+    <string name="button_create_new_card_test">new card (testing)</string>
     <string name="button_move_to_study">study this deck</string>
     <string name="button_study_screen_restart">restart</string>
     <string name="button_study_screen_option">option</string>

@@ -28,12 +28,26 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
-
-    <Button
-        android:id="@+id/button_create_new_card"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_create_new_card"/>
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/button_create_new_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_create_new_card"/>
+
+        <Button
+            android:id="@+id/button_create_new_card_hack"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/button_create_new_card_test"/>
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/button_study_this_deck"

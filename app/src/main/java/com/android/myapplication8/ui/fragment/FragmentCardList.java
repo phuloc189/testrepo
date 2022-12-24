@@ -176,6 +176,23 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
                 requestTransitionToStudyScreen();
             }
         });
+
+        if (Util.TEST_MODE) {
+            Button createCardQuickButton = view.findViewById(R.id.button_create_new_card_hack);
+            createCardQuickButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    viewModel.insertNewCard_vm(
+                            new CardEntity(viewModel.getSelectedDeckUid_Value(),
+                                    "deck " + viewModel.getSelectedDeckUid_Value() + " card " + recyViewAdapterAlias().getCurrentList().size() + " front text test",
+                                    "deck " + viewModel.getSelectedDeckUid_Value() + " card " + recyViewAdapterAlias().getCurrentList().size() + " back text test "
+                            ),
+                            database2Callback
+                    );
+                }
+            });
+        }
     }
 
     private void requestTransitionToStudyScreen() {

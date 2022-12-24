@@ -8,6 +8,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class Util {
 
+    public static final boolean TEST_MODE = true;
+
+    //------------
+
     public static final String BUNDLE_KEY_DIALOGTYPE = "bundle_key_dialogtype";
 
     public static final String BUNDLE_VALUE_DIALOGTYPE_DECK_DELETE_CONFIRM = "bundle_value_dialogtype_deck_delete_confirm";
