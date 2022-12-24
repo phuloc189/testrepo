@@ -47,6 +47,8 @@ public class FragmentStudyScreen extends Fragment implements
 
     TextView tvCardContentDisplay;
 
+    TextView tvDisplayedSide;
+
     TextView tvCardMarkingDisplay;
 
     TextView tvStudyProgress;
@@ -135,6 +137,7 @@ public class FragmentStudyScreen extends Fragment implements
         tvCardContentDisplay = view.findViewById(R.id.textView_studyScreen_card_content);
         tvCardMarkingDisplay = view.findViewById(R.id.textView_studyScreen_card_marking);
         tvStudyProgress = view.findViewById(R.id.tv_studyScreen_studyProgress);
+        tvDisplayedSide = view.findViewById(R.id.textView_studyScreen_cardSide);
 
 
         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -154,6 +157,7 @@ public class FragmentStudyScreen extends Fragment implements
             public void onClick(View view) {
                 displayingFront = !displayingFront;
                 tvCardContentDisplay.setText(getCardContentToDisplay());
+                tvDisplayedSide.setText(getSideInfoToDisplay());
             }
         });
         editButton.setOnClickListener(new View.OnClickListener() {
@@ -205,12 +209,12 @@ public class FragmentStudyScreen extends Fragment implements
         dialogFragment.show(getChildFragmentManager(), DialogFragmentMarkingEditing.TAG);
     }
 
-    private String getCardContentToDisplay() { //todo: should i put this in viewmodel???
-        if (displayingFront) {
-            return displayedCard.getFrontText();
-        } else {
-            return displayedCard.getBackText();
-        }
+    private String getCardContentToDisplay() {
+        return displayingFront?displayedCard.getFrontText():displayedCard.getBackText();
+    }
+
+    private String getSideInfoToDisplay() {
+        return displayingFront?"Front: ":"Back: ";
     }
 
     private void fetchAndCacheCards() {
@@ -315,6 +319,7 @@ public class FragmentStudyScreen extends Fragment implements
         displayingFront = !(viewModel.getBackSideFirstSetting());
         displayedCard = viewModel.getStudyingCardsList_Value().get(viewModel.getIndexArrays().get(index));
         tvCardContentDisplay.setText(getCardContentToDisplay());
+        tvDisplayedSide.setText(getSideInfoToDisplay());
         tvCardMarkingDisplay.setText(String.valueOf(displayedCard.getMarking0()));
 
         if (!viewModel.getMarkingSetting().checkIfMatch(displayedCard.getMarking0())) {
