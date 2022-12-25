@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragment.FragmentStudyScreen">
 
-<!--    &lt;!&ndash; TODO: Update blank fragment layout &ndash;&gt;-->
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:text="sup bitch"-->
-<!--        android:textSize="50dp"/>-->
-
     <Button
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
         android:id="@+id/button_study_screen_restart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_study_screen_restart"
         android:layout_margin="10dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/button_study_screen_restart"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout_studyScrn_group_cardContentDisplay"
         app:layout_constraintEnd_toStartOf="@id/tv_studyScreen_studyProgress"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread_inside" />
 
     <TextView
         android:id="@+id/tv_studyScreen_studyProgress"
@@ -30,87 +25,97 @@
         android:layout_height="wrap_content"
         android:text="progress text"
         android:textSize="18dp"
-        app:layout_constraintTop_toTopOf="@id/button_study_screen_restart"
         app:layout_constraintBottom_toBottomOf="@id/button_study_screen_restart"
+        app:layout_constraintEnd_toStartOf="@id/button_studyScreen_editCard"
         app:layout_constraintStart_toEndOf="@id/button_study_screen_restart"
-        app:layout_constraintEnd_toStartOf="@id/button_study_screen_edit_card"/>
+        app:layout_constraintTop_toTopOf="@id/button_study_screen_restart" />
 
     <Button
-        android:id="@+id/button_study_screen_edit_card"
+        android:id="@+id/button_studyScreen_editCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:text="@string/button_study_screen_edit_card"
-        android:layout_margin="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/tv_studyScreen_studyProgress"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView_studyScreen_cardSide"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="pick a side"
-        android:layout_margin="10dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/button_study_screen_restart"
-        />
-
-    <ScrollView
-        android:id="@+id/scrollView_studyScreen_card_content"
+    <LinearLayout
+        android:id="@+id/linearLayout_studyScrn_group_cardContentDisplay"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:layout_margin="10dp"
-        android:padding="10dp"
-        android:background="@color/grey1"
-        app:layout_constraintTop_toBottomOf="@id/textView_studyScreen_cardSide"
-        >
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout_studyScrn_group_cardNavigation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_study_screen_restart">
+
         <TextView
-            android:id="@+id/textView_studyScreen_card_content"
+            android:id="@+id/textView_studyScreen_cardSide"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="pick a side" />
+
+        <ScrollView
+            android:id="@+id/scrollView_studyScreen_card_content"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_margin="10dp"
+            android:background="@color/grey1"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/textView_studyScreen_card_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="what the hell is this"
+                android:textColor="@color/black" />
+
+        </ScrollView>
+
+        <TextView
+            android:id="@+id/textView_studyScreen_card_marking"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="what the hell is this"
+            android:layout_margin="10dp"
+            android:background="@color/grey1"
+            android:gravity="center"
+            android:padding="10dp"
+            android:text="marking"
             android:textColor="@color/black"
-            app:layout_constraintTop_toBottomOf="@id/textView_studyScreen_cardSide"
-            />
+            android:textSize="18dp" />
 
-    </ScrollView>
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView_studyScreen_card_marking"
+    <LinearLayout
+        android:id="@+id/linearLayout_studyScrn_group_cardNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="marking"
-        android:background="@color/grey1"
-        android:textColor="@color/black"
-        android:textSize="18dp"
-        android:layout_margin="10dp"
-        android:padding="10dp"
-        android:gravity="center"
-        app:layout_constraintTop_toBottomOf="@id/scrollView_studyScreen_card_content"
-        />
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout_studyScrn_group_cardContentDisplay">
 
-    <Button
-        android:id="@+id/button_study_screen_next_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:layout_constraintTop_toBottomOf="@id/textView_studyScreen_card_marking"
-        android:text="@string/button_study_screen_next_card" />
+        <Button
+            android:id="@+id/button_studyScreen_nextCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:text="@string/button_study_screen_next_card" />
 
-    <Button
-        android:id="@+id/button_study_screen_flip_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:layout_constraintTop_toBottomOf="@id/button_study_screen_next_card"
-        android:text="@string/button_study_screen_flip_card" />
+        <Button
+            android:id="@+id/button_studyScreen_flipCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:text="@string/button_study_screen_flip_card" />
 
-    <Button
-        android:id="@+id/button_study_screen_previous_card"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:layout_constraintTop_toBottomOf="@id/button_study_screen_flip_card"
-        android:text="@string/button_study_screen_previous_card" />
+        <Button
+            android:id="@+id/button_studyScreen_previousCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:text="@string/button_study_screen_previous_card" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

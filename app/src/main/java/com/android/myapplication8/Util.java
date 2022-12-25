@@ -83,7 +83,7 @@ public class Util {
         CLICK,
         LONG_CLICK
     }
-    
+
     public enum DialogType {
         NONE,
         NEW_DECK_NAME,
@@ -105,10 +105,10 @@ public class Util {
     }
 
     public enum SortingOptions {
-        NONE (0),
-        CREATION_ORDER (1),
-        VISITED_ORDER (2),
-        ALPHABET_ORDER (3);
+        NONE(0),
+        CREATION_ORDER(1),
+        VISITED_ORDER(2),
+        ALPHABET_ORDER(3);
 
         public final int prefValue;
 
@@ -132,7 +132,7 @@ public class Util {
 
 
     public static void toast(Context context, CharSequence text) {
-        Toast.makeText(context, text , Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
 
     public static void toastFromBackground(AppCompatActivity activity, CharSequence text) {
@@ -144,11 +144,11 @@ public class Util {
         });
     }
 
-    public static void logDebug(String TAG, String msg){
+    public static void logDebug(String TAG, String msg) {
         Log.d(TAG, msg);
     }
 
-    public static void logError(String TAG, String msg){
+    public static void logError(String TAG, String msg) {
         Log.e(TAG, msg);
     }
 

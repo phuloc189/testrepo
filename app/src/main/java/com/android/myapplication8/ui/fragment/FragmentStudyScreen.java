@@ -132,10 +132,10 @@ public class FragmentStudyScreen extends Fragment implements
     }
 
     private void setupUi(View view) {
-        nextButton = view.findViewById(R.id.button_study_screen_next_card);
-        previousButton = view.findViewById(R.id.button_study_screen_previous_card);
-        flipButton = view.findViewById(R.id.button_study_screen_flip_card);
-        Button editButton = view.findViewById(R.id.button_study_screen_edit_card);
+        nextButton = view.findViewById(R.id.button_studyScreen_nextCard);
+        previousButton = view.findViewById(R.id.button_studyScreen_previousCard);
+        flipButton = view.findViewById(R.id.button_studyScreen_flipCard);
+        Button editButton = view.findViewById(R.id.button_studyScreen_editCard);
         Button restartButton = view.findViewById(R.id.button_study_screen_restart);
         tvCardContentDisplay = view.findViewById(R.id.textView_studyScreen_card_content);
         tvCardMarkingDisplay = view.findViewById(R.id.textView_studyScreen_card_marking);
