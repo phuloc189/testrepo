@@ -3,6 +3,7 @@ package com.android.myapplication8;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,34 +13,74 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.myapplication8.database2.entity.CardEntity;
 import com.android.myapplication8.interfaces.CardListAdapterOnClick;
+import com.android.myapplication8.interfaces.ViewHolderCheckBoxInterface;
 import com.android.myapplication8.interfaces.ViewHolderOnClick;
 
+import java.util.Arrays;
+import java.util.TreeSet;
+
 public class CustomAdapterCardList extends ListAdapter<CardEntity, CustomAdapterCardList.CardItemViewHolder>
-    implements ViewHolderOnClick {
+        implements ViewHolderOnClick, ViewHolderCheckBoxInterface {
 
     public static final String TAG = "CustomAdapterCardList";
 
     CardListAdapterOnClick callback;
 
+    private static final int VIEW_TYPE_NORMAL = 0;
+
+    private static final int VIEW_TYPE_SELECT_MODE = 1;
+
+    TreeSet<Integer> selectedUid;
+
     public CustomAdapterCardList(@NonNull DiffUtil.ItemCallback<CardEntity> diffCallback,
                                  CardListAdapterOnClick callback) {
         super(diffCallback);
         this.callback = callback;
+        selectedUid = new TreeSet<>();
     }
 
     @NonNull
     @Override
     public CardItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_ui_card, parent, false);
-        return new CardItemViewHolder(view);
+        return new CardItemViewHolder(view, selectMode);
     }
 
     @Override
     public void onBindViewHolder(@NonNull CardItemViewHolder holder, int position) {
         CardEntity cardEntity = getItem(position);
         holder.bindHolderWithContent(cardEntity.getFrontText(), cardEntity.getBackText()
-        , cardEntity.getMarking0());
-        holder.setOnClickListener(this);
+                , cardEntity.getMarking0());
+
+        if (selectMode && holder.getItemViewType() == VIEW_TYPE_SELECT_MODE) {
+            holder.setSelected(selectedUid.contains(getItem(position).getUid()));
+            holder.setCheckBoxListener(this);
+        } else if (!selectMode && holder.getItemViewType() == VIEW_TYPE_NORMAL) {
+            holder.setOnClickListener(this);
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        Util.logDebug(TAG, "getItemViewType: " + (selectMode ? VIEW_TYPE_SELECT_MODE : VIEW_TYPE_NORMAL));
+        return selectMode ? VIEW_TYPE_SELECT_MODE : VIEW_TYPE_NORMAL;
+    }
+
+    private boolean selectMode = false;
+
+    public void enableSelectMode() {
+        this.selectMode = true;
+        this.notifyDataSetChanged();
+    }
+
+    public void disableSelectMode() {
+        this.selectMode = false;
+        selectedUid.clear();
+        this.notifyDataSetChanged();
+    }
+
+    public Integer[] getSelectedUids() {
+        return Arrays.copyOf(selectedUid.toArray(), selectedUid.size(), Integer[].class);
     }
 
     @Override
@@ -48,17 +89,40 @@ public class CustomAdapterCardList extends ListAdapter<CardEntity, CustomAdapter
         callback.cardListAdapterOnItemClick(event, position, getItem(position));
     }
 
-    static class CardItemViewHolder extends RecyclerView.ViewHolder{
+    @Override
+    public void onCheckbox(int position, boolean value) {
+        if (value && selectedUid.contains(getItem(position).getUid())) {
+            Util.logDebug(TAG, "oncheckbox: something is wrong: about to include it's already there");
+            return;
+        } else if (!value && !selectedUid.contains(getItem(position).getUid())) {
+            Util.logDebug(TAG, "oncheckbox: something is wrong: about to remove it's not there");
+            return;
+        }
+        if (value) {
+            selectedUid.add(getItem(position).getUid());
+        } else {
+            selectedUid.remove(getItem(position).getUid());
+        }
+    }
+
+    static class CardItemViewHolder extends RecyclerView.ViewHolder {
         private TextView frontText;
         private TextView backText;
         private TextView marking;
+        private CheckBox checkBoxItemSelected;
+        private boolean selectMode = false;
 
-        public CardItemViewHolder(@NonNull View itemView) {
+        public CardItemViewHolder(@NonNull View itemView, boolean selectModeOn) {
             super(itemView);
 
             frontText = itemView.findViewById(R.id.textView_cardList_cardItem_frontText);
             backText = itemView.findViewById(R.id.textView_cardList_cardItem_backText);
             marking = itemView.findViewById(R.id.textView_cardList_cardItem_marking);
+            checkBoxItemSelected = itemView.findViewById(R.id.chkBox_cardListItem_itemSelected);
+            selectMode = selectModeOn;
+            if (!selectModeOn) {
+                checkBoxItemSelected.setVisibility(View.GONE);
+            }
         }
 
         public void bindHolderWithContent(String frontText, String backText, int marking) {
@@ -76,6 +140,20 @@ public class CustomAdapterCardList extends ListAdapter<CardEntity, CustomAdapter
                     return true;
                 }
             });
+        }
+
+        public void setCheckBoxListener(ViewHolderCheckBoxInterface callback) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    callback.onCheckbox(getAdapterPosition(), !checkBoxItemSelected.isChecked());
+                    checkBoxItemSelected.setChecked(!checkBoxItemSelected.isChecked());
+                }
+            });
+        }
+
+        public void setSelected(boolean value) {
+            checkBoxItemSelected.setChecked(value);
         }
     }
 

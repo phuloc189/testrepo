@@ -34,4 +34,7 @@ public interface CardDao {
             "ON table_CardEntity.deckUid = table_collectiondeckmapping.deckUid " +
             "AND table_collectiondeckmapping.collectionUid = :collectionUid")
     List<CardEntity> getAllCardsFromCollection(int collectionUid);
+
+    @Query("DELETE FROM table_CardEntity WHERE uid IN (:cardUids)")
+    int deleteMultipleCards(List<Integer> cardUids);
 }

@@ -19,6 +19,7 @@ import com.android.myapplication8.database2.entity.DeckEntityExtra;
 import com.android.myapplication8.database2.entity.DeckEntityExtra_CollectionCheckList;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -55,12 +56,14 @@ public class Database2Wrapper {
         DB_TASK_DELETE_COLLECTION,
         DB_TASK_ADD_DECKS_TO_COLLECTION,
         DB_TASK_REMOVE_DECKS_FROM_COLLECTION,
-        DB_TASK_FETCH_CARDS_FROM_COLLECTION
+        DB_TASK_FETCH_CARDS_FROM_COLLECTION,
+        DB_TASK_DELETE_MULTIPLE_CARDS
     }
 
     public static enum DbTaskResult {
         DB_RESULT_OK,
-        DB_RESULT_NG
+        DB_RESULT_NG,
+        DB_RESULT_OTHER
     }
 
     public interface Database2Callback{
@@ -392,6 +395,20 @@ public class Database2Wrapper {
             public void run() {
                 List<CardEntity> result = cardDaoAlias().getAllCardsFromCollection(collectionUid);
                 callback.onComplete_FetchingCards(DbTask.DB_TASK_FETCH_CARDS_FROM_COLLECTION, result);
+            }
+        });
+    }
+
+    public void deleteMultipleCards(Integer[] cardUids, Database2Callback callback) {
+        if (cardUids == null || cardUids.length == 0) {
+            callback.onComplete_SimpleResult(DbTask.DB_TASK_DELETE_MULTIPLE_CARDS, DbTaskResult.DB_RESULT_OTHER);
+            return;
+        }
+        dbExecutor.execute(new Runnable() {
+            @Override
+            public void run() {
+                int result = cardDaoAlias().deleteMultipleCards(Arrays.asList(cardUids));
+                callback.onComplete_SimpleResult(DbTask.DB_TASK_DELETE_MULTIPLE_CARDS, (result == cardUids.length)?DbTaskResult.DB_RESULT_OK: DbTaskResult.DB_RESULT_NG);
             }
         });
     }

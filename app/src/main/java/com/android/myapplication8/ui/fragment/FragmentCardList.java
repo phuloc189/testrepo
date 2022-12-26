@@ -84,10 +84,10 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
 
         setupDatabaseCallback();
         setupViewModel();
+        updateDeckVisitedDate();
         setupList(view);
         setupUi(view);
         readDatabase();
-        updateDeckVisitedDate();
 
         return view;
     }
@@ -121,24 +121,34 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
         };
     }
 
+    MenuProvider menuProvider = new MenuProvider() {
+        @Override
+        public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+            menuInflater.inflate(R.menu.menu_cards_screen_option, menu);
+        }
+
+        @Override
+        public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+            if (menuItem.getItemId() == R.id.menu_item_change_deck_name) {
+                showDialog_DeckRename();
+                return true;
+            } else if (menuItem.getItemId() == R.id.menu_item_cards_mass_delete) {
+                switchToMassDeleteMode();
+                return true;
+            } else {
+                return false;
+            }
+        }
+    };
+
     private void setupOptionMenu() {
         MenuHost menuHost = requireActivity();
-        menuHost.addMenuProvider(new MenuProvider() {
-            @Override
-            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                menuInflater.inflate(R.menu.menu_cards_screen_option, menu);
-            }
+        menuHost.addMenuProvider(menuProvider, getViewLifecycleOwner());
+    }
 
-            @Override
-            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                if (menuItem.getItemId() == R.id.menu_item_change_deck_name){
-                    showDialog_DeckRename();
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        }, getViewLifecycleOwner());
+    private void removeOptionMenu() {
+        MenuHost menuHost = requireActivity();
+        menuHost.removeMenuProvider(menuProvider);
     }
 
     private void updateDeckVisitedDate() {
@@ -149,19 +159,41 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
         );
     }
 
-    private void setupViewModel(){
+    private void setupViewModel() {
         viewModel = new ViewModelProvider(requireActivity()).get(ViewModel1.class);
     }
 
-    private void setupList(View view){
+    private void setupList(View view) {
         recyclerView = view.findViewById(R.id.recyclerView_card_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(new CustomAdapterCardList(new CustomAdapterCardList.CardItemDiff(), this));
     }
 
-    private void setupUi(View view){
+    private void switchToMassDeleteMode() {
+        removeOptionMenu();
+        requireActivity().invalidateOptionsMenu();
+        getView().findViewById(R.id.linearLayout_cardsScrn_group_normalDisplayMode).setVisibility(View.GONE);
+        getView().findViewById(R.id.linearLayout_cardsScrn_group_deleteMode).setVisibility(View.VISIBLE);
+        recyViewAdapterAlias().enableSelectMode();
+    }
+
+    private void switchToNormalMode() {
+        setupOptionMenu();
+        requireActivity().invalidateOptionsMenu();
+        getView().findViewById(R.id.linearLayout_cardsScrn_group_normalDisplayMode).setVisibility(View.VISIBLE);
+        getView().findViewById(R.id.linearLayout_cardsScrn_group_deleteMode).setVisibility(View.GONE);
+        recyViewAdapterAlias().disableSelectMode();
+    }
+
+    private void setupUi(View view) {
         Button createCardButton = view.findViewById(R.id.button_create_new_card);
+        studyDeckButton = view.findViewById(R.id.button_study_this_deck);
         tvCurrentDeckName = view.findViewById(R.id.tv_cardList_current_deck);
+        Button buttonExecuteDelete = view.findViewById(R.id.button_cardScrn_deleteMode_Confirm);
+        Button buttonCancelDeleteMode = view.findViewById(R.id.button_cardScrn_deleteMode_Cancel);
+
+        view.findViewById(R.id.linearLayout_cardsScrn_group_deleteMode).setVisibility(View.GONE);
+
         createCardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -169,11 +201,25 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
             }
         });
 
-        studyDeckButton = view.findViewById(R.id.button_study_this_deck);
         studyDeckButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 requestTransitionToStudyScreen();
+            }
+        });
+
+        buttonExecuteDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                carryOutMassDelete();
+                showMultipleCardsDeleteConfirmDialog();
+            }
+        });
+
+        buttonCancelDeleteMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switchToNormalMode();
             }
         });
 
@@ -206,6 +252,11 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
                 }
             });
         }
+    }
+
+    private void carryOutMassDelete() {
+        viewModel.deleteMultipleCards_vm(recyViewAdapterAlias().getSelectedUids(), database2Callback);
+        switchToNormalMode();
     }
 
     private void requestTransitionToStudyScreen() {
@@ -262,12 +313,14 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
     public void onDialogResult_Confirm(Util.DialogType dialogType) {
         if (dialogType == Util.DialogType.CONFIRM_CARD_DELETE) {
             handleCardDelete(longClickedCard);
+        } else if (dialogType == Util.DialogType.CONFIRM_MULTIPLE_CARDS_DELETE) {
+            carryOutMassDelete();
         }
     }
 
     @Override
     public void onDialogResult_NewText(Util.DialogType dialogType, String text) {
-        if(dialogType == Util.DialogType.DECK_RENAME) {
+        if (dialogType == Util.DialogType.DECK_RENAME) {
             viewModel.updateDeckName_vm(
                     viewModel.getSelectedDeckUid_Value(),
                     text, database2Callback);
@@ -280,7 +333,7 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
         viewModel.insertNewCard_vm(newCard, database2Callback);
     }
 
-    private void onDbTaskResult(Database2Wrapper.DbTask whichTask, Database2Wrapper.DbTaskResult taskResult){
+    private void onDbTaskResult(Database2Wrapper.DbTask whichTask, Database2Wrapper.DbTaskResult taskResult) {
         Util.logDebug(TAG, "db task: " + whichTask);
         Util.logDebug(TAG, "result: " + taskResult);
     }
@@ -323,6 +376,12 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
         confirmDialogFragment.show(getChildFragmentManager(), DialogFragmentConfirm.TAG);
     }
 
+    private void showMultipleCardsDeleteConfirmDialog() {
+        DialogFragmentConfirm confirmDialogFragment =
+                DialogFragmentConfirm.newInstance(Util.DialogType.CONFIRM_MULTIPLE_CARDS_DELETE, null);
+        confirmDialogFragment.show(getChildFragmentManager(), DialogFragmentConfirm.TAG);
+    }
+
     private void showCardEditDialog() {
         DialogFragmentNewCard newCardDialogFragment = new DialogFragmentNewCard();
         Bundle args = new Bundle();
@@ -347,7 +406,7 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
         newCardDialogFragment.show(getChildFragmentManager(), DialogFragmentNewCard.TAG);
     }
 
-    private void handleCardDelete(CardEntity card){
+    private void handleCardDelete(CardEntity card) {
         viewModel.deleteCard_vm(longClickedCard, database2Callback);
     }
 

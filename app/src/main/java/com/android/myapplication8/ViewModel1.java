@@ -250,6 +250,10 @@ public class ViewModel1 extends AndroidViewModel {
         return cardsList;
     }
 
+    public void deleteMultipleCards_vm(Integer[] cardUids, Database2Wrapper.Database2Callback callback) {
+        database2.deleteMultipleCards(cardUids, callback);
+    }
+
     //-----------
 
     public void cacheCardsFromSelectedDeck() {

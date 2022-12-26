@@ -7,6 +7,13 @@
     android:layout_margin="5dp"
     android:padding="7dp">
 
+    <CheckBox
+        android:id="@+id/chkBox_cardListItem_itemSelected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        />
+
     <TextView
         android:id="@+id/textView_cardList_cardItem_marking"
         android:layout_width="25dp"

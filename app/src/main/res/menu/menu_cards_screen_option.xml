@@ -5,4 +5,8 @@
     <item android:id="@+id/menu_item_change_deck_name"
         android:title="@string/menu_item_text_deck_rename"
         app:showAsAction="never"/>
+
+    <item android:id="@+id/menu_item_cards_mass_delete"
+        android:title="@string/menu_item_text_cards_mass_delete"
+        app:showAsAction="never"/>
 </menu>

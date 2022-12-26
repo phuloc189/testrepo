@@ -44,6 +44,8 @@ public class Util {
 
     public static final String BUNDLE_VALUE_DIALOGTYPE_COLLECTION_RENAME = "bundle_value_dialogtype_collection_rename";
 
+    public static final String BUNDLE_VALUE_DIALOGTYPE_CONFIRM_MULTIPLE_CARDS_DELETE = "bundle_value_dialogtype_confirm_multiple_cards_delete";
+
     //////////////
 
     public static final String BUNDLE_KEY_OLD_NAME = "bundle_key_old_name";
@@ -98,6 +100,7 @@ public class Util {
         CONFIRM_DECK_DELETE,
         CONFIRM_OPEN_DECK,
         CONFIRM_CARD_DELETE,
+        CONFIRM_MULTIPLE_CARDS_DELETE,
         CONFIRM_OPEN_DECK_JUST_CREATED,
         CONFIRM_COLLECTION_DELETE,
         CREATE_COLLECTION
@@ -176,6 +179,8 @@ public class Util {
                 return R.string.dialog_descr_txt_collection_delete_confirm;
             case COLLECTION_RENAME:
                 return R.string.dialog_descr_txt_collection_rename;
+            case CONFIRM_MULTIPLE_CARDS_DELETE:
+                return R.string.dialog_descr_txt_multiple_cards_delete_confirm;
             default:
                 return R.string.dialog_descr_txt_default_text;
         }
@@ -213,6 +218,8 @@ public class Util {
                 return BUNDLE_VALUE_DIALOGTYPE_CONFIRM_COLLECTION_DELETE;
             case COLLECTION_RENAME:
                 return BUNDLE_VALUE_DIALOGTYPE_COLLECTION_RENAME;
+            case CONFIRM_MULTIPLE_CARDS_DELETE:
+                return BUNDLE_VALUE_DIALOGTYPE_CONFIRM_MULTIPLE_CARDS_DELETE;
             default:
                 return "WUT???";
         }//CREATE_COLLECTION
@@ -248,6 +255,8 @@ public class Util {
                 return DialogType.CONFIRM_COLLECTION_DELETE;
             case BUNDLE_VALUE_DIALOGTYPE_COLLECTION_RENAME:
                 return DialogType.COLLECTION_RENAME;
+            case BUNDLE_VALUE_DIALOGTYPE_CONFIRM_MULTIPLE_CARDS_DELETE:
+                return DialogType.CONFIRM_MULTIPLE_CARDS_DELETE;
             default:
                 return DialogType.NONE;
         }

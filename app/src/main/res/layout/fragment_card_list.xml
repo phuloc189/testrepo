@@ -28,32 +28,61 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
+
     <LinearLayout
+        android:id="@+id/linearLayout_cardsScrn_group_normalDisplayMode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/button_create_new_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/button_create_new_card"/>
+
+            <Button
+                android:id="@+id/button_create_new_card_hack"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/button_create_new_card_test"/>
+
+        </LinearLayout>
 
         <Button
-            android:id="@+id/button_create_new_card"
-            android:layout_width="0dp"
+            android:id="@+id/button_study_this_deck"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/button_create_new_card"/>
-
-        <Button
-            android:id="@+id/button_create_new_card_hack"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/button_create_new_card_test"/>
+            android:text="@string/button_move_to_study"/>
 
     </LinearLayout>
 
-    <Button
-        android:id="@+id/button_study_this_deck"
+    <LinearLayout
+        android:id="@+id/linearLayout_cardsScrn_group_deleteMode"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_move_to_study"/>
+        android:orientation="vertical" >
+
+        <Button
+            android:id="@+id/button_cardScrn_deleteMode_Confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_dialog_confirm"/>
+
+        <Button
+            android:id="@+id/button_cardScrn_deleteMode_Cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_dialog_cancel"/>
+
+    </LinearLayout>
 
 
 
