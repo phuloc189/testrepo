@@ -41,8 +41,7 @@ implements ViewHolderOnClick_CheckList {
     @Override
     public void onBindViewHolder(@NonNull DeckItemViewHolder holder, int position) {
         holder.bindData(getItem(position).getDeckName(),
-                getItem(position).getCollectionUid() > 0);
-        //todo: if new checked item by user get of site and late come back, it will lose its check mark
+                (getItem(position).getCollectionUid() > 0)? (!removeList.contains(getItem(position).getUid())) : (addList.contains(getItem(position).getUid())));
         holder.setOnItemClickListener(this);
     }
 
