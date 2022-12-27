@@ -4,5 +4,5 @@ import com.android.myapplication8.Util;
 
 public interface MarkingEditCallback {
 
-    void onMarkingChanged (Util.DialogType dialogType, int newValue);
+    void onMarkingChanged(Util.DialogType dialogType, int newValue);
 }

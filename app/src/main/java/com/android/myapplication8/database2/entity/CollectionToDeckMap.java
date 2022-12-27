@@ -18,7 +18,7 @@ import androidx.room.Ignore;
                         onDelete = ForeignKey.CASCADE)})
 public class CollectionToDeckMap {
 
-    public CollectionToDeckMap(){
+    public CollectionToDeckMap() {
 
     }
 

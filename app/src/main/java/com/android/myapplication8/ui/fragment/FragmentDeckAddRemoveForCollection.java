@@ -40,7 +40,7 @@ public class FragmentDeckAddRemoveForCollection extends Fragment {
 
     int dbResultCount = 0;
 
-    public interface FragmentDeckAddRemoveForCollectionCallback{
+    public interface FragmentDeckAddRemoveForCollectionCallback {
         void settingComplete();
     }
 
@@ -78,7 +78,7 @@ public class FragmentDeckAddRemoveForCollection extends Fragment {
         super.onAttach(context);
         try {
             callback = (FragmentDeckAddRemoveForCollectionCallback) context;
-        } catch (Exception e ) {
+        } catch (Exception e) {
             Util.logDebug(TAG, "exception: " + e);
             callback = null;
         }
@@ -99,7 +99,7 @@ public class FragmentDeckAddRemoveForCollection extends Fragment {
             @Override
             public void onComplete_SimpleResult(Database2Wrapper.DbTask whichTask, Database2Wrapper.DbTaskResult taskResult) {
                 dbResultCount++;
-                if (dbResultCount ==2) {
+                if (dbResultCount == 2) {
                     callback.settingComplete();
                 }
             }
@@ -134,7 +134,7 @@ public class FragmentDeckAddRemoveForCollection extends Fragment {
 
 
     private CustomAdapterDeckList_CheckList recyViewAdapterAlias() {
-        return (CustomAdapterDeckList_CheckList)recyclerView.getAdapter();
+        return (CustomAdapterDeckList_CheckList) recyclerView.getAdapter();
     }
 
 
@@ -183,10 +183,6 @@ public class FragmentDeckAddRemoveForCollection extends Fragment {
             Util.logDebug(TAG, "something is wrong with the list");
         }
     }
-
-
-
-
 
 
 }

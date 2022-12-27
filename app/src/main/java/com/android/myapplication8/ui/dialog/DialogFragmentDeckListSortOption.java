@@ -55,7 +55,7 @@ public class DialogFragmentDeckListSortOption extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
-        if (!processArguments()){
+        if (!processArguments()) {
             return super.onCreateDialog(savedInstanceState);
         }
         View view = requireActivity().getLayoutInflater().inflate(R.layout.dialog_deck_list_option, null);
@@ -110,11 +110,11 @@ public class DialogFragmentDeckListSortOption extends DialogFragment {
     }
 
     private void setNewSortTypeOption(int viewId) {
-        if (viewId == R.id.radioButton_listSortingOptions_AlphabetOrder){
+        if (viewId == R.id.radioButton_listSortingOptions_AlphabetOrder) {
             optionSortingType_new = Util.SortingOptions.ALPHABET_ORDER;
-        } else if (viewId == R.id.radioButton_listSortingOptions_VisitedOrder){
+        } else if (viewId == R.id.radioButton_listSortingOptions_VisitedOrder) {
             optionSortingType_new = Util.SortingOptions.VISITED_ORDER;
-        } else if (viewId == R.id.radioButton_listSortingOptions_creationOrder){
+        } else if (viewId == R.id.radioButton_listSortingOptions_creationOrder) {
             optionSortingType_new = Util.SortingOptions.CREATION_ORDER;
         }
     }
@@ -171,7 +171,7 @@ public class DialogFragmentDeckListSortOption extends DialogFragment {
             DeckListSortSettingCallback callback = (DeckListSortSettingCallback) requireParentFragment();
             callback.onDeckListSortDialogResult(dialogType,
                     optionDescending_new != optionDescending_current
-                    || optionSortingType_new != optionSortingType_current);
+                            || optionSortingType_new != optionSortingType_current);
         } catch (Exception e) {
             Util.logError(TAG, "exception happened: " + e);
         }

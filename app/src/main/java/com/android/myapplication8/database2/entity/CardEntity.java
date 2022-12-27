@@ -8,10 +8,10 @@ import androidx.room.PrimaryKey;
 import java.util.Calendar;
 
 @Entity(tableName = "table_CardEntity",
-foreignKeys = {@ForeignKey(entity = DeckEntity.class,
-parentColumns = "uid",
-childColumns = "deckUid",
-onDelete = ForeignKey.CASCADE)})
+        foreignKeys = {@ForeignKey(entity = DeckEntity.class,
+                parentColumns = "uid",
+                childColumns = "deckUid",
+                onDelete = ForeignKey.CASCADE)})
 public class CardEntity {
 
     @PrimaryKey(autoGenerate = true)
@@ -28,7 +28,7 @@ public class CardEntity {
     private long modifiedDate;
 
     @Ignore
-    public CardEntity(int deckUid, String frontText, String backText){
+    public CardEntity(int deckUid, String frontText, String backText) {
         this.deckUid = deckUid;
         this.frontText = frontText;
         this.backText = backText;
@@ -37,7 +37,7 @@ public class CardEntity {
         this.modifiedDate = Calendar.getInstance().getTimeInMillis();
     }
 
-    public CardEntity(){
+    public CardEntity() {
 
     }
 

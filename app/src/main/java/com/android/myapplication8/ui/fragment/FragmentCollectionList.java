@@ -94,7 +94,7 @@ public class FragmentCollectionList extends Fragment implements DialogResultCall
     }
 
     private void onListUpdateFromDatabase(List<CollectionEntityExtra> newData) {
-        if (newData != null && newData.size() > 0){
+        if (newData != null && newData.size() > 0) {
 //            for (CollectionEntityExtra entityExtra: newData) {
 //                Util.logDebug(TAG, "item uid: " + entityExtra.getUid());
 //                Util.logDebug(TAG, "item uid: " + entityExtra.getUid());
@@ -112,7 +112,7 @@ public class FragmentCollectionList extends Fragment implements DialogResultCall
     }
 
     private CustomAdapterCollectionList recyViewAdapterAlias() {
-        return (CustomAdapterCollectionList)recyclerView.getAdapter();
+        return (CustomAdapterCollectionList) recyclerView.getAdapter();
     }
 
     private void setupList(View view) {
@@ -153,7 +153,6 @@ public class FragmentCollectionList extends Fragment implements DialogResultCall
                 DialogFragmentSimpleNameEdit.newInstance(Util.DialogType.COLLECTION_RENAME, oldName);
         dialogFragment.show(getChildFragmentManager(), DialogFragmentSimpleNameEdit.TAG);
     }
-
 
 
     private void setupDatabaseCallback() {
@@ -218,7 +217,6 @@ public class FragmentCollectionList extends Fragment implements DialogResultCall
         });
         menu.show();
     }
-
 
 
     @Override

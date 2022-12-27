@@ -16,7 +16,7 @@ import com.android.myapplication8.database2.entity.CollectionToDeckMap;
 import com.android.myapplication8.database2.entity.DeckEntity;
 
 @Database(entities = {DeckEntity.class, CardEntity.class, CollectionEntity.class,
-CollectionToDeckMap.class}, version = 1)
+        CollectionToDeckMap.class}, version = 1)
 public abstract class Database2 extends RoomDatabase {
 
     public abstract DeckDao deckDao();

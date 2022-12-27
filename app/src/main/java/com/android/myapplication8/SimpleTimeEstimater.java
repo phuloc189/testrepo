@@ -19,21 +19,20 @@ public class SimpleTimeEstimater {
     public static final long YEAR_IN_MILLIS_APPROX = 365 * DAY_IN_MILLIS;
 
     public enum TimeInterval {
-        NOW (0, "just now"),
-        MINUTE (MINUTE_IN_MILLIS, "minutes ago"),
-        FEW_MINUTES (10 * MINUTE_IN_MILLIS, "less than an hour ago"),
+        NOW(0, "just now"),
+        MINUTE(MINUTE_IN_MILLIS, "minutes ago"),
+        FEW_MINUTES(10 * MINUTE_IN_MILLIS, "less than an hour ago"),
         HOUR(HOUR_IN_MILLIS, "more than an hour ago"),
         MORE_THAN_AN_HOUR(2 * HOUR_IN_MILLIS, "few hours ago"),
         FEW_HOURS(5 * HOUR_IN_MILLIS, "many hours ago"),
-        DAY (DAY_IN_MILLIS, "more than a day ago"),
-        MORE_THAN_A_DAY (2 * DAY_IN_MILLIS, "few days ago"),
-        WEEK (WEEK_IN_MILLIS, "more than a week ago"),
-        MORE_THAN_A_WEEK (2 * WEEK_IN_MILLIS, "weeks ago"),
-        MONTH (MONTH_IN_MILLIS_APPROX, "more than a month ago"),
-        MORE_THAN_A_MONTH (2 * MONTH_IN_MILLIS_APPROX, "few months ago"),
-        FEW_MONTH (5 * MONTH_IN_MILLIS_APPROX, "many months ago"),
-        YEAR (YEAR_IN_MILLIS_APPROX, "eon ago")
-        ;
+        DAY(DAY_IN_MILLIS, "more than a day ago"),
+        MORE_THAN_A_DAY(2 * DAY_IN_MILLIS, "few days ago"),
+        WEEK(WEEK_IN_MILLIS, "more than a week ago"),
+        MORE_THAN_A_WEEK(2 * WEEK_IN_MILLIS, "weeks ago"),
+        MONTH(MONTH_IN_MILLIS_APPROX, "more than a month ago"),
+        MORE_THAN_A_MONTH(2 * MONTH_IN_MILLIS_APPROX, "few months ago"),
+        FEW_MONTH(5 * MONTH_IN_MILLIS_APPROX, "many months ago"),
+        YEAR(YEAR_IN_MILLIS_APPROX, "eon ago");
         public final long timeInMillis;
         public final String flavourText;
 
@@ -77,7 +76,7 @@ public class SimpleTimeEstimater {
             if ((ptrHead - ptrTail) <= 1) {
                 break;
             }
-            ptrMid = ptrTail + (int)Math.floor((ptrHead - ptrTail)/ 2.0);
+            ptrMid = ptrTail + (int) Math.floor((ptrHead - ptrTail) / 2.0);
             if (timeUntilNow < timeMilestones[ptrMid].timeInMillis) {
                 ptrHead = ptrMid;
             } else {

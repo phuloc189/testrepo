@@ -43,7 +43,7 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
         viewModel = new ViewModelProvider(this).get(ViewModel1.class);
 
         if (savedInstanceState == null) {
-            if (modeOfOp.equals(Util.INTENT_EXTRA_VALUE_MODE_SELECT_COLLECTION_MANAGEMENT)){
+            if (modeOfOp.equals(Util.INTENT_EXTRA_VALUE_MODE_SELECT_COLLECTION_MANAGEMENT)) {
                 //todo: how to save status of this shit???
                 launchCollectionListFragment();
             } else if (modeOfOp.equals(Util.INTENT_EXTRA_VALUE_MODE_SELECT_DECK_MANAGEMENT)) {
@@ -68,7 +68,7 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
             return;
         }
         Log.d(TAG, "BackStackChanged: currently: " +
-                getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() -1).getName());
+                getSupportFragmentManager().getBackStackEntryAt(getSupportFragmentManager().getBackStackEntryCount() - 1).getName());
 
         switch (manager.getBackStackEntryAt(manager.getBackStackEntryCount() - 1).getName()) {
             case FragmentDeckList.TAG:

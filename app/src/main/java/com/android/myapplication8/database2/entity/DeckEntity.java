@@ -22,7 +22,7 @@ public class DeckEntity implements DeckEntityInterface {
 //    @ColumnInfo(name = "cardsCount")
 //    public int cardsCount;
 
-    public DeckEntity(int uid, String deckName, long visitedDate){
+    public DeckEntity(int uid, String deckName, long visitedDate) {
         this.uid = uid;
         this.deckName = deckName;
         this.visitedDate = visitedDate;
@@ -42,7 +42,7 @@ public class DeckEntity implements DeckEntityInterface {
     //----------------------
 
     @Override
-    public int getUid(){
+    public int getUid() {
         return this.uid;
     }
 

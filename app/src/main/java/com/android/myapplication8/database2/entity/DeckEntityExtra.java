@@ -5,7 +5,7 @@ public class DeckEntityExtra extends DeckEntity {
 
     public int cardsCount;
 
-    public DeckEntityExtra(){
+    public DeckEntityExtra() {
         super();
     }
 

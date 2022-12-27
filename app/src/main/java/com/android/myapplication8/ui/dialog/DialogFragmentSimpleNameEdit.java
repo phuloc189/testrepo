@@ -53,7 +53,7 @@ public class DialogFragmentSimpleNameEdit extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        if (!processArguments()){
+        if (!processArguments()) {
             return super.onCreateDialog(savedInstanceState);
         }
 
@@ -78,7 +78,7 @@ public class DialogFragmentSimpleNameEdit extends DialogFragment {
         }
         dialogType = Util.getDialogTypeFromString(args.getString(Util.BUNDLE_KEY_DIALOGTYPE, "what the fuck"));
         if (dialogType == Util.DialogType.DECK_RENAME ||
-        dialogType == Util.DialogType.COLLECTION_RENAME) {
+                dialogType == Util.DialogType.COLLECTION_RENAME) {
             renaming = true;
             oldName = args.getString(Util.BUNDLE_KEY_OLD_NAME, "");
             if (oldName.length() == 0) {

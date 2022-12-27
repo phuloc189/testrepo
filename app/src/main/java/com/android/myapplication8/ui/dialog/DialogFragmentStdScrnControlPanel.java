@@ -57,7 +57,7 @@ public class DialogFragmentStdScrnControlPanel extends DialogFragment {
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
-        if (!processArguments()){
+        if (!processArguments()) {
             return super.onCreateDialog(savedInstanceState);
         }
         View view = requireActivity().getLayoutInflater().inflate(R.layout.dialog_study_screen_control_panel, null);
@@ -72,7 +72,7 @@ public class DialogFragmentStdScrnControlPanel extends DialogFragment {
         super.onAttach(context);
     }
 
-    private boolean processArguments(){
+    private boolean processArguments() {
         Bundle args = getArguments();
         if (args == null) {
             return false;
@@ -150,12 +150,12 @@ public class DialogFragmentStdScrnControlPanel extends DialogFragment {
         limitedMarkingValue_new = currentLimitedMarkingValue;
         if (limitedMarkingValue_new < Util.LIMITED_MARKING_NON_LIMITED) {
             checkBoxSelectedMarking.setChecked(true);
-        } else if (limitedMarkingValue_new == Util.LIMITED_MARKING_NON_LIMITED){
+        } else if (limitedMarkingValue_new == Util.LIMITED_MARKING_NON_LIMITED) {
             checkBoxSelectedMarking.setChecked(false);
         }
     }
 
-    private void doConfirmChanges(){
+    private void doConfirmChanges() {
         sharedPreferences.edit()
                 .putBoolean(requireContext().getString(R.string.pref_key_random_mode_on), randomMode_new)
                 .putBoolean(requireContext().getString(R.string.pref_key_show_back_side_first), showBackFirst_new)
@@ -169,7 +169,7 @@ public class DialogFragmentStdScrnControlPanel extends DialogFragment {
         notifyChange();
     }
 
-    private void notifyChange(){
+    private void notifyChange() {
         try {
             StdScrnControlPanelCallback callback = (StdScrnControlPanelCallback) requireParentFragment();
             callback.controlPanelResult(dialogType,

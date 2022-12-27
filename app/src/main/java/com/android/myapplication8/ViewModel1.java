@@ -60,7 +60,7 @@ public class ViewModel1 extends AndroidViewModel {
 
     MarkingSettingHelperType markingSetting;
 
-    int [] markingStat;
+    int[] markingStat;
 
     /**
      * default constructor (when this class was created)
@@ -72,7 +72,7 @@ public class ViewModel1 extends AndroidViewModel {
         init();
     }
 
-    public ViewModel1(@NonNull Application application, Database2Wrapper.Database2Callback callback){
+    public ViewModel1(@NonNull Application application, Database2Wrapper.Database2Callback callback) {
         super(application);
         Util.logDebug(TAG, "my constructor 2 called");
         database2 = new Database2Wrapper(application, callback);
@@ -206,11 +206,11 @@ public class ViewModel1 extends AndroidViewModel {
         }
     }
 
-    public void findDecksExtra_vm (String searchString, Database2Wrapper.Database2Callback callback) {
+    public void findDecksExtra_vm(String searchString, Database2Wrapper.Database2Callback callback) {
         database2.findDecksExtra(searchString, callback);
     }
 
-    public void findDecks_vm (String searchString, Database2Wrapper.Database2Callback callback) {
+    public void findDecks_vm(String searchString, Database2Wrapper.Database2Callback callback) {
         database2.findDecks(searchString, callback);
     }
 
@@ -304,8 +304,8 @@ public class ViewModel1 extends AndroidViewModel {
         }
         int cardsListSize = studyingCardsList_value.size();
 
-        for (int i = 0; i < cardsListSize; i++ ) {
-            if (markingSetting.checkIfMatch(studyingCardsList_value.get(i).getMarking0())){
+        for (int i = 0; i < cardsListSize; i++) {
+            if (markingSetting.checkIfMatch(studyingCardsList_value.get(i).getMarking0())) {
                 indexArrays.add(i);
             }
             markingStat[studyingCardsList_value.get(i).getMarking0()]++;
@@ -324,14 +324,14 @@ public class ViewModel1 extends AndroidViewModel {
     }
 
     public void getAllCardsFromCollection_vm(int collectionUid,
-                                   Database2Wrapper.Database2Callback_CardsEntity callback) {
+                                             Database2Wrapper.Database2Callback_CardsEntity callback) {
         database2.getAllCardsFromCollection(collectionUid, callback);
     }
 
     //-----------
 
     public void resetCardListPointer() {
-        studyingCardsListPointer.setValue((indexArrays.size() > 0)?0:-1);
+        studyingCardsListPointer.setValue((indexArrays.size() > 0) ? 0 : -1);
     }
 
     public MutableLiveData<Integer> getStudyingCardsListPointer() {
@@ -343,7 +343,7 @@ public class ViewModel1 extends AndroidViewModel {
     }
 
     public void incrementStudyingCardsListPointer() {
-        if (indexArrays.size() == 0){
+        if (indexArrays.size() == 0) {
             return;
         }
         int pointerValue = studyingCardsListPointer.getValue();
@@ -353,7 +353,7 @@ public class ViewModel1 extends AndroidViewModel {
     }
 
     public void decrementStudyingCardsListPointer() {
-        if (indexArrays.size() == 0){
+        if (indexArrays.size() == 0) {
             return;
         }
         int pointerValue = studyingCardsListPointer.getValue();
@@ -376,7 +376,7 @@ public class ViewModel1 extends AndroidViewModel {
         return markingStat;
     }
 
-    public void shiftMarkingStat(int from, int to){
+    public void shiftMarkingStat(int from, int to) {
         markingStat[from]--;
         markingStat[to]++;
     }
@@ -387,19 +387,19 @@ public class ViewModel1 extends AndroidViewModel {
         return database2.getAllCollectionExtraLivedata();
     }
 
-    public LiveData<CollectionEntity> getCollectionWithUid_vm(int collectionUid){
+    public LiveData<CollectionEntity> getCollectionWithUid_vm(int collectionUid) {
         return database2.getCollectionWithUid(collectionUid);
     }
 
-    public void deleteCollection_vm (int targetUid, Database2Wrapper.Database2Callback callback){
+    public void deleteCollection_vm(int targetUid, Database2Wrapper.Database2Callback callback) {
         database2.deleteCollection(targetUid, callback);
     }
 
-    public void renameCollection_vm (int targetUid, String newName, Database2Wrapper.Database2Callback callback) {
+    public void renameCollection_vm(int targetUid, String newName, Database2Wrapper.Database2Callback callback) {
         database2.renameCollection(targetUid, newName, callback);
     }
 
-    public void  createCollection_vm (String name, Database2Wrapper.Database2Callback callback) {
+    public void createCollection_vm(String name, Database2Wrapper.Database2Callback callback) {
         database2.createCollection(name, callback);
     }
 
@@ -429,11 +429,11 @@ public class ViewModel1 extends AndroidViewModel {
 
     //----------- factory
 
-    public static class MyVmFactory3 extends ViewModelProvider.AndroidViewModelFactory{
+    public static class MyVmFactory3 extends ViewModelProvider.AndroidViewModelFactory {
         Application application;
         Database2Wrapper.Database2Callback callback;
 
-        public MyVmFactory3 (Application application, Database2Wrapper.Database2Callback callback) {
+        public MyVmFactory3(Application application, Database2Wrapper.Database2Callback callback) {
             this.application = application;
             this.callback = callback;
         }

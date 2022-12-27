@@ -66,7 +66,7 @@ public class Database2Wrapper {
         DB_RESULT_OTHER
     }
 
-    public interface Database2Callback{
+    public interface Database2Callback {
         void onComplete_SimpleResult(DbTask whichTask, DbTaskResult taskResult);
 
         void onSearchDeckComplete(DbTask whichTask, List<DeckEntity> deckSearchResult);
@@ -82,7 +82,7 @@ public class Database2Wrapper {
         void onComplete_FetchingCards(DbTask whichTask, List<CardEntity> cardsFetchResult);
     }
 
-//    private static final int NUMBER_OF_THREADS = 4;
+    //    private static final int NUMBER_OF_THREADS = 4;
 //    private static final ExecutorService dbExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
     private static final ExecutorService dbExecutor = Executors.newSingleThreadExecutor();
 
@@ -353,7 +353,7 @@ public class Database2Wrapper {
             @Override
             public void run() {
                 long rowId = cardDaoAlias().insert(cardEntity);
-                DbTaskResult dbResult = (rowId == -1)? DbTaskResult.DB_RESULT_NG : DbTaskResult.DB_RESULT_OK;
+                DbTaskResult dbResult = (rowId == -1) ? DbTaskResult.DB_RESULT_NG : DbTaskResult.DB_RESULT_OK;
                 callback.onComplete_SimpleResult(DbTask.DB_TASK_INSERT_CARD, dbResult);
             }
         });
@@ -364,7 +364,7 @@ public class Database2Wrapper {
             @Override
             public void run() {
                 int result = cardDaoAlias().update(cardEntity);
-                DbTaskResult dbResult = (result == 0)? DbTaskResult.DB_RESULT_NG : DbTaskResult.DB_RESULT_OK;
+                DbTaskResult dbResult = (result == 0) ? DbTaskResult.DB_RESULT_NG : DbTaskResult.DB_RESULT_OK;
                 callback.onComplete_SimpleResult(DbTask.DB_TASK_UPDATE_CARD, dbResult);
             }
         });
@@ -375,7 +375,7 @@ public class Database2Wrapper {
             @Override
             public void run() {
                 int result = cardDaoAlias().delete(cardEntity);
-                DbTaskResult dbResult = (result == 0)? DbTaskResult.DB_RESULT_NG : DbTaskResult.DB_RESULT_OK;
+                DbTaskResult dbResult = (result == 0) ? DbTaskResult.DB_RESULT_NG : DbTaskResult.DB_RESULT_OK;
                 callback.onComplete_SimpleResult(DbTask.DB_TASK_DELETE_CARD, dbResult);
             }
         });
@@ -408,7 +408,7 @@ public class Database2Wrapper {
             @Override
             public void run() {
                 int result = cardDaoAlias().deleteMultipleCards(Arrays.asList(cardUids));
-                callback.onComplete_SimpleResult(DbTask.DB_TASK_DELETE_MULTIPLE_CARDS, (result == cardUids.length)?DbTaskResult.DB_RESULT_OK: DbTaskResult.DB_RESULT_NG);
+                callback.onComplete_SimpleResult(DbTask.DB_TASK_DELETE_MULTIPLE_CARDS, (result == cardUids.length) ? DbTaskResult.DB_RESULT_OK : DbTaskResult.DB_RESULT_NG);
             }
         });
     }
@@ -419,28 +419,28 @@ public class Database2Wrapper {
         return collectionDaoAlias().getAllCollectionExtraLivedata2();
     }
 
-    public LiveData<CollectionEntity> getCollectionWithUid(int collectionUid){
+    public LiveData<CollectionEntity> getCollectionWithUid(int collectionUid) {
         return collectionDaoAlias().getCollectionWithUid(collectionUid);
     }
 
-    public void deleteCollection (int targetUid, Database2Callback callback) {
+    public void deleteCollection(int targetUid, Database2Callback callback) {
         dbExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 int result = collectionDaoAlias().delete(targetUid);
                 callback.onComplete_SimpleResult(DbTask.DB_TASK_DELETE_COLLECTION,
-                        (result <= 0 ? DbTaskResult.DB_RESULT_NG: DbTaskResult.DB_RESULT_OK));
+                        (result <= 0 ? DbTaskResult.DB_RESULT_NG : DbTaskResult.DB_RESULT_OK));
             }
         });
     }
 
-    public void renameCollection (int targetUid, String newName, Database2Callback callback){
+    public void renameCollection(int targetUid, String newName, Database2Callback callback) {
         dbExecutor.execute(new Runnable() {
             @Override
             public void run() {
                 int result = collectionDaoAlias().updateCollectionName(targetUid, newName);
                 callback.onComplete_SimpleResult(DbTask.DB_TASK_RENAME_COLLECTION,
-                        (result <= 0 ? DbTaskResult.DB_RESULT_NG: DbTaskResult.DB_RESULT_OK));
+                        (result <= 0 ? DbTaskResult.DB_RESULT_NG : DbTaskResult.DB_RESULT_OK));
             }
         });
     }
@@ -461,7 +461,7 @@ public class Database2Wrapper {
     // ------------  collection-deck map  --------------
 
     public void insertDecksToCollection(int collectionUid, Integer[] deckUidList, Database2Callback callback) {
-        if (deckUidList == null || deckUidList.length == 0){
+        if (deckUidList == null || deckUidList.length == 0) {
             callback.onComplete_SimpleResult(DbTask.DB_TASK_ADD_DECKS_TO_COLLECTION,
                     DbTaskResult.DB_RESULT_NG);
             return;
@@ -470,12 +470,12 @@ public class Database2Wrapper {
             @Override
             public void run() {
                 List<CollectionToDeckMap> mapList = new ArrayList<>();
-                for (Integer deckUid: deckUidList) {
+                for (Integer deckUid : deckUidList) {
                     mapList.add(new CollectionToDeckMap(collectionUid, deckUid));
                 }
                 List<Long> results = collectionToDeckMapDaoAlias().insertListOfDecks(mapList);
 
-                if (results != null && results.size()> 0) {
+                if (results != null && results.size() > 0) {
                     callback.onComplete_SimpleResult(DbTask.DB_TASK_ADD_DECKS_TO_COLLECTION,
                             DbTaskResult.DB_RESULT_OK);
                 } else {
@@ -487,7 +487,7 @@ public class Database2Wrapper {
     }
 
     public void removeDecksFromCollection(int collectionUid, Integer[] deckUidList, Database2Callback callback) {
-        if (deckUidList == null || deckUidList.length == 0){
+        if (deckUidList == null || deckUidList.length == 0) {
             callback.onComplete_SimpleResult(DbTask.DB_TASK_REMOVE_DECKS_FROM_COLLECTION,
                     DbTaskResult.DB_RESULT_NG);
             return;
@@ -496,7 +496,7 @@ public class Database2Wrapper {
             @Override
             public void run() {
                 List<CollectionToDeckMap> mapList = new ArrayList<>();
-                for (Integer deckUid: deckUidList) {
+                for (Integer deckUid : deckUidList) {
                     mapList.add(new CollectionToDeckMap(collectionUid, deckUid));
                 }
                 int results = collectionToDeckMapDaoAlias().deleteListOfDecks(mapList);

@@ -14,7 +14,7 @@ import com.android.myapplication8.database2.entity.DeckEntity;
 import com.android.myapplication8.interfaces.ViewHolderOnClick;
 
 public class CustomAdapterDeckList extends ListAdapter<DeckEntity, CustomAdapterDeckList.DeckItemViewHolder>
-implements ViewHolderOnClick {
+        implements ViewHolderOnClick {
 
     private static final String TAG = "CustomAdapterDeckList";
 
@@ -55,7 +55,7 @@ implements ViewHolderOnClick {
     }
 
     static class DeckItemViewHolder extends RecyclerView.ViewHolder {
-//        View itemView; // we don't need this, the base class already have one
+        //        View itemView; // we don't need this, the base class already have one
         TextView textView;
 
         public DeckItemViewHolder(@NonNull View itemView) {

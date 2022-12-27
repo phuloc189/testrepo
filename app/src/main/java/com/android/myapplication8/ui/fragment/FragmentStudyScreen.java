@@ -204,7 +204,7 @@ public class FragmentStudyScreen extends Fragment implements
         dialog.show(getChildFragmentManager(), DialogFragmentNewCard.TAG);
     }
 
-    private void showMarkingEditDialog(){
+    private void showMarkingEditDialog() {
         DialogFragmentMarkingEditing dialogFragment = new DialogFragmentMarkingEditing();
         Bundle args = new Bundle();
         args.putString(Util.BUNDLE_KEY_DIALOGTYPE, Util.BUNDLE_VALUE_DIALOGTYPE_CARD_MARKING_EDIT);
@@ -214,11 +214,11 @@ public class FragmentStudyScreen extends Fragment implements
     }
 
     private String getCardContentToDisplay() {
-        return displayingFront?displayedCard.getFrontText():displayedCard.getBackText();
+        return displayingFront ? displayedCard.getFrontText() : displayedCard.getBackText();
     }
 
     private String getSideInfoToDisplay() {
-        return displayingFront?"Front: ":"Back: ";
+        return displayingFront ? "Front: " : "Back: ";
     }
 
     private void fetchAndCacheCards() {
@@ -304,7 +304,7 @@ public class FragmentStudyScreen extends Fragment implements
                 previousButton.setVisibility(View.VISIBLE);
             }
 
-            if (pointerIndex == (viewModel.getIndexArrays().size() -1)) {
+            if (pointerIndex == (viewModel.getIndexArrays().size() - 1)) {
                 nextButton.setVisibility(View.INVISIBLE);
             } else {
                 nextButton.setVisibility(View.VISIBLE);
@@ -320,7 +320,7 @@ public class FragmentStudyScreen extends Fragment implements
     }
 
     private void displayCardContent(int index, boolean scrollReset) {
-        if (scrollReset){
+        if (scrollReset) {
             scrollViewCardContent.scrollTo(0, 0);
         }
         displayingFront = !(viewModel.getBackSideFirstSetting());
@@ -380,7 +380,7 @@ public class FragmentStudyScreen extends Fragment implements
         };
     }
 
-    private void onDbTaskResult(Database2Wrapper.DbTask whichTask, Database2Wrapper.DbTaskResult taskResult){
+    private void onDbTaskResult(Database2Wrapper.DbTask whichTask, Database2Wrapper.DbTaskResult taskResult) {
         Util.logDebug(TAG, "db task: " + whichTask);
         Util.logDebug(TAG, "result: " + taskResult);
     }

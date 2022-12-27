@@ -26,7 +26,7 @@ public class CustomAdapterDecklist_Extra
     }
 
     public CustomAdapterDecklist_Extra(@NonNull DiffUtil.ItemCallback<DeckEntityExtra> diffCallback,
-                                          CustomAdapterDecklist_ExtraCallback callback) {
+                                       CustomAdapterDecklist_ExtraCallback callback) {
         super(diffCallback);
         this.callback = callback;
     }
@@ -35,7 +35,7 @@ public class CustomAdapterDecklist_Extra
     @Override
     public DeckItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view =
-        LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_ui_deck, parent, false);
+                LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_ui_deck, parent, false);
         return new DeckItemViewHolder(view);
     }
 
@@ -80,9 +80,9 @@ public class CustomAdapterDecklist_Extra
         }
 
         public void bind(String deckName, int cardsCount, long visitedDate) {
-            ((TextView)this.itemView.findViewById(R.id.tv_deck_item_deck_title)).setText(deckName);
-            ((TextView)this.itemView.findViewById(R.id.tv_deck_item_cards_count)).setText(friendlyCardsCount(cardsCount));
-            ((TextView)this.itemView.findViewById(R.id.tv_deck_item_last_visited_date)).setText(friendlyTimeEstimate(visitedDate));
+            ((TextView) this.itemView.findViewById(R.id.tv_deck_item_deck_title)).setText(deckName);
+            ((TextView) this.itemView.findViewById(R.id.tv_deck_item_cards_count)).setText(friendlyCardsCount(cardsCount));
+            ((TextView) this.itemView.findViewById(R.id.tv_deck_item_last_visited_date)).setText(friendlyTimeEstimate(visitedDate));
         }
 
         private String friendlyCardsCount(int cardsCount) {

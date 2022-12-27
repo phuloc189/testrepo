@@ -44,7 +44,7 @@ public class DialogFragmentNewCard extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        if (!processArguments()){
+        if (!processArguments()) {
             return super.onCreateDialog(savedInstanceState);
         }
 
@@ -109,7 +109,7 @@ public class DialogFragmentNewCard extends DialogFragment {
             editTextInputField1.setError("enter both fields bruh");
             return;
         } else if (dialogType == Util.DialogType.EDIT_CARD &&
-        frontText.equals(oldFrontText) && backText.equals(oldBackText)) {
+                frontText.equals(oldFrontText) && backText.equals(oldBackText)) {
             editTextInputField1.setError("these are the same bruh");
             return;
         }
@@ -118,7 +118,7 @@ public class DialogFragmentNewCard extends DialogFragment {
         dismiss();
     }
 
-    private void notifyResult(){
+    private void notifyResult() {
         try {
             NewCardDialogCallback callback = (NewCardDialogCallback) requireParentFragment();
             callback.onNewCardTextDialogResult(dialogType, frontText, backText);

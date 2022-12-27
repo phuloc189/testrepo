@@ -19,7 +19,7 @@ import java.util.TreeSet;
 
 public class CustomAdapterDeckList_CheckList
         extends ListAdapter<DeckEntityExtra_CollectionCheckList, CustomAdapterDeckList_CheckList.DeckItemViewHolder>
-implements ViewHolderOnClick_CheckList {
+        implements ViewHolderOnClick_CheckList {
     public static final String TAG = "CustomAdapterDeckList_CheckList";
     TreeSet<Integer> removeList;
     TreeSet<Integer> addList;
@@ -41,7 +41,7 @@ implements ViewHolderOnClick_CheckList {
     @Override
     public void onBindViewHolder(@NonNull DeckItemViewHolder holder, int position) {
         holder.bindData(getItem(position).getDeckName(),
-                (getItem(position).getCollectionUid() > 0)? (!removeList.contains(getItem(position).getUid())) : (addList.contains(getItem(position).getUid())));
+                (getItem(position).getCollectionUid() > 0) ? (!removeList.contains(getItem(position).getUid())) : (addList.contains(getItem(position).getUid())));
         holder.setOnItemClickListener(this);
     }
 
@@ -86,8 +86,8 @@ implements ViewHolderOnClick_CheckList {
         }
 
         public void bindData(String deckName, boolean isInCollection) {
-            ((TextView)itemView.findViewById(R.id.tv_deck_item_deck_title)).setText(deckName);
-            ((CheckBox)itemView.findViewById(R.id.chkBox_deckListItem_included)).setChecked(isInCollection);
+            ((TextView) itemView.findViewById(R.id.tv_deck_item_deck_title)).setText(deckName);
+            ((CheckBox) itemView.findViewById(R.id.chkBox_deckListItem_included)).setChecked(isInCollection);
         }
 
         public void setOnItemClickListener(ViewHolderOnClick_CheckList callback) {

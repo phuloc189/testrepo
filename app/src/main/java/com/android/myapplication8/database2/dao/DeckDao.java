@@ -78,7 +78,7 @@ public interface DeckDao {
 
     @Query("SELECT table_DeckEntity.*, COUNT(table_cardentity.deckUid) as cardsCount " +
             "FROM table_DeckEntity LEFT OUTER JOIN table_cardentity ON table_DeckEntity.uid = table_cardentity.deckUid " +
-            "GROUP BY table_DeckEntity.uid" )
+            "GROUP BY table_DeckEntity.uid")
     LiveData<List<DeckEntityExtra>> getAllLiveData_experimental2();//todo: experimental
 
     @RawQuery(observedEntities = DeckEntity.class)
@@ -116,7 +116,7 @@ public interface DeckDao {
             "FROM table_DeckEntity " +
             "LEFT OUTER JOIN table_cardentity ON table_DeckEntity.uid = table_cardentity.deckUid " +
             "JOIN table_CollectionDeckMapping ON table_DeckEntity.uid = table_CollectionDeckMapping.deckUid and table_CollectionDeckMapping.collectionUid = :collectionUid " +
-            "GROUP BY table_DeckEntity.uid" )
+            "GROUP BY table_DeckEntity.uid")
     LiveData<List<DeckEntityExtra>> getAllLiveDataExtra_forCollection(int collectionUid);
 
 

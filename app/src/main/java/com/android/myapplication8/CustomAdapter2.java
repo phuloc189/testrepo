@@ -47,7 +47,7 @@ public class CustomAdapter2 extends ListAdapter<ItemClass1, CustomAdapter2.ListI
         }
     }
 
-    static class ListItemViewHolder extends RecyclerView.ViewHolder{
+    static class ListItemViewHolder extends RecyclerView.ViewHolder {
 
         TextView textView;
 
@@ -57,7 +57,7 @@ public class CustomAdapter2 extends ListAdapter<ItemClass1, CustomAdapter2.ListI
             textView = itemView.findViewById(R.id.tv_deck_item_deck_title);
         }
 
-        public void bind (String text) { //bind???
+        public void bind(String text) { //bind???
             textView.setText(text);
         }
     }

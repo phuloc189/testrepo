@@ -1,6 +1,6 @@
 package com.android.myapplication8.database2.entity;
 
-public class CollectionEntityExtra extends CollectionEntity{
+public class CollectionEntityExtra extends CollectionEntity {
 
     public int deckCount;
 

@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder>{
+public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
 
     private String[] localDataSet;
 
@@ -43,16 +43,16 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
     /**
      * Provide a reference to the type of views that you are using
-     *       (custom ViewHolder).
+     * (custom ViewHolder).
      */
-    public static class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             // Define click listener for the ViewHolder's View???
 
-            textView = (TextView)itemView.findViewById(R.id.tv_deck_item_deck_title);
+            textView = (TextView) itemView.findViewById(R.id.tv_deck_item_deck_title);
         }
 
         public TextView getTextView() {

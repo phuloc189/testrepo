@@ -18,7 +18,7 @@ public class CustomAdapterCollectionList extends ListAdapter<CollectionEntityExt
 
     CustomAdapterCollectionListCallback callback;
 
-    public interface CustomAdapterCollectionListCallback{
+    public interface CustomAdapterCollectionListCallback {
         void onItemClick(Util.ClickEvent event, int position);
     }
 
@@ -49,7 +49,7 @@ public class CustomAdapterCollectionList extends ListAdapter<CollectionEntityExt
         callback.onItemClick(event, position);
     }
 
-    public static class CollectionItemDiff extends DiffUtil.ItemCallback<CollectionEntityExtra>{
+    public static class CollectionItemDiff extends DiffUtil.ItemCallback<CollectionEntityExtra> {
         @Override
         public boolean areItemsTheSame(@NonNull CollectionEntityExtra oldItem, @NonNull CollectionEntityExtra newItem) {
             return oldItem.getUid() == newItem.getUid();
@@ -61,15 +61,15 @@ public class CustomAdapterCollectionList extends ListAdapter<CollectionEntityExt
         }
     }
 
-    static class CollectionItemViewHolder extends RecyclerView.ViewHolder{
+    static class CollectionItemViewHolder extends RecyclerView.ViewHolder {
 
         public CollectionItemViewHolder(@NonNull View itemView) {
             super(itemView);
         }
 
         public void bindData(String collectionName, int deckCount) {
-            ((TextView)itemView.findViewById(R.id.tv_collection_item_title)).setText(collectionName);
-            ((TextView)itemView.findViewById(R.id.tv_collection_item_deck_count)).setText(
+            ((TextView) itemView.findViewById(R.id.tv_collection_item_title)).setText(collectionName);
+            ((TextView) itemView.findViewById(R.id.tv_collection_item_deck_count)).setText(
                     friendlyDecksCount(deckCount));
         }
 

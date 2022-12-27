@@ -16,8 +16,8 @@ public class MarkingSettingHelperType {
     }
 
     public boolean[] getByteArray() {
-        boolean [] result = new boolean[10];
-        for (int i = 0; i < 10; i++ ) {
+        boolean[] result = new boolean[10];
+        for (int i = 0; i < 10; i++) {
             result[i] = (markingValue_int & (1 << i)) > 0;
         }
         return result;
@@ -42,7 +42,7 @@ public class MarkingSettingHelperType {
         }
     }
 
-    public int getMarkingValue_int(){
+    public int getMarkingValue_int() {
         return markingValue_int;
     }
 }

@@ -6,7 +6,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "table_CollectionEntity")
-public class CollectionEntity implements CollectionEntityInterface{
+public class CollectionEntity implements CollectionEntityInterface {
     @PrimaryKey(autoGenerate = true)
     public int uid;
 
