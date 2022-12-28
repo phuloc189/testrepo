@@ -13,14 +13,11 @@ import java.util.List;
 @Dao
 public interface CollectionDao {
 
-    @Query("DELETE FROM table_collectionentity WHERE uid = :targetUid")
-    int delete(int targetUid);
-
     @Insert
     long insert(CollectionEntity collection);
 
-    @Query("UPDATE table_CollectionEntity SET collectionName = :newName WHERE uid = :targetUid")
-    int updateCollectionName(int targetUid, String newName);
+    //--------------- queries
+    //--------------- read
 
     @Query("SELECT table_CollectionEntity.*, COUNT(table_CollectionDeckMapping.deckUid) as deckCount" +
             " FROM table_CollectionEntity " +
@@ -31,5 +28,15 @@ public interface CollectionDao {
 
     @Query("SELECT * FROM table_CollectionEntity WHERE uid = :collectionUid")
     LiveData<CollectionEntity> getCollectionWithUid(int collectionUid);
+
+    //--------------- delete
+
+    @Query("DELETE FROM table_collectionentity WHERE uid = :targetUid")
+    int delete(int targetUid);
+
+    //--------------- update
+
+    @Query("UPDATE table_CollectionEntity SET collectionName = :newName WHERE uid = :targetUid")
+    int updateCollectionName(int targetUid, String newName);
 
 }

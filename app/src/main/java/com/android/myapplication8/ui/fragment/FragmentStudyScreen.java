@@ -357,11 +357,6 @@ public class FragmentStudyScreen extends Fragment implements
             @Override
             public void onInsertComplete(Database2Wrapper.DbTask whichTask, long newRowId) {
             }
-
-            @Override
-            public void onGetDeckResult(Database2Wrapper.DbTask whichTask, DeckEntity deck) {
-
-            }
         };
 
         database2Callback_cardsEntity = new Database2Wrapper.Database2Callback_CardsEntity() {

@@ -16,9 +16,7 @@ public class CollectionEntityExtra extends CollectionEntity {
 
     @Override
     public boolean checkIfSameContentWith(CollectionEntityInterface otherObject) {
-        //todo: re enable this, later
-//        return super.checkIfSameContentWith(otherObject)
-//                && this.deckCount == otherObject.getDeckCount();
-        return super.checkIfSameContentWith(otherObject);
+        return super.checkIfSameContentWith(otherObject)
+                && this.deckCount == otherObject.getDeckCount();
     }
 }

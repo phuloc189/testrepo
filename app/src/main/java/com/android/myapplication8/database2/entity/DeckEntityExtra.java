@@ -36,7 +36,6 @@ public class DeckEntityExtra extends DeckEntity {
 
     @Override
     public boolean checkIfSameContentWith(DeckEntityInterface otherDeck) {
-//        return super.checkIfSameContentWith(otherDeck);
         return this.getDeckName().equals(otherDeck.getDeckName())
                 && this.getCardsCount() == otherDeck.getCardsCount();
     }

@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.android.myapplication8.MarkingSettingHelperType;
+import com.android.myapplication8.MarkingSettingHelper;
 import com.android.myapplication8.R;
 import com.android.myapplication8.Util;
 import com.android.myapplication8.ViewModel1;
@@ -27,7 +27,7 @@ public class DialogFragmentMarkingEditing extends DialogFragment {
 
     int limitedMarkingValue_received;
 
-    MarkingSettingHelperType limitedMarkingValue_current;
+    MarkingSettingHelper limitedMarkingValue_current;
 
     Util.DialogType dialogType;
 
@@ -106,7 +106,7 @@ public class DialogFragmentMarkingEditing extends DialogFragment {
             newChoice = previousChoice;
         } else if (dialogType == Util.DialogType.LIMIT_MARKING_OPTION) {
             limitedMarkingValue_received = args.getInt(Util.BUNDLE_KEY_CURRENT_LIMITED_MARKING_VALUE_SETTING, Util.LIMITED_MARKING_DEFAULT_VALUE);
-            limitedMarkingValue_current = new MarkingSettingHelperType(limitedMarkingValue_received);
+            limitedMarkingValue_current = new MarkingSettingHelper(limitedMarkingValue_received);
         }
         return true;
     }

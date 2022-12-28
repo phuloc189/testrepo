@@ -58,7 +58,7 @@ public class ViewModel1 extends AndroidViewModel {
 
     boolean backSideFirstSetting;
 
-    MarkingSettingHelperType markingSetting;
+    MarkingSettingHelper markingSetting;
 
     int[] markingStat;
 
@@ -101,7 +101,7 @@ public class ViewModel1 extends AndroidViewModel {
     //----------- decks
 
     public LiveData<DeckEntity> getDeckWithId_LiveData_vm(int deckUid) {
-        return database2.getDeckWithId_LiveData(deckUid);
+        return database2.getDeckWithThisId_LiveData(deckUid);
     }
 
     public void insertNewDeck_vm(String deckName, Database2Wrapper.Database2Callback callback) {
@@ -112,59 +112,15 @@ public class ViewModel1 extends AndroidViewModel {
         database2.deleteDeck(targetUid, callback);
     }
 
-    public LiveData<List<DeckEntity>> readAll_vm() {
-        //--------
-        Util.SortingOptions optionSortingType = Util.getSortingOption(sharedPreferences.getInt(
-                getApplication().getString(R.string.pref_key_deck_list_sorting_type),
-                Util.SORTING_TYPE_OPTION_DEFAULT_VALUE
-        ));
-        boolean optionDescending = sharedPreferences.getBoolean(
-                getApplication().getString(R.string.pref_key_deck_list_sorting_descending),
-                Util.SORTING_DESCENDING_OPTION_DEFAULT_VALUE
-        );
-//        if (optionDescending) {
-//            switch (optionSortingType) {
-//                case ALPHABET_ORDER:
-//                    deckList = database2.readAll_Sorted_Name_Desc();
-//                    break;
-//                case VISITED_ORDER:
-//                    deckList = database2.readAll_Sorted_VisitDate_Desc();
-//                    break;
-//                case CREATION_ORDER:
-//                default:
-//                    deckList = database2.readAll_Sorted_Uid_Desc();
-//            }
-//        } else {
-//            switch (optionSortingType) {
-//                case ALPHABET_ORDER:
-//                    deckList = database2.readAll_Sorted_Name_Asc();
-//                    break;
-//                case VISITED_ORDER:
-//                    deckList = database2.readAll_Sorted_VisitDate_Asc();
-//                    break;
-//                case CREATION_ORDER:
-//                default:
-//                    deckList = database2.readAll();
-//            }
-//        }
-        //todo: experimenting
-//        deckList = database2.readAllLiveData_experimental();
-        deckList = database2.getAllLiveData_raw();
-
-        //don't enable this, not part of experiment
-//        deckList = database2.readAll();
-        return deckList;
-    }
-
     public LiveData<List<DeckEntityExtra>> getAllLiveData_experimental2_vm() {
-        deckList_withExtra = database2.getAllLiveDataExtra_raw(
+        deckList_withExtra = database2.getDecks_WithExtra_LiveData(
                 getSortingType(),
                 getOptionDescending());
         return deckList_withExtra;
     }
 
     public LiveData<List<DeckEntityExtra>> getAllLiveDataExtra_forCollection(int collectionUid) {
-        deckList_withExtra = database2.getAllLiveDataExtra_forCollection_raw(
+        deckList_withExtra = database2.getDecks_WithExtra_LiveData_ForCollection(
                 getSortingType(),
                 getOptionDescending(),
                 collectionUid);
@@ -186,7 +142,7 @@ public class ViewModel1 extends AndroidViewModel {
     }
 
     public LiveData<List<DeckEntityExtra_CollectionCheckList>> getAllLiveData_CollectionChecklist_vm(int collectionUid) {
-        return database2.getAllLiveData_CollectionChecklist(collectionUid);
+        return database2.getDecks_WithExtra_LiveData_CollectionChecklist(collectionUid);
     }
 
     public void insertDecksToCollection_vm(int collectionUid, Integer[] deckUidList, Database2Wrapper.Database2Callback callback) {
@@ -207,11 +163,7 @@ public class ViewModel1 extends AndroidViewModel {
     }
 
     public void findDecksExtra_vm(String searchString, Database2Wrapper.Database2Callback callback) {
-        database2.findDecksExtra(searchString, callback);
-    }
-
-    public void findDecks_vm(String searchString, Database2Wrapper.Database2Callback callback) {
-        database2.findDecks(searchString, callback);
+        database2.findDecks_WithExtra(searchString, callback);
     }
 
     public void updateDeckVisitedDate_vm(int targetUid, long newVisitedDate, Database2Wrapper.Database2Callback callback) {
@@ -236,13 +188,8 @@ public class ViewModel1 extends AndroidViewModel {
         database2.deleteCard(cardEntity, callback);
     }
 
-    public LiveData<List<CardEntity>> readAllCardsLiveData_vm() {
-        cardsList = database2.readAllCardsLiveData();
-        return cardsList;
-    }
-
     public LiveData<List<CardEntity>> readAllCardsFromDeckLiveData_vm(int deckUid) {
-        cardsList = database2.readAllCardsFromDeckLiveData(deckUid);
+        cardsList = database2.getCardsFromDeck_LiveData(deckUid);
         return cardsList;
     }
 
@@ -285,10 +232,10 @@ public class ViewModel1 extends AndroidViewModel {
                 getApplication().getString(R.string.pref_key_show_back_side_first), false);
         int markingSetting_int = sharedPreferences.getInt(
                 getApplication().getString(R.string.pref_key_limited_marking_value), Util.LIMITED_MARKING_DEFAULT_VALUE);
-        markingSetting = new MarkingSettingHelperType(markingSetting_int);
+        markingSetting = new MarkingSettingHelper(markingSetting_int);
     }
 
-    public MarkingSettingHelperType getMarkingSetting() {
+    public MarkingSettingHelper getMarkingSetting() {
         return markingSetting;
     }
 
@@ -325,7 +272,7 @@ public class ViewModel1 extends AndroidViewModel {
 
     public void getAllCardsFromCollection_vm(int collectionUid,
                                              Database2Wrapper.Database2Callback_CardsEntity callback) {
-        database2.getAllCardsFromCollection(collectionUid, callback);
+        database2.getCardsFromCollection(collectionUid, callback);
     }
 
     //-----------
@@ -384,11 +331,11 @@ public class ViewModel1 extends AndroidViewModel {
     //--------- collection
 
     public LiveData<List<CollectionEntityExtra>> getAllCollectionExtraLivedata_vm() {
-        return database2.getAllCollectionExtraLivedata();
+        return database2.getCollection_WithExtra_Livedata();
     }
 
     public LiveData<CollectionEntity> getCollectionWithUid_vm(int collectionUid) {
-        return database2.getCollectionWithUid(collectionUid);
+        return database2.getCollectionWithThisUid(collectionUid);
     }
 
     public void deleteCollection_vm(int targetUid, Database2Wrapper.Database2Callback callback) {

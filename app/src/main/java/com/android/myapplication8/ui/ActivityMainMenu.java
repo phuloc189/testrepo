@@ -10,7 +10,7 @@ import android.widget.Button;
 import com.android.myapplication8.R;
 import com.android.myapplication8.Util;
 
-public class MainActivity extends AppCompatActivity {
+public class ActivityMainMenu extends AppCompatActivity {
     public static String TAG = "MainActivity";
 
     @Override
@@ -36,8 +36,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void nextActivity(String intentValue_ModeSelect) {
-//        todo: consider going back using the event from up button on app bar
-        Intent intent = new Intent(getApplicationContext(), MainActivity2.class);
+        Intent intent = new Intent(getApplicationContext(), ActivityMainContentHost.class);
         intent.putExtra(Util.INTENT_EXTRA_KEY_MODE_SELECT, intentValue_ModeSelect);
         startActivity(intent);
     }

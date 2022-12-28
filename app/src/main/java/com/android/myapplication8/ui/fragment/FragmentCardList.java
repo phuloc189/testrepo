@@ -113,11 +113,6 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
             public void onInsertComplete(Database2Wrapper.DbTask whichTask, long newRowId) {
 
             }
-
-            //todo: delete this interface method
-            @Override
-            public void onGetDeckResult(Database2Wrapper.DbTask whichTask, DeckEntity deck) {
-            }
         };
     }
 

@@ -1,11 +1,11 @@
 package com.android.myapplication8;
 
-public class MarkingSettingHelperType {
+public class MarkingSettingHelper {
 
-    public static final String TAG = "MarkingClass";
+    public static final String TAG = "MarkingSettingHelper";
     int markingValue_int;
 
-    public MarkingSettingHelperType(int value) {
+    public MarkingSettingHelper(int value) {
         if (value > 1023) {
             markingValue_int = 1023;
         } else if (markingValue_int < 0) {

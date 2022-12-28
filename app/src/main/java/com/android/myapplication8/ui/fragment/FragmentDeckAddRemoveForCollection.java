@@ -118,11 +118,6 @@ public class FragmentDeckAddRemoveForCollection extends Fragment {
             public void onInsertComplete(Database2Wrapper.DbTask whichTask, long newRowId) {
                 //todo: implement shit here
             }
-
-            @Override
-            public void onGetDeckResult(Database2Wrapper.DbTask whichTask, DeckEntity deck) {
-
-            }
         };
     }
 

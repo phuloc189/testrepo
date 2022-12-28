@@ -149,11 +149,6 @@ public class FragmentDeckList extends Fragment implements
                 //  todo: choose between int or long???
                 askUserIfTheyAlsoWantToOpenDeck((int) newRowId);
             }
-
-            @Override
-            public void onGetDeckResult(Database2Wrapper.DbTask whichTask, DeckEntity deck) {
-
-            }
         };
     }
 
@@ -167,6 +162,7 @@ public class FragmentDeckList extends Fragment implements
     }
 
     private void readDatabaseLiveData() {
+        Util.logDebug(TAG, "readDatabaseLiveData: " );
         /**
          * "this observer will be notified about modifications of the
          * wrapped data only if the paired LifecycleOwner is in
@@ -185,7 +181,6 @@ public class FragmentDeckList extends Fragment implements
 //                });
 
         if (viewModel.isInCollectionMode()) {
-            Util.logDebug(TAG, "reading deck for collection: ");
             viewModel.getAllLiveDataExtra_forCollection(viewModel.getSelectedCollectionUid_Value()).observe(
                     getViewLifecycleOwner(),
                     new Observer<List<DeckEntityExtra>>() {
@@ -357,7 +352,6 @@ public class FragmentDeckList extends Fragment implements
         if (!searchMode) {
             transitionToSearchMode();
         }
-//        viewModel.findDecks_vm(query, database2Callback);
         viewModel.findDecksExtra_vm(query, database2Callback);
     }
 
@@ -473,10 +467,6 @@ public class FragmentDeckList extends Fragment implements
                 DialogFragmentConfirm.newInstance(confirmDialogType, stringParam);
         dialogFragment.show(getChildFragmentManager(), DialogFragmentConfirm.TAG);
     }
-
-//    private CustomAdapterDeckList recyViewAdapterAlias() {
-//        return (CustomAdapterDeckList) recyclerView.getAdapter();
-//    }
 
     private CustomAdapterDecklist_Extra recyViewAdapterAlias() {
         return (CustomAdapterDecklist_Extra) recyclerView.getAdapter();

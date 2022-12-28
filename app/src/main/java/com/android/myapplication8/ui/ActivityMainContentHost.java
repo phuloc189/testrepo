@@ -23,7 +23,7 @@ import com.android.myapplication8.ui.fragment.FragmentStudyScreen;
 /**
  * first activity right after start activity
  */
-public class MainActivity2 extends AppCompatActivity implements FragmentDeckList.Fragment1Interface,
+public class ActivityMainContentHost extends AppCompatActivity implements FragmentDeckList.Fragment1Interface,
         FragmentCardList.Fragment2Interface, FragmentCollectionList.FragmentCollectionListCallback,
         FragmentDeckAddRemoveForCollection.FragmentDeckAddRemoveForCollectionCallback {
     public static String TAG = "MainActivity2";
@@ -44,7 +44,6 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
 
         if (savedInstanceState == null) {
             if (modeOfOp.equals(Util.INTENT_EXTRA_VALUE_MODE_SELECT_COLLECTION_MANAGEMENT)) {
-                //todo: how to save status of this shit???
                 launchCollectionListFragment();
             } else if (modeOfOp.equals(Util.INTENT_EXTRA_VALUE_MODE_SELECT_DECK_MANAGEMENT)) {
                 launchDeckListFragment();
@@ -91,14 +90,6 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
         }
     }
 
-    private void launchCollectionListFragment() {
-        getSupportFragmentManager().beginTransaction()
-                .setReorderingAllowed(true)
-                .add(R.id.fragment_container_content, FragmentCollectionList.class, null)
-                .addToBackStack(FragmentCollectionList.TAG)
-                .commit();
-    }
-
     private void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar_activity_main2);
         setSupportActionBar(toolbar);
@@ -116,6 +107,14 @@ public class MainActivity2 extends AppCompatActivity implements FragmentDeckList
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return super.onCreateOptionsMenu(menu);
+    }
+
+    private void launchCollectionListFragment() {
+        getSupportFragmentManager().beginTransaction()
+                .setReorderingAllowed(true)
+                .add(R.id.fragment_container_content, FragmentCollectionList.class, null)
+                .addToBackStack(FragmentCollectionList.TAG)
+                .commit();
     }
 
     void launchDeckListFragment() {

@@ -18,10 +18,6 @@ public class DeckEntity implements DeckEntityInterface {
 
     public long visitedDate;
 
-//    @Ignore
-//    @ColumnInfo(name = "cardsCount")
-//    public int cardsCount;
-
     public DeckEntity(int uid, String deckName, long visitedDate) {
         this.uid = uid;
         this.deckName = deckName;
@@ -80,22 +76,6 @@ public class DeckEntity implements DeckEntityInterface {
     //----------------------
 
     public static boolean checkIfSameContent(DeckEntity deck1, DeckEntity deck2) {
-//        return
-//                deck1.getUid() == deck2.getUid()
-//                && deck1.getDeckName().equals(deck2.getDeckName());
         return deck1.getDeckName().equals(deck2.getDeckName());
     }
-
-    //----------------------
-
-//    public DeckEntity(int uid, String deckName){
-//        this.uid = uid;
-//        this.deckName = deckName;
-//    }
-
-    //todo: delete
-//    @Ignore
-//    public DeckEntity(String deckName) {
-//        this.deckName = deckName;
-//    }
 }

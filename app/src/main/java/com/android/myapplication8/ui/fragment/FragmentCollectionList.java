@@ -177,11 +177,6 @@ public class FragmentCollectionList extends Fragment implements DialogResultCall
             public void onInsertComplete(Database2Wrapper.DbTask whichTask, long newRowId) {
                 Util.logDebug(TAG, "db task complete: " + whichTask);
             }
-
-            @Override
-            public void onGetDeckResult(Database2Wrapper.DbTask whichTask, DeckEntity deck) {
-
-            }
         };
     }
 

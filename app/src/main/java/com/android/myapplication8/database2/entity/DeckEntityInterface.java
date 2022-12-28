@@ -15,8 +15,4 @@ public interface DeckEntityInterface {
     boolean checkIfSameContentWith(DeckEntityInterface otherDeck);
 
     int getCardsCount();
-
-//    static boolean checkIfSameContent(DeckEntityInterface deck1, DeckEntityInterface deck2) {
-//        return deck1.getDeckName().equals(deck2.getDeckName());
-//    }
 }

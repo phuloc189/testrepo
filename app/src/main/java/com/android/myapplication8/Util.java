@@ -222,7 +222,7 @@ public class Util {
                 return BUNDLE_VALUE_DIALOGTYPE_CONFIRM_MULTIPLE_CARDS_DELETE;
             default:
                 return "WUT???";
-        }//CREATE_COLLECTION
+        }
     }
 
     public static Util.DialogType getDialogTypeFromString(String dialogType) {
@@ -261,18 +261,4 @@ public class Util {
                 return DialogType.NONE;
         }
     }
-
-//    public static int getDialogDescriptionTextId(String dialogType) {
-//        if (dialogType.equals(Util.BUNDLE_VALUE_DIALOGTYPE_DECK_DELETE_CONFIRM)) {
-//            return R.string.dialog_descr_txt_deck_delete_confirm;
-//        } else if (dialogType.equals(Util.BUNDLE_VALUE_DIALOGTYPE_CREATE_NEW_DECK)){
-//            return R.string.dialog_descr_txt_create_new_deck;
-//        } else if (dialogType.equals(Util.BUNDLE_VALUE_DIALOGTYPE_RENAME_DECK)){
-//            return R.string.dialog_descr_txt_rename_deck;
-//        } else if (dialogType.equals(Util.BUNDLE_VALUE_DIALOGTYPE_OPEN_DECK_CONFIRM)){
-//            return R.string.dialog_descr_txt_open_deck_confirm;
-//        } else {
-//            return R.string.dialog_descr_txt_default_text;
-//        }
-//    }
 }

@@ -23,8 +23,8 @@ public interface CardDao {
     @Delete
     int delete(CardEntity cardEntity);
 
-    @Query("SELECT * FROM table_CardEntity")
-    LiveData<List<CardEntity>> getAllCardsLiveData();
+    //--------------- queries
+    //--------------- read
 
     @Query("SELECT * FROM table_CardEntity WHERE deckUid = :deckUid")
     LiveData<List<CardEntity>> getAllCardsLiveDataFromDeck(int deckUid);
@@ -34,6 +34,8 @@ public interface CardDao {
             "ON table_CardEntity.deckUid = table_collectiondeckmapping.deckUid " +
             "AND table_collectiondeckmapping.collectionUid = :collectionUid")
     List<CardEntity> getAllCardsFromCollection(int collectionUid);
+
+    //--------------- delete
 
     @Query("DELETE FROM table_CardEntity WHERE uid IN (:cardUids)")
     int deleteMultipleCards(List<Integer> cardUids);
