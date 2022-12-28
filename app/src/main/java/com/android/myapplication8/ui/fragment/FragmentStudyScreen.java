@@ -363,7 +363,7 @@ public class FragmentStudyScreen extends Fragment implements
             @Override
             public void onComplete_FetchingCards(Database2Wrapper.DbTask whichTask, List<CardEntity> cardsFetchResult) {
                 Util.logDebug(TAG, "onComplete_FetchingCards result: " + cardsFetchResult.size());
-                if (whichTask == Database2Wrapper.DbTask.DB_TASK_FETCH_CARDS_FROM_COLLECTION) {
+                if (whichTask == Database2Wrapper.DbTask.CARD_READ_FROM_COLLECTION) {
                     requireActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

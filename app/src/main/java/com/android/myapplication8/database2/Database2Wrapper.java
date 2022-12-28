@@ -34,30 +34,22 @@ public class Database2Wrapper {
     private Database2Callback callback;
 
     public enum DbTask {
-        DB_TASK_NONE,
-        DB_TASK_INSERT_DECK,
-        DB_TASK_INSERT_DECK_USING_THIS_NAME,
-        DB_TASK_UPDATE_DECK,
-        DB_TASK_UPDATE_DECK_VISITED_DATE,
-        DB_TASK_UPDATE_DECK_NAME,
-        DB_TASK_DELETE_DECK,
-        DB_TASK_DELETE_DECK_WITH_UID,
-        DB_TASK_READ_DECKS_LIVEDATA,
-        DB_TASK_SEARCH_DECKS,
-        DB_TASK_GET_DECK_WITH_ID,
-        DB_TASK_INSERT_CARD,
-        DB_TASK_UPDATE_CARD,
-        DB_TASK_DELETE_CARD,
-        DB_TASK_READ_CARDS_LIVEDATA,
-        DB_TASK_READ_CARDS_FROM_DECK_LIVEDATA,
-        DB_TASK_CREATE_COLLECTION,
-        DB_TASK_READ_COLLECTION,
-        DB_TASK_RENAME_COLLECTION,
-        DB_TASK_DELETE_COLLECTION,
-        DB_TASK_ADD_DECKS_TO_COLLECTION,
-        DB_TASK_REMOVE_DECKS_FROM_COLLECTION,
-        DB_TASK_FETCH_CARDS_FROM_COLLECTION,
-        DB_TASK_DELETE_MULTIPLE_CARDS
+        NONE,
+        CARD_DELETE,
+        CARD_DELETE_MULTIPLE_CARDS,
+        CARD_INSERT,
+        CARD_READ_FROM_COLLECTION,
+        CARD_UPDATE,
+        COLLECTION_CREATE,
+        COLLECTION_DELETE,
+        COLLECTION_RENAME,
+        DECK_DELETE_WITH_UID,
+        DECK_INSERT_USING_THIS_NAME,
+        DECK_SEARCH,
+        DECK_UPDATE_NAME,
+        DECK_UPDATE_VISITED_DATE,
+        REMOVE_DECKS_FROM_COLLECTION,
+        ADD_DECKS_TO_COLLECTION
     }
 
     public enum DbTaskResult {
@@ -172,7 +164,7 @@ public class Database2Wrapper {
             @Override
             public void run() {
                 List<DeckEntityExtra> result = deckDaoAlias().findDeckEntities_WithExtra(searchString);
-                callback.onSearchDeckCompleteExtra(DbTask.DB_TASK_SEARCH_DECKS, result);
+                callback.onSearchDeckCompleteExtra(DbTask.DECK_SEARCH, result);
             }
         });
     }
@@ -185,7 +177,7 @@ public class Database2Wrapper {
             public void run() {
                 int result = deckDaoAlias().updateVisitedDate(targetUid, newVisitedDate);
                 callback.onComplete_SimpleResult(
-                        DbTask.DB_TASK_UPDATE_DECK_VISITED_DATE,
+                        DbTask.DECK_UPDATE_VISITED_DATE,
                         (result > 0) ? DbTaskResult.DB_RESULT_OK : DbTaskResult.DB_RESULT_NG);
             }
         });
@@ -198,7 +190,7 @@ public class Database2Wrapper {
                 int result = deckDaoAlias().updateDeckName(targetUid, newDeckName, Calendar.getInstance().getTimeInMillis());
 
                 callback.onComplete_SimpleResult(
-                        DbTask.DB_TASK_UPDATE_DECK_NAME,
+                        DbTask.DECK_UPDATE_NAME,
                         (result > 0) ? DbTaskResult.DB_RESULT_OK : DbTaskResult.DB_RESULT_NG);
             }
         });
@@ -212,7 +204,7 @@ public class Database2Wrapper {
             public void run() {
                 int result = deckDaoAlias().delete(targetUid);
                 callback.onComplete_SimpleResult(
-                        DbTask.DB_TASK_DELETE_DECK_WITH_UID,
+                        DbTask.DECK_DELETE_WITH_UID,
                         (result > 0) ? DbTaskResult.DB_RESULT_OK : DbTaskResult.DB_RESULT_NG);
             }
         });
@@ -229,9 +221,9 @@ public class Database2Wrapper {
                 long rowId = deckDaoAlias().insert(newDeck);
                 Util.logDebug(TAG, "insertNewDeck with result: " + rowId);
                 if (rowId < 0) {
-                    callback.onComplete_SimpleResult(DbTask.DB_TASK_INSERT_DECK_USING_THIS_NAME, DbTaskResult.DB_RESULT_NG);
+                    callback.onComplete_SimpleResult(DbTask.DECK_INSERT_USING_THIS_NAME, DbTaskResult.DB_RESULT_NG);
                 } else {
-                    callback.onInsertComplete(DbTask.DB_TASK_INSERT_DECK_USING_THIS_NAME, rowId);
+                    callback.onInsertComplete(DbTask.DECK_INSERT_USING_THIS_NAME, rowId);
                 }
             }
         });
@@ -246,7 +238,7 @@ public class Database2Wrapper {
             public void run() {
                 long rowId = cardDaoAlias().insert(cardEntity);
                 callback.onComplete_SimpleResult(
-                        DbTask.DB_TASK_INSERT_CARD,
+                        DbTask.CARD_INSERT,
                         (rowId <= 0) ? DbTaskResult.DB_RESULT_NG : DbTaskResult.DB_RESULT_OK);
             }
         });
@@ -260,7 +252,7 @@ public class Database2Wrapper {
             public void run() {
                 int result = cardDaoAlias().update(cardEntity);
                 callback.onComplete_SimpleResult(
-                        DbTask.DB_TASK_UPDATE_CARD,
+                        DbTask.CARD_UPDATE,
                         (result <= 0) ? DbTaskResult.DB_RESULT_NG : DbTaskResult.DB_RESULT_OK);
             }
         });
@@ -274,7 +266,7 @@ public class Database2Wrapper {
             public void run() {
                 int result = cardDaoAlias().delete(cardEntity);
                 callback.onComplete_SimpleResult(
-                        DbTask.DB_TASK_DELETE_CARD,
+                        DbTask.CARD_DELETE,
                         (result <= 0) ? DbTaskResult.DB_RESULT_NG : DbTaskResult.DB_RESULT_OK);
             }
         });
@@ -282,7 +274,7 @@ public class Database2Wrapper {
 
     public void deleteMultipleCards(Integer[] cardUids, Database2Callback callback) {
         if (cardUids == null || cardUids.length == 0) {
-            callback.onComplete_SimpleResult(DbTask.DB_TASK_DELETE_MULTIPLE_CARDS, DbTaskResult.DB_RESULT_OTHER);
+            callback.onComplete_SimpleResult(DbTask.CARD_DELETE_MULTIPLE_CARDS, DbTaskResult.DB_RESULT_OTHER);
             return;
         }
         dbExecutor.execute(new Runnable() {
@@ -290,7 +282,7 @@ public class Database2Wrapper {
             public void run() {
                 int result = cardDaoAlias().deleteMultipleCards(Arrays.asList(cardUids));
                 callback.onComplete_SimpleResult(
-                        DbTask.DB_TASK_DELETE_MULTIPLE_CARDS,
+                        DbTask.CARD_DELETE_MULTIPLE_CARDS,
                         (result == cardUids.length) ? DbTaskResult.DB_RESULT_OK : DbTaskResult.DB_RESULT_NG);
             }
         });
@@ -307,7 +299,7 @@ public class Database2Wrapper {
             @Override
             public void run() {
                 List<CardEntity> result = cardDaoAlias().getAllCardsFromCollection(collectionUid);
-                callback.onComplete_FetchingCards(DbTask.DB_TASK_FETCH_CARDS_FROM_COLLECTION, result);
+                callback.onComplete_FetchingCards(DbTask.CARD_READ_FROM_COLLECTION, result);
             }
         });
     }
@@ -330,7 +322,7 @@ public class Database2Wrapper {
             @Override
             public void run() {
                 int result = collectionDaoAlias().delete(targetUid);
-                callback.onComplete_SimpleResult(DbTask.DB_TASK_DELETE_COLLECTION,
+                callback.onComplete_SimpleResult(DbTask.COLLECTION_DELETE,
                         (result <= 0 ? DbTaskResult.DB_RESULT_NG : DbTaskResult.DB_RESULT_OK));
             }
         });
@@ -343,7 +335,7 @@ public class Database2Wrapper {
             @Override
             public void run() {
                 int result = collectionDaoAlias().updateCollectionName(targetUid, newName);
-                callback.onComplete_SimpleResult(DbTask.DB_TASK_RENAME_COLLECTION,
+                callback.onComplete_SimpleResult(DbTask.COLLECTION_RENAME,
                         (result <= 0 ? DbTaskResult.DB_RESULT_NG : DbTaskResult.DB_RESULT_OK));
             }
         });
@@ -358,7 +350,7 @@ public class Database2Wrapper {
                 CollectionEntity collection = new CollectionEntity(name);
                 Util.logDebug(TAG, "new name: " + name);
                 long result = collectionDaoAlias().insert(collection);
-                callback.onInsertComplete(DbTask.DB_TASK_CREATE_COLLECTION,
+                callback.onInsertComplete(DbTask.COLLECTION_CREATE,
                         result);
             }
         });
@@ -369,7 +361,7 @@ public class Database2Wrapper {
 
     public void insertDecksToCollection(int collectionUid, Integer[] deckUidList, Database2Callback callback) {
         if (deckUidList == null || deckUidList.length == 0) {
-            callback.onComplete_SimpleResult(DbTask.DB_TASK_ADD_DECKS_TO_COLLECTION,
+            callback.onComplete_SimpleResult(DbTask.ADD_DECKS_TO_COLLECTION,
                     DbTaskResult.DB_RESULT_NG);
             return;
         }
@@ -383,7 +375,7 @@ public class Database2Wrapper {
                 List<Long> results = collectionToDeckMapDaoAlias().insertListOfDecks(mapList);
 
                 callback.onComplete_SimpleResult(
-                        DbTask.DB_TASK_ADD_DECKS_TO_COLLECTION,
+                        DbTask.ADD_DECKS_TO_COLLECTION,
                         (results != null && results.size() > 0) ? DbTaskResult.DB_RESULT_OK : DbTaskResult.DB_RESULT_NG);
             }
         });
@@ -393,7 +385,7 @@ public class Database2Wrapper {
 
     public void removeDecksFromCollection(int collectionUid, Integer[] deckUidList, Database2Callback callback) {
         if (deckUidList == null || deckUidList.length == 0) {
-            callback.onComplete_SimpleResult(DbTask.DB_TASK_REMOVE_DECKS_FROM_COLLECTION,
+            callback.onComplete_SimpleResult(DbTask.REMOVE_DECKS_FROM_COLLECTION,
                     DbTaskResult.DB_RESULT_NG);
             return;
         }
@@ -407,7 +399,7 @@ public class Database2Wrapper {
                 int results = collectionToDeckMapDaoAlias().deleteListOfDecks(mapList);
 
                 callback.onComplete_SimpleResult(
-                        DbTask.DB_TASK_REMOVE_DECKS_FROM_COLLECTION,
+                        DbTask.REMOVE_DECKS_FROM_COLLECTION,
                         (results > 0) ? DbTaskResult.DB_RESULT_OK : DbTaskResult.DB_RESULT_NG);
             }
         });
