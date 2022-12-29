@@ -82,7 +82,7 @@ public class FragmentCollectionList extends Fragment implements DialogResultCall
     }
 
     private void readDatabase() {
-        viewModel.getAllCollectionExtraLivedata_vm().observe(
+        viewModel.getCollections_WithExtra_Livedata_vm().observe(
                 getViewLifecycleOwner(),
                 new Observer<List<CollectionEntityExtra>>() {
                     @Override

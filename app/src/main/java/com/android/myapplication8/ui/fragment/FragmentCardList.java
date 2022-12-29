@@ -270,7 +270,7 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
 
     private void readDatabase() {
         Util.logDebug(TAG, "read from deckUid: " + viewModel.getSelectedDeckUid_Value());
-        viewModel.readAllCardsFromDeckLiveData_vm(viewModel.getSelectedDeckUid_Value())
+        viewModel.getCardsFromDeck_LiveData_vm(viewModel.getSelectedDeckUid_Value())
                 .observe(this.getViewLifecycleOwner(), new Observer<List<CardEntity>>() {
                     @Override
                     public void onChanged(List<CardEntity> cardEntities) {
@@ -283,7 +283,7 @@ public class FragmentCardList extends Fragment implements NewCardDialogCallback,
                     }
                 });
 
-        viewModel.getDeckWithId_LiveData_vm(viewModel.getSelectedDeckUid_Value())
+        viewModel.getDeckWithThisId_LiveData_vm(viewModel.getSelectedDeckUid_Value())
                 .observe(this.getViewLifecycleOwner(), new Observer<DeckEntity>() {
                     @Override
                     public void onChanged(DeckEntity deck) {

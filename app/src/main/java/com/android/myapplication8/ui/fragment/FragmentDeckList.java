@@ -181,7 +181,7 @@ public class FragmentDeckList extends Fragment implements
 //                });
 
         if (viewModel.isInCollectionMode()) {
-            viewModel.getAllLiveDataExtra_forCollection(viewModel.getSelectedCollectionUid_Value()).observe(
+            viewModel.getDecks_WithExtra_LiveData_ForCollection_vm(viewModel.getSelectedCollectionUid_Value()).observe(
                     getViewLifecycleOwner(),
                     new Observer<List<DeckEntityExtra>>() {
                         @Override
@@ -201,7 +201,7 @@ public class FragmentDeckList extends Fragment implements
                     }
             );
         } else {
-            viewModel.getAllLiveData_experimental2_vm().observe(
+            viewModel.getDecks_WithExtra_LiveData_vm().observe(
                     getViewLifecycleOwner(),
                     new Observer<List<DeckEntityExtra>>() {
                         @Override
@@ -352,7 +352,7 @@ public class FragmentDeckList extends Fragment implements
         if (!searchMode) {
             transitionToSearchMode();
         }
-        viewModel.findDecksExtra_vm(query, database2Callback);
+        viewModel.findDecks_WithExtra_vm(query, database2Callback);
     }
 
     private void setupListUi(View view) {

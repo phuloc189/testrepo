@@ -227,7 +227,7 @@ public class FragmentStudyScreen extends Fragment implements
             reloadDeck();
         } else if (viewModel.getStudyMode_value() == Util.StudyMode.COLLECTION &&
                 viewModel.isInCollectionMode()) { //todo: do something with this condition expression
-            viewModel.getAllCardsFromCollection_vm(viewModel.getSelectedCollectionUid_Value(), database2Callback_cardsEntity);
+            viewModel.getCardsFromCollection_vm(viewModel.getSelectedCollectionUid_Value(), database2Callback_cardsEntity);
         }
     }
 
@@ -399,7 +399,7 @@ public class FragmentStudyScreen extends Fragment implements
     private void reloadDeck() {
         viewModel.fetchPrefSetting();
         viewModel.reloadDeck();
-        viewModel.resetCardListPointer();
+        viewModel.resetStudyingCardsListPointer();
     }
 
     @Override

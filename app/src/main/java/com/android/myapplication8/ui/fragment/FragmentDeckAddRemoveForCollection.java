@@ -159,7 +159,7 @@ public class FragmentDeckAddRemoveForCollection extends Fragment {
     }
 
     private void readDatabase() {
-        viewModel.getAllLiveData_CollectionChecklist_vm(viewModel.getSelectedCollectionUid_Value())
+        viewModel.getDecks_WithExtra_LiveData_CollectionChecklist_vm(viewModel.getSelectedCollectionUid_Value())
                 .observe(
                         getViewLifecycleOwner(),
                         new Observer<List<DeckEntityExtra_CollectionCheckList>>() {

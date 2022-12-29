@@ -307,7 +307,7 @@ public class Database2Wrapper {
     //----------- collection 
     //----------- collection/read
 
-    public LiveData<List<CollectionEntityExtra>> getCollection_WithExtra_Livedata() {
+    public LiveData<List<CollectionEntityExtra>> getCollections_WithExtra_Livedata() {
         return collectionDaoAlias().getAllCollectionExtraLivedata2();
     }
 

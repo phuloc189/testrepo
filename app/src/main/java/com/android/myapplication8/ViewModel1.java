@@ -44,7 +44,8 @@ public class ViewModel1 extends AndroidViewModel {
     LiveData<List<CardEntity>> cardsList;
 
     // it's actually cardsList but we need this to do stuff like persisting changes for ui data,
-    // and persisting change for randomized list, cuz supposedly random list should not be updated (with changes) from database??? (
+    // and persisting change for randomized list, cuz supposedly
+    // random list should not be updated on database trigger??? (
     // like how can we even keep the randomized position???)
     MutableLiveData<List<CardEntity>> studyingCardsList;
 
@@ -80,7 +81,7 @@ public class ViewModel1 extends AndroidViewModel {
     }
 
     private void init() {
-        deckList = new MutableLiveData<>();//todo: experimental
+        deckList = new MutableLiveData<>();
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication());
         studyingCardsListPointer = new MutableLiveData<>();
         studyingCardsList = new MutableLiveData<>();
@@ -100,31 +101,65 @@ public class ViewModel1 extends AndroidViewModel {
 
     //----------- decks
 
-    public LiveData<DeckEntity> getDeckWithId_LiveData_vm(int deckUid) {
-        return database2.getDeckWithThisId_LiveData(deckUid);
-    }
+    //----------- decks/create
 
     public void insertNewDeck_vm(String deckName, Database2Wrapper.Database2Callback callback) {
         database2.insertNewDeck(deckName, callback);
     }
+    //----------- decks/read
 
-    public void deleteDeck_vm(int targetUid, Database2Wrapper.Database2Callback callback) {
-        database2.deleteDeck(targetUid, callback);
+    public LiveData<DeckEntity> getDeckWithThisId_LiveData_vm(int deckUid) {
+        return database2.getDeckWithThisId_LiveData(deckUid);
     }
 
-    public LiveData<List<DeckEntityExtra>> getAllLiveData_experimental2_vm() {
+    public LiveData<List<DeckEntityExtra>> getDecks_WithExtra_LiveData_vm() {
         deckList_withExtra = database2.getDecks_WithExtra_LiveData(
                 getSortingType(),
                 getOptionDescending());
         return deckList_withExtra;
     }
 
-    public LiveData<List<DeckEntityExtra>> getAllLiveDataExtra_forCollection(int collectionUid) {
+    public LiveData<List<DeckEntityExtra>> getDecks_WithExtra_LiveData_ForCollection_vm(int collectionUid) {
         deckList_withExtra = database2.getDecks_WithExtra_LiveData_ForCollection(
                 getSortingType(),
                 getOptionDescending(),
                 collectionUid);
         return deckList_withExtra;
+    }
+
+    public LiveData<List<DeckEntityExtra_CollectionCheckList>> getDecks_WithExtra_LiveData_CollectionChecklist_vm(int collectionUid) {
+        return database2.getDecks_WithExtra_LiveData_CollectionChecklist(collectionUid);
+    }
+
+    public void findDecks_WithExtra_vm(String searchString, Database2Wrapper.Database2Callback callback) {
+        database2.findDecks_WithExtra(searchString, callback);
+    }
+
+    //----------- decks/update
+
+    public void updateDeckVisitedDate_vm(int targetUid, long newVisitedDate, Database2Wrapper.Database2Callback callback) {
+        database2.updateDeckVisitedDate(targetUid, newVisitedDate, callback);
+    }
+
+    public void updateDeckName_vm(int targetUid, String newDeckName, Database2Wrapper.Database2Callback callback) {
+        database2.updateDeckName(targetUid, newDeckName, callback);
+    }
+
+    //----------- decks/delete
+
+    public void deleteDeck_vm(int targetUid, Database2Wrapper.Database2Callback callback) {
+        database2.deleteDeck(targetUid, callback);
+    }
+
+    //----------- decks/other
+
+    public void removeDeckListObservers(LifecycleOwner lifecycleOwner) {
+        if (deckList != null) {
+            deckList.removeObservers(lifecycleOwner);
+        }
+        if (deckList_withExtra != null) {
+            deckList_withExtra.removeObservers(lifecycleOwner);
+        }
     }
 
     private Util.SortingOptions getSortingType() {
@@ -141,67 +176,85 @@ public class ViewModel1 extends AndroidViewModel {
         );
     }
 
-    public LiveData<List<DeckEntityExtra_CollectionCheckList>> getAllLiveData_CollectionChecklist_vm(int collectionUid) {
-        return database2.getDecks_WithExtra_LiveData_CollectionChecklist(collectionUid);
-    }
-
-    public void insertDecksToCollection_vm(int collectionUid, Integer[] deckUidList, Database2Wrapper.Database2Callback callback) {
-        database2.insertDecksToCollection(collectionUid, deckUidList, callback);
-    }
-
-    public void removeDecksFromCollection_vm(int collectionUid, Integer[] deckUidList, Database2Wrapper.Database2Callback callback) {
-        database2.removeDecksFromCollection(collectionUid, deckUidList, callback);
-    }
-
-    public void removeDeckListObservers(LifecycleOwner lifecycleOwner) {
-        if (deckList != null) {
-            deckList.removeObservers(lifecycleOwner);
-        }
-        if (deckList_withExtra != null) {
-            deckList_withExtra.removeObservers(lifecycleOwner);
-        }
-    }
-
-    public void findDecksExtra_vm(String searchString, Database2Wrapper.Database2Callback callback) {
-        database2.findDecks_WithExtra(searchString, callback);
-    }
-
-    public void updateDeckVisitedDate_vm(int targetUid, long newVisitedDate, Database2Wrapper.Database2Callback callback) {
-        database2.updateDeckVisitedDate(targetUid, newVisitedDate, callback);
-    }
-
-    public void updateDeckName_vm(int targetUid, String newDeckName, Database2Wrapper.Database2Callback callback) {
-        database2.updateDeckName(targetUid, newDeckName, callback);
-    }
-
     //----------- cards
+    //----------- cards/create
 
     public void insertNewCard_vm(CardEntity cardEntity, Database2Wrapper.Database2Callback callback) {
         database2.insertNewCard(cardEntity, callback);
     }
 
-    public void updateCard_vm(CardEntity cardEntity, Database2Wrapper.Database2Callback callback) {
-        database2.updateCard(cardEntity, callback);
-    }
+    //----------- cards/read
 
-    public void deleteCard_vm(CardEntity cardEntity, Database2Wrapper.Database2Callback callback) {
-        database2.deleteCard(cardEntity, callback);
-    }
-
-    public LiveData<List<CardEntity>> readAllCardsFromDeckLiveData_vm(int deckUid) {
+    public LiveData<List<CardEntity>> getCardsFromDeck_LiveData_vm(int deckUid) {
         cardsList = database2.getCardsFromDeck_LiveData(deckUid);
         return cardsList;
     }
 
-    public LiveData<List<CardEntity>> getCardsList_vm() {
-        return cardsList;
+    public void getCardsFromCollection_vm(int collectionUid,
+                                          Database2Wrapper.Database2Callback_CardsEntity callback) {
+        database2.getCardsFromCollection(collectionUid, callback);
+    }
+
+    //----------- cards/update
+
+    public void updateCard_vm(CardEntity cardEntity, Database2Wrapper.Database2Callback callback) {
+        database2.updateCard(cardEntity, callback);
+    }
+
+    //----------- cards/delete
+
+    public void deleteCard_vm(CardEntity cardEntity, Database2Wrapper.Database2Callback callback) {
+        database2.deleteCard(cardEntity, callback);
     }
 
     public void deleteMultipleCards_vm(Integer[] cardUids, Database2Wrapper.Database2Callback callback) {
         database2.deleteMultipleCards(cardUids, callback);
     }
 
-    //-----------
+    //--------- collection
+
+    //--------- collection/create
+
+    public void createCollection_vm(String name, Database2Wrapper.Database2Callback callback) {
+        database2.createCollection(name, callback);
+    }
+
+    //--------- collection/read
+
+    public LiveData<List<CollectionEntityExtra>> getCollections_WithExtra_Livedata_vm() {
+        return database2.getCollections_WithExtra_Livedata();
+    }
+
+    public LiveData<CollectionEntity> getCollectionWithUid_vm(int collectionUid) {
+        return database2.getCollectionWithThisUid(collectionUid);
+    }
+
+    //--------- collection/update
+
+    public void renameCollection_vm(int targetUid, String newName, Database2Wrapper.Database2Callback callback) {
+        database2.renameCollection(targetUid, newName, callback);
+    }
+
+    //--------- collection/delete
+
+    public void deleteCollection_vm(int targetUid, Database2Wrapper.Database2Callback callback) {
+        database2.deleteCollection(targetUid, callback);
+    }
+
+    //----------- deck-collection-relation
+    //----------- deck-collection-relation/create
+
+    public void insertDecksToCollection_vm(int collectionUid, Integer[] deckUidList, Database2Wrapper.Database2Callback callback) {
+        database2.insertDecksToCollection(collectionUid, deckUidList, callback);
+    }
+
+    //----------- deck-collection-relation/delete
+
+    public void removeDecksFromCollection_vm(int collectionUid, Integer[] deckUidList, Database2Wrapper.Database2Callback callback) {
+        database2.removeDecksFromCollection(collectionUid, deckUidList, callback);
+    }
+
+    //----------- studying cards
 
     public void cacheCardsFromSelectedDeck() {
         List<CardEntity> studyingCardsList_value = cardsList.getValue();
@@ -270,14 +323,9 @@ public class ViewModel1 extends AndroidViewModel {
         return studyingCardsList;
     }
 
-    public void getAllCardsFromCollection_vm(int collectionUid,
-                                             Database2Wrapper.Database2Callback_CardsEntity callback) {
-        database2.getCardsFromCollection(collectionUid, callback);
-    }
+    //----------- studying cards list pointer
 
-    //-----------
-
-    public void resetCardListPointer() {
+    public void resetStudyingCardsListPointer() {
         studyingCardsListPointer.setValue((indexArrays.size() > 0) ? 0 : -1);
     }
 
@@ -309,7 +357,7 @@ public class ViewModel1 extends AndroidViewModel {
         }
     }
 
-    //-------------
+    //------------- studying cards indexes array
 
     public List<Integer> getIndexArrays() {
         return indexArrays;
@@ -326,28 +374,6 @@ public class ViewModel1 extends AndroidViewModel {
     public void shiftMarkingStat(int from, int to) {
         markingStat[from]--;
         markingStat[to]++;
-    }
-
-    //--------- collection
-
-    public LiveData<List<CollectionEntityExtra>> getAllCollectionExtraLivedata_vm() {
-        return database2.getCollection_WithExtra_Livedata();
-    }
-
-    public LiveData<CollectionEntity> getCollectionWithUid_vm(int collectionUid) {
-        return database2.getCollectionWithThisUid(collectionUid);
-    }
-
-    public void deleteCollection_vm(int targetUid, Database2Wrapper.Database2Callback callback) {
-        database2.deleteCollection(targetUid, callback);
-    }
-
-    public void renameCollection_vm(int targetUid, String newName, Database2Wrapper.Database2Callback callback) {
-        database2.renameCollection(targetUid, newName, callback);
-    }
-
-    public void createCollection_vm(String name, Database2Wrapper.Database2Callback callback) {
-        database2.createCollection(name, callback);
     }
 
     // ---------- selected deck
