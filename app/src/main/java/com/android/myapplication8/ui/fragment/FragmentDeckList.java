@@ -219,6 +219,7 @@ public class FragmentDeckList extends Fragment implements
 //                    }
 //                });
 
+        Util.logDebug(TAG, "selected collection: " + viewModel.getSelectedCollectionUid_Value());
         if (viewModel.isInCollectionMode()) {
             viewModel.getDecks_WithExtra_LiveData_ForCollection_vm(viewModel.getSelectedCollectionUid_Value()).observe(
                     getViewLifecycleOwner(),

@@ -12,6 +12,7 @@
         android:id="@+id/tv_collection_item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="20dp"
         android:text="what? (default text)"/>
 
     <TextView
