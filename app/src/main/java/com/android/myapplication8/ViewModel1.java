@@ -9,6 +9,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.viewmodel.CreationExtras;
@@ -49,7 +50,11 @@ public class ViewModel1 extends AndroidViewModel {
     // like how can we even keep the randomized position???)
     MutableLiveData<List<CardEntity>> studyingCardsList;
 
-    List<Integer> indexArrays;
+    MutableLiveData<List<Integer>> indexArray = new MutableLiveData<>();
+
+    LiveData<Integer> filteredStudyingCardsSize;
+//    somehow this shit wouldn't trigger if i do this right here instead
+//    LiveData<Integer> filteredStudyingCardsSize = Transformations.map(indexArray, this::transforming);
 
     MutableLiveData<Integer> studyingCardsListPointer;
 
@@ -85,10 +90,11 @@ public class ViewModel1 extends AndroidViewModel {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplication());
         studyingCardsListPointer = new MutableLiveData<>();
         studyingCardsList = new MutableLiveData<>();
-        indexArrays = new ArrayList<>();
+        indexArray = new MutableLiveData<>(new ArrayList<>());
         selectedDeckUid = new MutableLiveData<>();
         selectedCollectionUid = new MutableLiveData<>(-1);
         studyMode = new MutableLiveData<>();
+        filteredStudyingCardsSize = Transformations.map(indexArray, filteredList -> (filteredList != null) ? filteredList.size() : -1);
     }
 
     public void setSelectedDeckUid(int uid) {
@@ -100,7 +106,6 @@ public class ViewModel1 extends AndroidViewModel {
     }
 
     //----------- decks
-
     //----------- decks/create
 
     public void insertNewDeck_vm(String deckName, Database2Wrapper.Database2Callback callback) {
@@ -256,21 +261,7 @@ public class ViewModel1 extends AndroidViewModel {
     //----------- studying cards
 
     public void cacheCardsFromSelectedDeck() {
-        List<CardEntity> studyingCardsList_value = cardsList.getValue();
-        studyingCardsList.setValue(studyingCardsList_value);
-
-        //todo: handle case where there are no card to display
-//        int cardsListSize = studyingCardsList_value.size();
-//
-//        indexArrays = new ArrayList<>();
-//        for (int i = 0; i < cardsListSize; i++ ) {
-//            if (markingSetting.checkIfMarkingEnabled(studyingCardsList_value.get(i).getMarking0())){
-//                indexArrays.add(i);
-//            }
-//        }
-//        if (randomSetting && indexArrays.size() > 0) {
-//            Collections.shuffle(indexArrays);
-//        }
+        studyingCardsList.setValue(cardsList.getValue());
     }
 
     public void cacheCards(List<CardEntity> cardsForStudying) {
@@ -295,23 +286,26 @@ public class ViewModel1 extends AndroidViewModel {
      * filter and sort deck
      */
     public void reloadDeck() {
-        indexArrays.clear();
+        List<Integer> newIndexArray = new ArrayList<>();
         markingStat = new int[Util.CARD_MARKING_MAX_NUMBER_OF_VALUES];
         List<CardEntity> studyingCardsList_value = studyingCardsList.getValue();
-        if (studyingCardsList_value == null || studyingCardsList_value.size() == 0) {
+        if (studyingCardsList_value == null || studyingCardsList_value.size() < 1) {
+            indexArray.setValue(newIndexArray);
             return;
         }
         int cardsListSize = studyingCardsList_value.size();
 
         for (int i = 0; i < cardsListSize; i++) {
             if (markingSetting.checkIfMatch(studyingCardsList_value.get(i).getMarking0())) {
-                indexArrays.add(i);
+                newIndexArray.add(i);
             }
             markingStat[studyingCardsList_value.get(i).getMarking0()]++;
         }
-        if (randomSetting && indexArrays.size() > 0) {
-            Collections.shuffle(indexArrays);
+        if (randomSetting && newIndexArray.size() > 0) {
+            Collections.shuffle(newIndexArray);
         }
+
+        indexArray.setValue(newIndexArray);
     }
 
     public List<CardEntity> getStudyingCardsList_Value() {
@@ -325,7 +319,7 @@ public class ViewModel1 extends AndroidViewModel {
     //----------- studying cards list pointer
 
     public void resetStudyingCardsListPointer() {
-        studyingCardsListPointer.setValue((indexArrays.size() > 0) ? 0 : -1);
+        studyingCardsListPointer.setValue((getIndexArray_value().size() > 0) ? 0 : -1);
     }
 
     public MutableLiveData<Integer> getStudyingCardsListPointer() {
@@ -337,17 +331,17 @@ public class ViewModel1 extends AndroidViewModel {
     }
 
     public void incrementStudyingCardsListPointer() {
-        if (indexArrays.size() == 0) {
+        if (getIndexArray_value().size() == 0) {
             return;
         }
         int pointerValue = studyingCardsListPointer.getValue();
-        if (pointerValue < indexArrays.size() - 1) {
+        if (pointerValue < getIndexArray_value().size() - 1) {
             studyingCardsListPointer.setValue(pointerValue + 1);
         }
     }
 
     public void decrementStudyingCardsListPointer() {
-        if (indexArrays.size() == 0) {
+        if (getIndexArray_value().size() == 0) {
             return;
         }
         int pointerValue = studyingCardsListPointer.getValue();
@@ -356,10 +350,16 @@ public class ViewModel1 extends AndroidViewModel {
         }
     }
 
+    //----------------- filtered studying cards list size
+
+    public LiveData<Integer> getFilteredStudyingCardsSize() {
+        return filteredStudyingCardsSize;
+    }
+
     //------------- studying cards indexes array
 
-    public List<Integer> getIndexArrays() {
-        return indexArrays;
+    public List<Integer> getIndexArray_value() {
+        return indexArray.getValue();
     }
 
     public boolean getBackSideFirstSetting() {

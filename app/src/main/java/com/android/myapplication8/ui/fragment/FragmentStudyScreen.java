@@ -202,6 +202,16 @@ public class FragmentStudyScreen extends Fragment implements
     }
 
     private void fetchCardContent() {
+        viewModel.getFilteredStudyingCardsSize().observe(
+                getViewLifecycleOwner(),
+                new Observer<Integer>() {
+                    @Override
+                    public void onChanged(Integer integer) {
+                        Util.logDebug(TAG, "filtered size: " + integer);
+                        getView().findViewById(R.id.linearLayout_studyScrn_group_cardNavigation).setVisibility((integer <= 0) ? View.INVISIBLE : View.VISIBLE);
+                    }
+                }
+        );
         viewModel.getStudyingCardsListPointer().observe(
                 getViewLifecycleOwner(), new Observer<Integer>() {
                     @Override
@@ -317,43 +327,37 @@ public class FragmentStudyScreen extends Fragment implements
             tvStudyProgress.setText("oops: " + pointerIndex);
             return;
         }
-        String progressText = (pointerIndex + 1) + " / " + viewModel.getIndexArrays().size();
+        String progressText = (pointerIndex + 1) + " / " + viewModel.getIndexArray_value().size();
         tvStudyProgress.setText(progressText);
     }
 
     private void updateNavigationButton(int pointerIndex) {
         if (pointerIndex < 0) {
-            nextButton.setVisibility(View.INVISIBLE);
-            previousButton.setVisibility(View.INVISIBLE);
-            flipButton.setVisibility(View.INVISIBLE);
-        } else {
-            if (pointerIndex == 0) {
-                previousButton.setVisibility(View.INVISIBLE);
-            } else {
-                previousButton.setVisibility(View.VISIBLE);
-            }
-
-            if (pointerIndex == (viewModel.getIndexArrays().size() - 1)) {
-                nextButton.setVisibility(View.INVISIBLE);
-            } else {
-                nextButton.setVisibility(View.VISIBLE);
-            }
+            return;
         }
+        previousButton.setVisibility(
+                (pointerIndex == 0) ? View.INVISIBLE : View.VISIBLE);
+        nextButton.setVisibility(
+                (pointerIndex == (viewModel.getIndexArray_value().size() - 1)) ? View.INVISIBLE : View.VISIBLE);
     }
 
     private void updateCard(CardEntity card) {
         viewModel.updateCard_vm(card, database2Callback);
         List<CardEntity> newList = viewModel.getStudyingCardsList_Value();
-        newList.set(viewModel.getIndexArrays().get(viewModel.getStudyingCardsListPointer_Value()), card);
+        newList.set(viewModel.getIndexArray_value().get(viewModel.getStudyingCardsListPointer_Value()), card);
         viewModel.getStudyingCardsList().setValue(newList);
     }
 
     private void displayCardContent(int index, boolean scrollReset) {
+        if (index < 0) {
+            tvCardContentDisplay.setText("nothing to see here");
+            return;
+        }
         if (scrollReset) {
             scrollViewCardContent.scrollTo(0, 0);
         }
         displayingFront = !(viewModel.getBackSideFirstSetting());
-        displayedCard = viewModel.getStudyingCardsList_Value().get(viewModel.getIndexArrays().get(index));
+        displayedCard = viewModel.getStudyingCardsList_Value().get(viewModel.getIndexArray_value().get(index));
         tvCardContentDisplay.setText(getCardContentToDisplay());
         tvDisplayedSide.setText(getSideInfoToDisplay());
         tvCardMarkingDisplay.setText(String.valueOf(displayedCard.getMarking0()));
