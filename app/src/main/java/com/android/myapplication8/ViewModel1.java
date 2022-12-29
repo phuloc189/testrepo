@@ -212,7 +212,6 @@ public class ViewModel1 extends AndroidViewModel {
     }
 
     //--------- collection
-
     //--------- collection/create
 
     public void createCollection_vm(String name, Database2Wrapper.Database2Callback callback) {

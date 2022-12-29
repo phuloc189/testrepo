@@ -41,6 +41,18 @@ public class DialogFragmentNewCard extends DialogFragment {
 
     String backText;
 
+    public static DialogFragmentNewCard newInstance(Util.DialogType dialogType, String frontText, String backText) {
+        DialogFragmentNewCard dialog = new DialogFragmentNewCard();
+        Bundle args = new Bundle();
+        args.putString(Util.BUNDLE_KEY_DIALOGTYPE, Util.getDialogTypeStringFromDialogType(dialogType));
+        if (dialogType == Util.DialogType.EDIT_CARD) {
+            args.putString(Util.BUNDLE_KEY_OLD_FRONT_TEXT, frontText);
+            args.putString(Util.BUNDLE_KEY_OLD_BACK_TEXT, backText);
+        }
+        dialog.setArguments(args);
+        return dialog;
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

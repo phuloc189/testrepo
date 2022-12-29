@@ -26,7 +26,6 @@ import com.android.myapplication8.Util;
 import com.android.myapplication8.ViewModel1;
 import com.android.myapplication8.database2.entity.CardEntity;
 import com.android.myapplication8.database2.Database2Wrapper;
-import com.android.myapplication8.database2.entity.DeckEntity;
 import com.android.myapplication8.database2.entity.DeckEntityExtra;
 import com.android.myapplication8.interfaces.MarkingEditCallback;
 import com.android.myapplication8.interfaces.NewCardDialogCallback;
@@ -101,30 +100,37 @@ public class FragmentStudyScreen extends Fragment implements
         return view;
     }
 
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        setupOptionsMenu();
-    }
-
-    private void setupOptionsMenu() {
-        MenuHost menuHost = requireActivity();
-        menuHost.addMenuProvider(new MenuProvider() {
+    private void setupDatabaseCallback() {
+        database2Callback = new Database2Wrapper.Database2Callback() {
             @Override
-            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                menuInflater.inflate(R.menu.menu_study_screen_option, menu);
+            public void onComplete_SimpleResult(Database2Wrapper.DbTask whichTask, Database2Wrapper.DbTaskResult taskResult) {
+                onDbTaskResult(whichTask, taskResult);
             }
 
             @Override
-            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                if (menuItem.getItemId() == R.id.menu_item_sorting) {
-                    showControlPanelDialog();
-                    return true;
-                } else {
-                    return false;
+            public void onSearchDeckCompleteExtra(Database2Wrapper.DbTask whichTask, List<DeckEntityExtra> deckSearchResult) {
+
+            }
+
+            @Override
+            public void onInsertComplete(Database2Wrapper.DbTask whichTask, long newRowId) {
+            }
+        };
+
+        database2Callback_cardsEntity = new Database2Wrapper.Database2Callback_CardsEntity() {
+            @Override
+            public void onComplete_FetchingCards(Database2Wrapper.DbTask whichTask, List<CardEntity> cardsFetchResult) {
+                Util.logDebug(TAG, "onComplete_FetchingCards result: " + cardsFetchResult.size());
+                if (whichTask == Database2Wrapper.DbTask.CARD_READ_FROM_COLLECTION) {
+                    requireActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            onCardFetchResult(cardsFetchResult);
+                        }
+                    });
                 }
             }
-        }, getViewLifecycleOwner());
+        };
     }
 
     private void setupViewModel() {
@@ -185,42 +191,6 @@ public class FragmentStudyScreen extends Fragment implements
         });
     }
 
-    private void showControlPanelDialog() {
-        controlPanelDialog = new DialogFragmentStdScrnControlPanel();
-        Bundle args = new Bundle();
-        args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
-                Util.getDialogTypeStringFromDialogType(Util.DialogType.STUDY_SCREEN_CTRL_PANEL));
-        controlPanelDialog.setArguments(args);
-        controlPanelDialog.show(getChildFragmentManager(), DialogFragmentStdScrnControlPanel.TAG);
-    }
-
-    private void showCardEditDialog() {
-        DialogFragmentNewCard dialog = new DialogFragmentNewCard();
-        Bundle args = new Bundle();
-        args.putString(Util.BUNDLE_KEY_DIALOGTYPE, Util.BUNDLE_VALUE_DIALOGTYPE_EDIT_CARD);
-        args.putString(Util.BUNDLE_KEY_OLD_FRONT_TEXT, displayedCard.getFrontText());
-        args.putString(Util.BUNDLE_KEY_OLD_BACK_TEXT, displayedCard.getBackText());
-        dialog.setArguments(args);
-        dialog.show(getChildFragmentManager(), DialogFragmentNewCard.TAG);
-    }
-
-    private void showMarkingEditDialog() {
-        DialogFragmentMarkingEditing dialogFragment = new DialogFragmentMarkingEditing();
-        Bundle args = new Bundle();
-        args.putString(Util.BUNDLE_KEY_DIALOGTYPE, Util.BUNDLE_VALUE_DIALOGTYPE_CARD_MARKING_EDIT);
-        args.putInt(Util.BUNDLE_KEY_OLD_MARKING_VALUE, displayedCard.getMarking0());
-        dialogFragment.setArguments(args);
-        dialogFragment.show(getChildFragmentManager(), DialogFragmentMarkingEditing.TAG);
-    }
-
-    private String getCardContentToDisplay() {
-        return displayingFront ? displayedCard.getFrontText() : displayedCard.getBackText();
-    }
-
-    private String getSideInfoToDisplay() {
-        return displayingFront ? "Front: " : "Back: ";
-    }
-
     private void fetchAndCacheCards() {
         if (viewModel.getStudyMode_value() == Util.StudyMode.DECK) {
             viewModel.cacheCardsFromSelectedDeck();
@@ -229,11 +199,6 @@ public class FragmentStudyScreen extends Fragment implements
                 viewModel.isInCollectionMode()) { //todo: do something with this condition expression
             viewModel.getCardsFromCollection_vm(viewModel.getSelectedCollectionUid_Value(), database2Callback_cardsEntity);
         }
-    }
-
-    private void onCardFetchResult(List<CardEntity> cardsFetchResult) {
-        viewModel.cacheCards(cardsFetchResult);
-        reloadDeck();
     }
 
     private void fetchCardContent() {
@@ -247,6 +212,71 @@ public class FragmentStudyScreen extends Fragment implements
                     }
                 }
         );
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setupOptionsMenu();
+    }
+
+    private void setupOptionsMenu() {
+        MenuHost menuHost = requireActivity();
+        menuHost.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                menuInflater.inflate(R.menu.menu_study_screen_option, menu);
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.menu_item_sorting) {
+                    showControlPanelDialog();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }, getViewLifecycleOwner());
+    }
+
+    private void showControlPanelDialog() {
+        controlPanelDialog = DialogFragmentStdScrnControlPanel.newInstance(Util.DialogType.STUDY_SCREEN_CTRL_PANEL);
+        controlPanelDialog.show(getChildFragmentManager(), DialogFragmentStdScrnControlPanel.TAG);
+    }
+
+    private void showCardEditDialog() {
+        DialogFragmentNewCard dialog = DialogFragmentNewCard.newInstance(
+                Util.DialogType.EDIT_CARD, displayedCard.getFrontText(), displayedCard.getBackText()
+        );
+        dialog.show(getChildFragmentManager(), DialogFragmentNewCard.TAG);
+    }
+
+    private void showMarkingEditDialog() {
+        DialogFragmentMarkingEditing dialog = DialogFragmentMarkingEditing.newInstance(
+                Util.DialogType.CARD_MARKING_EDIT,
+                displayedCard.getMarking0());
+        dialog.show(getChildFragmentManager(), DialogFragmentMarkingEditing.TAG);
+    }
+
+    private void showMarkingSelectDialog(int currentSetting) {
+        DialogFragmentMarkingEditing dialog = DialogFragmentMarkingEditing.newInstance(
+                Util.DialogType.LIMIT_MARKING_OPTION,
+                currentSetting);
+        dialog.show(getChildFragmentManager(), DialogFragmentMarkingEditing.TAG);
+    }
+
+    private String getCardContentToDisplay() {
+        return displayingFront ? displayedCard.getFrontText() : displayedCard.getBackText();
+    }
+
+    private String getSideInfoToDisplay() {
+        return displayingFront ? "Front: " : "Back: ";
+    }
+
+    private void onCardFetchResult(List<CardEntity> cardsFetchResult) {
+        viewModel.cacheCards(cardsFetchResult);
+        reloadDeck();
     }
 
     @Override
@@ -296,7 +326,6 @@ public class FragmentStudyScreen extends Fragment implements
             nextButton.setVisibility(View.INVISIBLE);
             previousButton.setVisibility(View.INVISIBLE);
             flipButton.setVisibility(View.INVISIBLE);
-            return;
         } else {
             if (pointerIndex == 0) {
                 previousButton.setVisibility(View.INVISIBLE);
@@ -337,39 +366,6 @@ public class FragmentStudyScreen extends Fragment implements
 
     }
 
-    private void setupDatabaseCallback() {
-        database2Callback = new Database2Wrapper.Database2Callback() {
-            @Override
-            public void onComplete_SimpleResult(Database2Wrapper.DbTask whichTask, Database2Wrapper.DbTaskResult taskResult) {
-                onDbTaskResult(whichTask, taskResult);
-            }
-
-            @Override
-            public void onSearchDeckCompleteExtra(Database2Wrapper.DbTask whichTask, List<DeckEntityExtra> deckSearchResult) {
-
-            }
-
-            @Override
-            public void onInsertComplete(Database2Wrapper.DbTask whichTask, long newRowId) {
-            }
-        };
-
-        database2Callback_cardsEntity = new Database2Wrapper.Database2Callback_CardsEntity() {
-            @Override
-            public void onComplete_FetchingCards(Database2Wrapper.DbTask whichTask, List<CardEntity> cardsFetchResult) {
-                Util.logDebug(TAG, "onComplete_FetchingCards result: " + cardsFetchResult.size());
-                if (whichTask == Database2Wrapper.DbTask.CARD_READ_FROM_COLLECTION) {
-                    requireActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            onCardFetchResult(cardsFetchResult);
-                        }
-                    });
-                }
-            }
-        };
-    }
-
     private void onDbTaskResult(Database2Wrapper.DbTask whichTask, Database2Wrapper.DbTaskResult taskResult) {
         Util.logDebug(TAG, "db task: " + whichTask);
         Util.logDebug(TAG, "result: " + taskResult);
@@ -399,16 +395,7 @@ public class FragmentStudyScreen extends Fragment implements
 
     @Override
     public void openMarkingOptionDialog(Util.DialogType dialogType, int currentSetting) {
-        openMarkingSelectDialog(currentSetting);
-    }
-
-    private void openMarkingSelectDialog(int currentSetting) {
-        DialogFragmentMarkingEditing limitedMarkingDialog = new DialogFragmentMarkingEditing();
-        Bundle args = new Bundle();
-        args.putString(Util.BUNDLE_KEY_DIALOGTYPE, Util.getDialogTypeStringFromDialogType(Util.DialogType.LIMIT_MARKING_OPTION));
-        args.putInt(Util.BUNDLE_KEY_CURRENT_LIMITED_MARKING_VALUE_SETTING, currentSetting);
-        limitedMarkingDialog.setArguments(args);
-        limitedMarkingDialog.show(getChildFragmentManager(), DialogFragmentMarkingEditing.TAG);
+        showMarkingSelectDialog(currentSetting);
     }
 
 }

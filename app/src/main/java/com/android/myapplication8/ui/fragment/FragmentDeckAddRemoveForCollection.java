@@ -61,7 +61,6 @@ public class FragmentDeckAddRemoveForCollection extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         View view = inflater.inflate(R.layout.fragment_deck_add_remove_for_collection, container, false);
 
         setupDatabaseCallback();
@@ -71,27 +70,6 @@ public class FragmentDeckAddRemoveForCollection extends Fragment {
         readDatabase();
 
         return view;
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        try {
-            callback = (FragmentDeckAddRemoveForCollectionCallback) context;
-        } catch (Exception e) {
-            Util.logDebug(TAG, "exception: " + e);
-            callback = null;
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        callback = null;
-    }
-
-    private void setupViewModel() {
-        viewModel = new ViewModelProvider(requireActivity()).get(ViewModel1.class);
     }
 
     private void setupDatabaseCallback() {
@@ -106,12 +84,12 @@ public class FragmentDeckAddRemoveForCollection extends Fragment {
 
             @Override
             public void onSearchDeckCompleteExtra(Database2Wrapper.DbTask whichTask, List<DeckEntityExtra> deckSearchResult) {
-                //todo: implement shit here
+
             }
 
             @Override
             public void onInsertComplete(Database2Wrapper.DbTask whichTask, long newRowId) {
-                //todo: implement shit here
+
             }
         };
     }
@@ -121,13 +99,6 @@ public class FragmentDeckAddRemoveForCollection extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(new CustomAdapterDeckList_CheckList(new CustomAdapterDeckList_CheckList.DeckItemDiff()));
     }
-
-
-    private CustomAdapterDeckList_CheckList recyViewAdapterAlias() {
-        return (CustomAdapterDeckList_CheckList) recyclerView.getAdapter();
-    }
-
-
     private void setupButton(View view) {
         Button confirmButton = view.findViewById(R.id.button_add_remove_screen_confirm);
         Button cancelButton = view.findViewById(R.id.button_add_remove_screen_cancel);
@@ -153,6 +124,10 @@ public class FragmentDeckAddRemoveForCollection extends Fragment {
         });
     }
 
+    private void setupViewModel() {
+        viewModel = new ViewModelProvider(requireActivity()).get(ViewModel1.class);
+    }
+
     private void readDatabase() {
         viewModel.getDecks_WithExtra_LiveData_CollectionChecklist_vm(viewModel.getSelectedCollectionUid_Value())
                 .observe(
@@ -164,6 +139,28 @@ public class FragmentDeckAddRemoveForCollection extends Fragment {
                             }
                         }
                 );
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            callback = (FragmentDeckAddRemoveForCollectionCallback) context;
+        } catch (Exception e) {
+            Util.logDebug(TAG, "exception: " + e);
+            callback = null;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        callback = null;
+    }
+
+
+    private CustomAdapterDeckList_CheckList recyViewAdapterAlias() {
+        return (CustomAdapterDeckList_CheckList) recyclerView.getAdapter();
     }
 
     private void onListDataUpdated(List<DeckEntityExtra_CollectionCheckList> newList) {

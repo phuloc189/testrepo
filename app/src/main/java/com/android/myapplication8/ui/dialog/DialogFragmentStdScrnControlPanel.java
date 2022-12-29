@@ -52,6 +52,14 @@ public class DialogFragmentStdScrnControlPanel extends DialogFragment {
     boolean showBackFirst_changed;
     boolean limitedMarkingValue_changed;
 
+    public static DialogFragmentStdScrnControlPanel newInstance(Util.DialogType dialogType) {
+        DialogFragmentStdScrnControlPanel dialog = new DialogFragmentStdScrnControlPanel();
+        Bundle args = new Bundle();
+        args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
+                Util.getDialogTypeStringFromDialogType(dialogType));
+        dialog.setArguments(args);
+        return dialog;
+    }
 
     @NonNull
     @Override

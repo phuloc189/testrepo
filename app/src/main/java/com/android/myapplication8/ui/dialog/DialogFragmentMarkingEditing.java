@@ -35,6 +35,20 @@ public class DialogFragmentMarkingEditing extends DialogFragment {
 
     int[] markingStat;
 
+    public static DialogFragmentMarkingEditing newInstance(Util.DialogType dialogType, int arg0) {
+        DialogFragmentMarkingEditing dialog = new DialogFragmentMarkingEditing();
+        Bundle args = new Bundle();
+        args.putString(Util.BUNDLE_KEY_DIALOGTYPE, Util.getDialogTypeStringFromDialogType(dialogType));
+
+        if (dialogType == Util.DialogType.CARD_MARKING_EDIT) {
+            args.putInt(Util.BUNDLE_KEY_OLD_MARKING_VALUE, arg0);
+        } else if (dialogType == Util.DialogType.LIMIT_MARKING_OPTION) {
+            args.putInt(Util.BUNDLE_KEY_CURRENT_LIMITED_MARKING_VALUE_SETTING, arg0);
+        }
+        dialog.setArguments(args);
+        return dialog;
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

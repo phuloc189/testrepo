@@ -51,6 +51,15 @@ public class DialogFragmentDeckListSortOption extends DialogFragment {
 
     Util.DialogType dialogType;
 
+    public static DialogFragmentDeckListSortOption newInstance(Util.DialogType dialogType) {
+        DialogFragmentDeckListSortOption dialog = new DialogFragmentDeckListSortOption();
+        Bundle args = new Bundle();
+        args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
+                Util.getDialogTypeStringFromDialogType(dialogType));
+        dialog.setArguments(args);
+        return dialog;
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {

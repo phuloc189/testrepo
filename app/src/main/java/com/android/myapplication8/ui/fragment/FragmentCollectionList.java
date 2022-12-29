@@ -81,6 +81,46 @@ public class FragmentCollectionList extends Fragment implements DialogResultCall
         return view;
     }
 
+    private void setupDatabaseCallback() {
+        dbCallback = new Database2Wrapper.Database2Callback() {
+            @Override
+            public void onComplete_SimpleResult(Database2Wrapper.DbTask whichTask, Database2Wrapper.DbTaskResult taskResult) {
+                Util.logDebug(TAG, "db task complete: " + whichTask);
+            }
+
+            @Override
+            public void onSearchDeckCompleteExtra(Database2Wrapper.DbTask whichTask, List<DeckEntityExtra> deckSearchResult) {
+                Util.logDebug(TAG, "db task complete: " + whichTask);
+            }
+
+            @Override
+            public void onInsertComplete(Database2Wrapper.DbTask whichTask, long newRowId) {
+                Util.logDebug(TAG, "db task complete: " + whichTask);
+            }
+        };
+    }
+
+    private void setupList(View view) {
+        recyclerView = view.findViewById(R.id.recyView_CollectionListScrn_CollectionList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        recyclerView.setAdapter(new CustomAdapterCollectionList(
+                new CustomAdapterCollectionList.CollectionItemDiff(), this
+        ));
+    }
+
+    private void setupButton(View view) {
+        view.findViewById(R.id.button_collectionList_createNew).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog_NewCollection();
+            }
+        });
+    }
+
+    private void setupViewModel() {
+        viewModel = (new ViewModelProvider(requireActivity())).get(ViewModel1.class);
+    }
+
     private void readDatabase() {
         viewModel.getCollections_WithExtra_Livedata_vm().observe(
                 getViewLifecycleOwner(),
@@ -115,27 +155,6 @@ public class FragmentCollectionList extends Fragment implements DialogResultCall
         return (CustomAdapterCollectionList) recyclerView.getAdapter();
     }
 
-    private void setupList(View view) {
-        recyclerView = view.findViewById(R.id.recyView_CollectionListScrn_CollectionList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
-        recyclerView.setAdapter(new CustomAdapterCollectionList(
-                new CustomAdapterCollectionList.CollectionItemDiff(), this
-        ));
-    }
-
-    private void setupViewModel() {
-        viewModel = (new ViewModelProvider(requireActivity())).get(ViewModel1.class);
-    }
-
-    private void setupButton(View view) {
-        view.findViewById(R.id.button_collectionList_createNew).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDialog_NewCollection();
-            }
-        });
-    }
-
     private void showDialog_NewCollection() {
         DialogFragmentSimpleNameEdit dialog =
                 DialogFragmentSimpleNameEdit.newInstance(Util.DialogType.CREATE_COLLECTION, null);
@@ -152,27 +171,6 @@ public class FragmentCollectionList extends Fragment implements DialogResultCall
         DialogFragmentSimpleNameEdit dialogFragment =
                 DialogFragmentSimpleNameEdit.newInstance(Util.DialogType.COLLECTION_RENAME, oldName);
         dialogFragment.show(getChildFragmentManager(), DialogFragmentSimpleNameEdit.TAG);
-    }
-
-
-    private void setupDatabaseCallback() {
-        //todo: put more logic in here
-        dbCallback = new Database2Wrapper.Database2Callback() {
-            @Override
-            public void onComplete_SimpleResult(Database2Wrapper.DbTask whichTask, Database2Wrapper.DbTaskResult taskResult) {
-                Util.logDebug(TAG, "db task complete: " + whichTask);
-            }
-
-            @Override
-            public void onSearchDeckCompleteExtra(Database2Wrapper.DbTask whichTask, List<DeckEntityExtra> deckSearchResult) {
-                Util.logDebug(TAG, "db task complete: " + whichTask);
-            }
-
-            @Override
-            public void onInsertComplete(Database2Wrapper.DbTask whichTask, long newRowId) {
-                Util.logDebug(TAG, "db task complete: " + whichTask);
-            }
-        };
     }
 
     @Override

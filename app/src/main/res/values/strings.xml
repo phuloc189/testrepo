@@ -80,6 +80,8 @@
     <string name="pref_key_deck_list_sorting_type">pref_deck_list_sorting_type</string>
     <string name="pref_key_deck_list_sorting_descending">pref_deck_list_sorting_descending</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- others -->
+
+    <string name="dummy_card_text_front">deck %1$d card %2$d front text</string>
+    <string name="dummy_card_text_back">deck %1$d card %2$d back text xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx xxxx xxxxx xxxxxx xxxx </string>
 </resources>

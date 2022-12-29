@@ -91,7 +91,6 @@ public class FragmentDeckList extends Fragment implements
         Util.logDebug(TAG, "onCreateView: ");
         View view = inflater.inflate(R.layout.fragment_deck_list, container, false);
 
-        //todo: handle back key to and from this screen
         setupViewModel();
         setupDatabaseCallback();
         setupListUi(view);
@@ -102,22 +101,8 @@ public class FragmentDeckList extends Fragment implements
         return view;
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-
-        try {
-            callBack = (Fragment1Interface) context;
-        } catch (Exception  e) {
-            Util.logError(TAG, "exception happened: " + e);
-            callBack = null;
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        callBack = null;
+    private void setupViewModel(){
+        viewModel = new ViewModelProvider(requireActivity()).get(ViewModel1.class);
     }
 
     private void setupDatabaseCallback() {
@@ -137,132 +122,25 @@ public class FragmentDeckList extends Fragment implements
 
             @Override
             public void onInsertComplete(Database2Wrapper.DbTask whichTask, long newRowId) {
-                Util.logDebug(TAG, "db task complete onInsertComplete: " + whichTask);
+                Util.logDebug(TAG, "db task complete: " + whichTask);
                 //  todo: choose between int or long???
                 askUserIfTheyAlsoWantToOpenDeck((int) newRowId);
             }
         };
     }
 
-    private void askUserIfTheyAlsoWantToOpenDeck(int newRowId) {
-        justInsertedDeckUid = newRowId;
-        showDialog_ConfirmDialog(Util.DialogType.CONFIRM_OPEN_DECK_JUST_CREATED, null);
-    }
-
-    private void setupViewModel(){
-        viewModel = new ViewModelProvider(requireActivity()).get(ViewModel1.class);
-    }
-
-    private void readDatabaseLiveData() {
-        Util.logDebug(TAG, "readDatabaseLiveData: " );
-        /**
-         * "this observer will be notified about modifications of the
-         * wrapped data only if the paired LifecycleOwner is in
-         * active state. LifecycleOwner is considered as active
-         * , if its state is STARTED or RESUMED"
-         *  -> ASSUMPTION: no need to manually remove observer
-         */
-//        viewModel.readAll_vm().observe(
-//                getViewLifecycleOwner(),
-//                new Observer<List<DeckEntity>>() {
-//                    @Override
-//                    public void onChanged(List<DeckEntity> deckEntities) {
-//                        Util.logDebug(TAG, "auto update from database");
-//                        onNewDeckListFromDatabase(deckEntities);
-//                    }
-//                });
-
-        if (viewModel.isInCollectionMode()) {
-            viewModel.getDecks_WithExtra_LiveData_ForCollection_vm(viewModel.getSelectedCollectionUid_Value()).observe(
-                    getViewLifecycleOwner(),
-                    new Observer<List<DeckEntityExtra>>() {
-                        @Override
-                        public void onChanged(List<DeckEntityExtra> deckEntityExtras) {
-                            onNewDeckListFromDatabase2(deckEntityExtras);
-                        }
+    private void setupListUi(View view) {
+        recyclerView = view.findViewById(R.id.recyclerView_item_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
+        recyclerView.setAdapter(new CustomAdapterDecklist_Extra(
+                new CustomAdapterDecklist_Extra.ItemDiff(),
+                new CustomAdapterDecklist_Extra.CustomAdapterDecklist_ExtraCallback() {
+                    @Override
+                    public void onItemClick(Util.ClickEvent event, int position) {
+                        handleDeckListItemClick(event, position);
                     }
-            );
-            viewModel.getCollectionWithUid_vm(viewModel.getSelectedCollectionUid_Value()).observe(
-                    getViewLifecycleOwner(),
-                    new Observer<CollectionEntity>() {
-                        @Override
-                        public void onChanged(CollectionEntity collectionEntity) {
-                            currentCollectionName  = collectionEntity.getCollectionName();
-                            textView_currentCollectionInfo.setText(getString(R.string.tv_current_collection_info, collectionEntity.getCollectionName()));
-                        }
-                    }
-            );
-        } else {
-            viewModel.getDecks_WithExtra_LiveData_vm().observe(
-                    getViewLifecycleOwner(),
-                    new Observer<List<DeckEntityExtra>>() {
-                        @Override
-                        public void onChanged(List<DeckEntityExtra> deckEntityExtras) {
-                            onNewDeckListFromDatabase2(deckEntityExtras);
-                        }
-                    }
-            );
-        }
+                }));
     }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        MenuHost menuHost = requireActivity();
-        menuHost.addMenuProvider(new MenuProvider() {
-            @Override
-            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
-                Util.logDebug(TAG, "on create menu");
-                menuInflater.inflate(R.menu.menu_deck_screen_option, menu);
-                if (viewModel.isInCollectionMode()) {
-                    menuInflater.inflate(R.menu.menu_deck_screen_option_collection_mode, menu);
-                }
-            }
-
-            @Override
-            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
-                if (menuItem.getItemId() == R.id.menu_item_sorting_option){
-                    showDialog_DeckSortOption();
-                    return true;
-                } else if (menuItem.getItemId() == R.id.menu_item_collection_rename_option_menu) {
-                    showDialog_CollectionRename();
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        }, getViewLifecycleOwner());
-    }
-
-    private void onNewDeckListFromDatabase2(List<DeckEntityExtra> deckEntityExtras) {
-        if (deckEntityExtras != null && deckEntityExtras.size() > 0){
-            Util.logDebug(TAG, "live data list update");
-            recyViewAdapterAlias().submitList(deckEntityExtras);
-        } else {
-            if (deckEntityExtras == null)
-                // todo: display error dialog
-                Util.logDebug(TAG, "live data list update error: null list");
-            else {
-                Util.logDebug(TAG, "live data list update error: no item on list");
-                recyViewAdapterAlias().submitList(deckEntityExtras);
-            }
-        }
-    }
-
-//    private void onNewDeckListFromDatabase(List<DeckEntity> deckEntities) {
-//        if (deckEntities != null && deckEntities.size() > 0){
-//            Util.logDebug(TAG, "live data list update");
-//            recyViewAdapterAlias().submitList(deckEntities);
-//        } else {
-//            if (deckEntities == null)
-//                // todo: display error dialog
-//                Util.logDebug(TAG, "live data list update error: null list");
-//            else {
-//                Util.logDebug(TAG, "live data list update error: no item on list");
-//                recyViewAdapterAlias().submitList(deckEntities);
-//            }
-//        }
-//    }
 
     private void setupUi(View view) {
         buttonCreateNewDeck = view.findViewById(R.id.button_add_item_to_decks_list);
@@ -322,6 +200,130 @@ public class FragmentDeckList extends Fragment implements
         }
     }
 
+    private void readDatabaseLiveData() {
+        Util.logDebug(TAG, "readDatabaseLiveData: " );
+        /**
+         * "this observer will be notified about modifications of the
+         * wrapped data only if the paired LifecycleOwner is in
+         * active state. LifecycleOwner is considered as active
+         * , if its state is STARTED or RESUMED"
+         *  -> ASSUMPTION: no need to manually remove observer
+         */
+//        viewModel.readAll_vm().observe(
+//                getViewLifecycleOwner(),
+//                new Observer<List<DeckEntity>>() {
+//                    @Override
+//                    public void onChanged(List<DeckEntity> deckEntities) {
+//                        Util.logDebug(TAG, "auto update from database");
+//                        onNewDeckListFromDatabase(deckEntities);
+//                    }
+//                });
+
+        if (viewModel.isInCollectionMode()) {
+            viewModel.getDecks_WithExtra_LiveData_ForCollection_vm(viewModel.getSelectedCollectionUid_Value()).observe(
+                    getViewLifecycleOwner(),
+                    new Observer<List<DeckEntityExtra>>() {
+                        @Override
+                        public void onChanged(List<DeckEntityExtra> deckEntityExtras) {
+                            onNewDeckListFromDatabase2(deckEntityExtras);
+                        }
+                    }
+            );
+            viewModel.getCollectionWithUid_vm(viewModel.getSelectedCollectionUid_Value()).observe(
+                    getViewLifecycleOwner(),
+                    new Observer<CollectionEntity>() {
+                        @Override
+                        public void onChanged(CollectionEntity collectionEntity) {
+                            currentCollectionName  = collectionEntity.getCollectionName();
+                            textView_currentCollectionInfo.setText(getString(R.string.tv_current_collection_info, collectionEntity.getCollectionName()));
+                        }
+                    }
+            );
+        } else {
+            viewModel.getDecks_WithExtra_LiveData_vm().observe(
+                    getViewLifecycleOwner(),
+                    new Observer<List<DeckEntityExtra>>() {
+                        @Override
+                        public void onChanged(List<DeckEntityExtra> deckEntityExtras) {
+                            onNewDeckListFromDatabase2(deckEntityExtras);
+                        }
+                    }
+            );
+        }
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+
+        try {
+            callBack = (Fragment1Interface) context;
+        } catch (Exception  e) {
+            Util.logError(TAG, "exception happened: " + e);
+            callBack = null;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        callBack = null;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        setupOptionMenu();
+    }
+
+    private void setupOptionMenu() {
+        MenuHost menuHost = requireActivity();
+        menuHost.addMenuProvider(new MenuProvider() {
+            @Override
+            public void onCreateMenu(@NonNull Menu menu, @NonNull MenuInflater menuInflater) {
+                Util.logDebug(TAG, "on create menu");
+                menuInflater.inflate(R.menu.menu_deck_screen_option, menu);
+                if (viewModel.isInCollectionMode()) {
+                    menuInflater.inflate(R.menu.menu_deck_screen_option_collection_mode, menu);
+                }
+            }
+
+            @Override
+            public boolean onMenuItemSelected(@NonNull MenuItem menuItem) {
+                if (menuItem.getItemId() == R.id.menu_item_sorting_option){
+                    showDialog_DeckSortOption();
+                    return true;
+                } else if (menuItem.getItemId() == R.id.menu_item_collection_rename_option_menu) {
+                    showDialog_CollectionRename();
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }, getViewLifecycleOwner());
+
+    }
+
+    private void askUserIfTheyAlsoWantToOpenDeck(int newRowId) {
+        justInsertedDeckUid = newRowId;
+        showDialog_ConfirmDialog(Util.DialogType.CONFIRM_OPEN_DECK_JUST_CREATED, null);
+    }
+
+    private void onNewDeckListFromDatabase2(List<DeckEntityExtra> deckEntityExtras) {
+        if (deckEntityExtras != null && deckEntityExtras.size() > 0){
+            Util.logDebug(TAG, "live data list update");
+            recyViewAdapterAlias().submitList(deckEntityExtras);
+        } else {
+            if (deckEntityExtras == null)
+                // todo: display error dialog
+                Util.logDebug(TAG, "live data list update error: null list");
+            else {
+                Util.logDebug(TAG, "live data list update error: no item on list");
+                recyViewAdapterAlias().submitList(deckEntityExtras);
+            }
+        }
+    }
+
     private void transitionToSearchMode(){
         searchMode = true;
         buttonCreateNewDeck.setVisibility(View.GONE);
@@ -345,26 +347,6 @@ public class FragmentDeckList extends Fragment implements
             transitionToSearchMode();
         }
         viewModel.findDecks_WithExtra_vm(query, database2Callback);
-    }
-
-    private void setupListUi(View view) {
-        recyclerView = view.findViewById(R.id.recyclerView_item_list);
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireActivity()));
-//        recyclerView.setAdapter(new CustomAdapterDeckList(new CustomAdapterDeckList.DeckItemDiff(),
-//                new CustomAdapterDeckList.CustomAdapterDeckListCallback() {
-//                    @Override
-//                    public void onItemClick(Util.ClickEvent event, int position) {
-//                        handleDeckListItemClick(event, position);
-//                    }
-//                }));
-        recyclerView.setAdapter(new CustomAdapterDecklist_Extra(
-                new CustomAdapterDecklist_Extra.ItemDiff(),
-                new CustomAdapterDecklist_Extra.CustomAdapterDecklist_ExtraCallback() {
-                    @Override
-                    public void onItemClick(Util.ClickEvent event, int position) {
-                        handleDeckListItemClick(event, position);
-                    }
-                }));
     }
 
     private void handleDeckListItemClick(Util.ClickEvent event, int position) {
@@ -428,11 +410,7 @@ public class FragmentDeckList extends Fragment implements
     }
 
     private void showDialog_DeckSortOption() {
-        DialogFragmentDeckListSortOption dialog = new DialogFragmentDeckListSortOption();
-        Bundle args = new Bundle();
-        args.putString(Util.BUNDLE_KEY_DIALOGTYPE,
-                Util.getDialogTypeStringFromDialogType(Util.DialogType.DECK_LIST_SORT_OPTION));
-        dialog.setArguments(args);
+        DialogFragmentDeckListSortOption dialog = DialogFragmentDeckListSortOption.newInstance(Util.DialogType.DECK_LIST_SORT_OPTION);
         dialog.show(getChildFragmentManager(), DialogFragmentDeckListSortOption.TAG);
     }
 
