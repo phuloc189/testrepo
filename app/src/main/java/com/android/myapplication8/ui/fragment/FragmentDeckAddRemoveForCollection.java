@@ -105,11 +105,6 @@ public class FragmentDeckAddRemoveForCollection extends Fragment {
             }
 
             @Override
-            public void onSearchDeckComplete(Database2Wrapper.DbTask whichTask, List<DeckEntity> deckSearchResult) {
-                //todo: implement shit here
-            }
-
-            @Override
             public void onSearchDeckCompleteExtra(Database2Wrapper.DbTask whichTask, List<DeckEntityExtra> deckSearchResult) {
                 //todo: implement shit here
             }

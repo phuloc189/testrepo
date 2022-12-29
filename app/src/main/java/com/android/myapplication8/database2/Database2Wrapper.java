@@ -61,8 +61,6 @@ public class Database2Wrapper {
     public interface Database2Callback {
         void onComplete_SimpleResult(DbTask whichTask, DbTaskResult taskResult);
 
-        void onSearchDeckComplete(DbTask whichTask, List<DeckEntity> deckSearchResult);
-
         void onSearchDeckCompleteExtra(DbTask whichTask, List<DeckEntityExtra> deckSearchResult);
 
         void onInsertComplete(DbTask whichTask, long newRowId);
@@ -115,7 +113,8 @@ public class Database2Wrapper {
 
     public LiveData<List<DeckEntityExtra>> getDecks_WithExtra_LiveData_ForCollection(Util.SortingOptions optionSortingType
             , boolean optionDescending, int collectionUid) {
-        /*    @Query("SELECT table_DeckEntity.*, COUNT(table_cardentity.deckUid) as cardsCount " +
+        /*
+        @Query("SELECT table_DeckEntity.*, COUNT(table_cardentity.deckUid) as cardsCount " +
             "FROM table_DeckEntity LEFT OUTER JOIN table_cardentity ON table_DeckEntity.uid = table_cardentity.deckUid " +
             "GROUP BY table_DeckEntity.uid" )
          */

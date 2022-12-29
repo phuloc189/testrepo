@@ -345,11 +345,6 @@ public class FragmentStudyScreen extends Fragment implements
             }
 
             @Override
-            public void onSearchDeckComplete(Database2Wrapper.DbTask whichTask, List<DeckEntity> deckSearchResult) {
-
-            }
-
-            @Override
             public void onSearchDeckCompleteExtra(Database2Wrapper.DbTask whichTask, List<DeckEntityExtra> deckSearchResult) {
 
             }

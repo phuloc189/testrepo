@@ -129,14 +129,6 @@ public class FragmentDeckList extends Fragment implements
             }
 
             @Override
-            public void onSearchDeckComplete(Database2Wrapper.DbTask whichTask, List<DeckEntity> deckSearchResult) {
-                Util.logDebug(TAG, "db task complete: " + whichTask);
-                Util.logDebug(TAG, "onSearchDeckComplete: " + deckSearchResult.size());
-//                onNewDeckListFromDatabase(deckSearchResult); //todo: delete this
-
-            }
-
-            @Override
             public void onSearchDeckCompleteExtra(Database2Wrapper.DbTask whichTask, List<DeckEntityExtra> deckSearchResult) {
                 Util.logDebug(TAG, "db task complete: " + whichTask);
                 Util.logDebug(TAG, "onSearchDeckCompleteExtra: " + deckSearchResult.size());
