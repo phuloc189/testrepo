@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application 8</string>
+    <string name="app_name">My Shimple Flashcards</string>
 
     <string name="tv_current_deck_info">Cards from deck: %1$s</string>
     <string name="tv_current_collection_info">Decks from collection: %1$s</string>
